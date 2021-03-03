@@ -1,13 +1,3 @@
-"""
-This is a software specific tokenizer that tokenizes programming related texts in stackoverflow.
-These texts are social as well as domain-specific i.e. printf() must be recognized as 'print()' rather than 'print','(', and ')'.
-
-
-Acknowledgement goes to Brendan O'Connor, Kevin Gimpel and Daniel Mills,
-who are the authors of a Twitter tokenizer. This tokenizer modifies their Twitter one.
-
-"""
-
 import re
 import sys
 import emoticons as emoticons

@@ -1,9 +1,5 @@
 # emoticon recognition via patterns.
 
-"""Author: Brendan O'Connor (brenocon.com, brenocon@gmail.com)"""
-"""Modified for part-of-speech tagging by Kevin Gimpel (kgimpel@cs.cmu.edu) and Daniel Mills (dpmills@cs.cmu.edu)"""
-
-
 import sys
 import re
 import sane_re
