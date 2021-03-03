@@ -2,7 +2,7 @@
 
 import sys
 import re
-import sane_re
+# import sane_re
 def mycompile(pat): return re.compile(pat,  re.UNICODE)
 
 
@@ -71,7 +71,7 @@ def analyze_text(text):
     # return "NA"
 
 
-if __name__ == '__main__':
-    for line in sys.stdin:
-        sane_re._S(line[:-1]).show_match(Emoticon_RE, numbers=False)
-        #print(analyze_tweet(line.strip()), line.strip(), sep="\t")
+# if __name__ == '__main__':
+#     for line in sys.stdin:
+#         sane_re._S(line[:-1]).show_match(Emoticon_RE, numbers=False)
+    #print(analyze_tweet(line.strip()), line.strip(), sep="\t")

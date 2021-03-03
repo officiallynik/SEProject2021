@@ -1,9 +1,12 @@
 import os
 import re
 from textblob import TextBlob
-import SoftwareTokenizer as tokenizer
+import software_tokenizer as tokenizer
 import nltk
+from nltk.stem import WordNetLemmatizer  # used for stemming
+from remove_stopwords import remove_stopwords
 nltk.download('punkt')
+nltk.download('wordnet')
 
 
 class PreprocessPostContent(object):
@@ -39,6 +42,8 @@ class PreprocessPostContent(object):
         self.num_token = "[NUM]"
         self.code_token = "[CODE]"
         self.max_code = 5
+        # lemmatize
+        self.lemmatizer = WordNetLemmatizer()
 
     def remove_bracket(self, txt):
         cleaned = []
@@ -213,9 +218,9 @@ class PreprocessPostContent(object):
         # paragraphs_candidates = [p[3:-4]
         #                          for p in paragraphs_candidates if len(p[3:-4]) > 0]
         paragraphs = []
-        print(paragraphs_candidates)
+        # print(paragraphs_candidates)
         for p in paragraphs_candidates:
-            print(TextBlob(p).words)
+            # print(TextBlob(p).words)
             if len(TextBlob(p).words) == 0:
                 continue
             paragraphs.append(p)
@@ -226,9 +231,14 @@ class PreprocessPostContent(object):
         filter_list = list(filter(condition, wordlist))
         return filter_list
 
+    def lemmatize(self, text):
+        text = [self.lemmatizer.lemmatize(token) for token in text]
+        return text
+
     # [ [word1, word2, ...], [word1, word2, ...], [word1, word2, ...], ... ]
     def get_mul_para_wordlist_list(self, raw_txt):
         # return a list of paragraphs of plain text(word list)
+        raw_txt = raw_txt.lower()
         txt = self.remove_code(raw_txt)
 
         paragraphs = self.getParagraphs(txt)
@@ -242,26 +252,36 @@ class PreprocessPostContent(object):
             wordlist = self.filterNILStr(cleaned)
             wordlist = tokenizer.tokenize(wordlist)
             wordlist = self.filter_wordlist(wordlist)
-            wordlist_list.append(wordlist)
+            #print("Before stopwords", wordlist)
+            wordlist = remove_stopwords(wordlist)
+            #print("Before lemmatization", wordlist)
+            wordlist = self.lemmatize(wordlist)
+            #print("After lemming", wordlist)
+            wordlist_list.append(' '.join(wordlist))
 
-        return wordlist_list
+        return ' '.join(wordlist_list)
 
     # [word1, word2, ...]
     def get_single_para_word_list(self, raw_txt):
         # return a list of plain text(word list)
         # filter code
-        print(raw_txt)
+        raw_txt = raw_txt.lower()
+
         txt = self.remove_code(raw_txt)
-        print(txt)
+
         cleaned = self.__process(txt)
-        print(cleaned)
+
         text = self.filterNILStr(cleaned)
-        print(text)
+
         word_list = tokenizer.tokenize(text)
-        print(word_list)
+
         word_list = self.filter_wordlist(word_list)
+
+        word_list = remove_stopwords(word_list)
+
+        word_list = self.lemmatize(word_list)
         # print(word_list)
-        return word_list
+        return ' '.join(word_list)
 
 
 if __name__ == '__main__':
@@ -274,70 +294,70 @@ if __name__ == '__main__':
         <p> as a result of this, you better visit https://www.baidu.com to get full answer</p>
 
     <p>But this is still linear regression:</p>
-    
+
     <p>$$Y=\beta_1 X+\beta_2X^2+\beta_3\log(X)$$</p>
-    
+
     <p>The latter is the same as basic linear regression with feature vector $(X,X^2,\log(X))$ instead of $X$.</p>
-    
+
     <p>By linear regression I assume that you mean simple linear regression. The difference is in the number of independent explanatory variables you use to model your dependent variable.</p>
 
     <p>Simple linear regression</p>
-    
-    <p>$Y=\beta X+\beta_0$</p>    
-    
+
+    <p>$Y=\beta X+\beta_0$</p>
+
     <p>I have been given 65 values. 57 of these data values are quarterly results and 8 are the holdback data to be used. </p>
-    
-    <p>I have to do: 
+
+    <p>I have to do:
     - Regression with Dummy variables with a linear trend cycle component </p>
-    
+
     <p>Does anyone know what to do as my results aren't making much sense? </p>
-    
+
     <p>For the first part - I obviously split the data into dummy variables for the relevant quarters (Q1-Q4). </p>
-    
+
     <p>I then performed regression analysis - linear. But all my values are extremely large and not significant. Also Q2 has been listed as 'excluded variables' in the results? I have followed the steps and I am unsure why this has happened. </p>
-    
+
     <p>Then I thought of removing Q4, due to multi-collinearity but again the values are still quite large (>.450). </p>
-    
+
     <p>Not sure if I am doing something wrong at the start (especially with the excluded variables aspect) </p>
-    
+
     <p>Anybody got any idea? This is driving me nuts</p>
-    
+
     <p>Update: It won't let me comment back on the main page for some reason. </p>
-    
+
     <p>The data set was given to us:
     "It is a quarterly series of total consumer lending. It is not seasonally adjusted.
     The first 57 data values for modelling and choose the remaining 8 data values as holdback data to test your models."</p>
-    
-    <p>The data is: 
+
+    <p>The data is:
     16180
     17425
     43321
     3214 4324 5435 41 143221 545 45</p>
-    
+
     <p>It has to be SPSS generated: as it is not like.</p>
-    
+
     <p>Email primarybeing12@hotmail.co.uk - not letting me respond to people. Thanks for any help!</p>
-    
+
     <p>Doing the ARIMA forecasting is the next step (which I understand). I have to do regression on the linear/non-linear for this question</p>
-    
+
     <p>If I was to use time, time^2, Q1, Q2, Q3 + lagged variables.</p>
-    
+
     <p>Would I use lagged variables 1-3? Also, I understand the rest, but what benefit does using lagged variables do? As I said, feel free to e-mail me if you can.</p>
-    
+
     <p>(I'm not positive about this, but...)</p>
 
     <p>AS3 uses a non-deterministic garbage collection. Which means that unreferenced memory will be freed up whenever the runtime feels like it (typically not unless there's a reason to run, since it's an expensive operation to execute). This is the same approach used by most modern garbage collected languages (like C# and Java as well).</p>
-    
+
     <p>Assuming there are no other references to the memory pointed to by <code>byteArray</code> or the items within the array itself, the memory will be freed at some point after you exit the scope where <code>byteArray</code> is declared.</p>
-    
+
     <p>difflib.context_diff() You can force a garbage collection, though you really shouldn't. If you do, do it only for testing... if you do it in production, you'll hurt performance much more than help it.</p>
-    
+
     <p>To force a GC, try (yes, twice):</p>
-    
+
     <pre><code>flash.system.System.gc();
     flash.system.System.gc();
     </code></pre>
-    
+
     <p><a href="http://www.craftymind.com/2008/04/09/kick-starting-the-garbage-collector-in-actionscript-3-with-air/" rel="noreferrer">You can read more here</a>.</p>
     <p> __builtin__
 __future__
@@ -398,28 +418,29 @@ Carbon.Dragconst
 
     ans2 = '''
         <p>It is saied that Whenever<code>code</code> a problem becomes solvable by a computer, people start arguing that it does not require intelligence . </p>
-        <p>[CLS] "Whenever a problem becomes solvable by a computer , people start arguing that it does not require intelligence . [SEP] John McCarthy is often quoted : `` As soon as it works , no one calls it AI anymore '' ( Referenced in CACM )[SEP] ."</p> 
-        
-        <p>"One of my teachers in <code>jet.listen</code>college said that in the 1950 's , a professor was asked what he thought was intelligent for a machine . The professor reputedly answered that if a vending machine gave him the right change , that would be intelligent ."</p> 
-        
-        <p>"Later , playing chess was considered intelligent . However , computers can now defeat grandmasters at chess , and people are no longer saying that it is a form of intelligence ."</p> 
-        
-        <p>"Now we have OCR . It 's already stated in another answer that our methods do not have the recognition facilities of a 5 year old . As soon as this is achieved , people will say `` meh , that 's not intelligence , a 5 year old can do that ! ''"</p> 
-        
+        <p>[CLS] "Whenever a problem becomes solvable by a computer , people start arguing that it does not require intelligence . [SEP] John McCarthy is often quoted : `` As soon as it works , no one calls it AI anymore '' ( Referenced in CACM )[SEP] ."</p>
+
+        <p>"One of my teachers in <code>jet.listen</code>college said that in the 1950 's , a professor was asked what he thought was intelligent for a machine . The professor reputedly answered that if a vending machine gave him the right change , that would be intelligent ."</p>
+
+        <p>"Later , playing chess was considered intelligent . However , computers can now defeat grandmasters at chess , and people are no longer saying that it is a form of intelligence ."</p>
+
+        <p>"Now we have OCR . It 's already stated in another answer that our methods do not have the recognition facilities of a 5 year old . As soon as this is achieved , people will say `` meh , that 's not intelligence , a 5 year old can do that ! ''"</p>
+
         <p>"A psychological bias , a need to state that we are somehow superior to machines , is at the basis of this ."</p>
     '''
     gold = '''
         <p>An optimal solution for the task as stated , would be some alignment algorithm like Smith-Waterman , with a matrix which encodes typical typo frequencies .</p>
-        <p>As an exercise in NNs , I would recommend using a RNN . This circumvents the problem that your inputs will be of variable size , because you just feed one letter after another and get an output once you feed the delimiter .</p> 
+        <p>As an exercise in NNs , I would recommend using a RNN . This circumvents the problem that your inputs will be of variable size , because you just feed one letter after another and get an output once you feed the delimiter .</p>
         <p>As trainingsdata you 'll need a list of random words and possibly a list of random strings , as negative examples and a list of slightly messed up versions of your target word as positive examples .</p>
         <p>Here is a minimal character-level RNN , which consists of only a little more than a hundred lines of code , so you might be able to get your head around it or at least get it to run . Here is the excellent blog post by Karpathy to which the code sample belongs .</p>
     '''
 
-    text = "<p>Who was Jim Henson</p>. <p>Jim Henson was a puppeteer.But he always using pytorch and java's code: <code>print()</code></p>"
+    text = "<p>Who was better likely corpora Jim Henson</p>. <p>Jim Henson was a puppeteer.But he always using pytorch and java's code: <code>print()</code></p>"
 
     # text = "I am a bot ,and he's my friend, i. . # AI Beginners Book"
 
-    answer = PreprocessPostContent().get_mul_para_wordlist_list(sam)
-    #answer = PreprocessPostContent().get_single_para_word_list(text)
+    answer = PreprocessPostContent().get_mul_para_wordlist_list(text)
+    #answer2 = PreprocessPostContent().get_single_para_word_list(text)
 
-    print(answer)
+    # print(answer)
+    # print(answer2)
