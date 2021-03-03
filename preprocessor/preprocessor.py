@@ -1,7 +1,7 @@
 import os
 import re
 from textblob import TextBlob
-import SoftwareTokenizer as tokenizer
+import software_tokenizer as tokenizer
 import nltk
 nltk.download('punkt')
 

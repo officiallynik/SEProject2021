@@ -2,7 +2,7 @@
 
 import sys
 import re
-import sane_re
+# import sane_re
 def mycompile(pat): return re.compile(pat,  re.UNICODE)
 
 
