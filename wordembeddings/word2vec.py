@@ -39,7 +39,7 @@ def parallel_process(posts):
 
 def create_corpus():
     dataset = pd.read_csv("../data/questions_data.csv")
-    return_list = parallel_process(zip(dataset['title'][0:10], dataset['body'][0:10]))
+    return_list = parallel_process(zip(dataset['title'], dataset['body']))
     corpus_wordlist_list = []
 
     for ls in return_list:
