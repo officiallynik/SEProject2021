@@ -2,3 +2,4 @@ data/questions_data.csv
 data/answers_data.csv
 data/config.json
 wordembeddings/idf.csv
+wordembeddings/w2v_model.bin
