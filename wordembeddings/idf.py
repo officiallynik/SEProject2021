@@ -9,13 +9,16 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 def get_corpus():
     pp_text = []
     dataset = pd.read_csv('../data/questions_data.csv')
-    preprocessor = PreprocessPostContent()
     
     for text in dataset['title']:
-        pp_text.append(preprocessor.get_mul_para_wordlist_list(text))
+        # print(text)
+        pp_text_data = PreprocessPostContent().get_single_para_word_list(text)
+        # print(pp_text_data)
+        pp_text.append(pp_text_data)
     
     for text in dataset['body']:
-        pp_text.append(preprocessor.get_mul_para_wordlist_list(text))
+        pp_text_data = PreprocessPostContent().get_mul_para_wordlist_list(text)
+        pp_text.append(pp_text_data)
 
     return pp_text
 
@@ -33,5 +36,6 @@ def to_csv(idf_dict, file_name="idf.csv"):
 
 if __name__ == '__main__':
     corpus = get_corpus()
+    # print(corpus)
     idf_dict = idf_vectorizer(corpus)
     to_csv(idf_dict)
