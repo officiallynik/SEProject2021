@@ -3,3 +3,4 @@ textblob
 gensim
 pandas
 elasticsearch
+wheel

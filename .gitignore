@@ -1,4 +1,7 @@
+env
+linux-env
 Data
 DataQuery/config.json
 wordembeddings/idf.csv
 wordembeddings/w2v_model.bin
+*/__pycache__
