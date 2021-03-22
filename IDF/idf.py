@@ -1,3 +1,4 @@
+import csv
 import sys
 sys.path.append("../PreProcessor")
 sys.path.append("../Data")
@@ -39,12 +40,22 @@ def idf_vectorizer(corpus):
 
 
 def to_csv(idf_dict, file_name="idf.csv"):
-    with open(file_name, 'w') as f:
+    with open(file_name, 'w', encoding="utf8") as f:
         f.write("Word, IDF\n") # header
         for key in idf_dict.keys():
             f.write("%s, %s\n" % (key, idf_dict[key]))
 
     print("successfully wrote data to the csv file.\n")
+
+def from_csv(file_name="idf.csv"):
+    idf_metric_dict = {}
+    with open(file_name, encoding="utf8") as f:
+        read_csv = csv.reader(csvfile, delimiter=',')
+        print("loading idf metrics")
+        for row in read_csv:
+            idf_metric_dict[row[0]] = row[1]
+
+    return idf_metric_dict
 
 
 if __name__ == '__main__':
