@@ -1,11 +1,14 @@
-from formula import relevance
-
+import sys
+sys.path.append('../IDF')
+import csv
+from RCA import RCA
+relevance = RCA()
 
 class Paragraph():
     def __init__(self, raw_text, word_list, vote_score, position):
-        self.raw_text = raw_text  # 带标签的，只经过<p>分段的数据
+        self.raw_text = raw_text
         self.word_list = word_list
-        self.position = position  # 第几段
+        self.position = position
         self.vote_score = vote_score
         self.relevance_score = 0
         self.entity_score = 0
@@ -14,15 +17,26 @@ class Paragraph():
         self.format_pattern = 0
         self.pos_score = 0
         self.overall_score = 0
+        self.idf_metric_dict = self.get_idf_metrics()
 
-    def cal_relevance(self, model, query_word_list, idf_metric_dict):
-        self.relevance_score = relevance.calculate_symmetric(model, query_word_list, self.word_list, idf_metric_dict)
+    def get_idf_metrics(self):
+        idf_metric_dict = {}
+        with open("../IDF/idf.csv", encoding="utf8") as f:
+            read_csv = csv.reader(f, delimiter=',')
+            print("loading idf metrics")
+            for row in read_csv:
+                idf_metric_dict[row[0]] = row[1]
 
-    def cal_entropy(self, idf_metric_dict):
+        return idf_metric_dict
+
+    def cal_relevance(self, query_word_list):
+        self.relevance_score = relevance.calc_symmetric_relevance(query_word_list, self.word_list)
+
+    def cal_entropy(self):
         idf_list = []
         for word in self.word_list:
             try:
-                idf = idf_metric_dict[word]
+                idf = +self.idf_metric_dict[word]
             except:
                 idf = 0
 
@@ -70,10 +84,13 @@ class Paragraph():
         else:
             self.infor_entropy = self.infor_entropy - entropy_min
             
-        if vote_max - vote_min != 0:
-            self.vote_score = (self.vote_score - vote_min) / (vote_max - vote_min)
-        else:
-            self.vote_score = self.vote_score - vote_min
+        # vote_max = int(vote_max)
+        # vote_min = int(vote_min)
+        # if vote_max - vote_min != 0:
+        #     self.vote_score = (self.vote_score - vote_min) / (vote_max - vote_min)
+        # else:
+        #     self.vote_score = self.vote_score - vote_min
+        self.vote_score = 0
         
     def cal_overall_score(self):
         self.overall_score += self.vote_score

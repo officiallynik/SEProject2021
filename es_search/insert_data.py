@@ -19,13 +19,13 @@ print(es)
 #             break
 
 
-def csv_reader(file_obj, index_name, doc_name):
+def csv_reader(file_obj, index_name):
     reader = csv.DictReader(file_obj)
-    helpers.bulk(es, reader, index=index_name, doc_type=doc_name)
+    helpers.bulk(es, reader, index=index_name)
 
 
 if __name__ == "__main__":
     with open("../Data/questions_data.csv") as f_obj:
-        csv_reader(f_obj, "answerbot_questions", "questions")
+        csv_reader(f_obj, "answerbot_questions")
     with open("../Data/answers_data.csv") as f_obj:
-        csv_reader(f_obj, "answerbot_answers", "answers")
+        csv_reader(f_obj, "answerbot_answers")

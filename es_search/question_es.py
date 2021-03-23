@@ -16,7 +16,7 @@ def search_question(query):
         }
     }
     returned_questions = es.search(
-        index="answerbot_questions", doc_type="questions", body=doc, size=size)
+        index="answerbot_questions", body=doc, size=size)
     relevant_questions = []
     for res in returned_questions['hits']['hits']:
         relevant_questions.append(res['_source'])
