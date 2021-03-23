@@ -14,6 +14,8 @@ class RCA:
             for row in read_csv:
                 idf_metric_dict[row[0]] = row[1]
 
+        return idf_metric_dict
+
     def get_word2vec_model(self):
         print("loading word2vec model")
         model = Word2Vec.load("../Word2Vec/word2vec.model")
@@ -40,8 +42,7 @@ class RCA:
             try:
                 idf_val = self.idf_dict[query]
                 idf = float(idf_val)
-
-            except:
+            except Exception as e:
                 idf = 0
             total_rel.append(0)
             max_rel = max(total_rel)
