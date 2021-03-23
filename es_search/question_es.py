@@ -3,7 +3,7 @@ from elasticsearch import Elasticsearch
 
 def search_question(query):
     # Query Passed by user
-    size = 1000
+    size = 10
     es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
 
     doc = {
