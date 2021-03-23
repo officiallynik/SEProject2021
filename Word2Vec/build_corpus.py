@@ -23,7 +23,7 @@ def create_corpus():
 
     print("starting to process dataset")
     data_list = [pool.apply(process_data, args=(data, cnt)) for cnt, data in enumerate(dataset)]
-    print(data_list)
+    # print(data_list)
 
     print("starting to add data to txt file")
 
