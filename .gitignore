@@ -3,6 +3,6 @@ linux-env
 Data
 DataQuery/config.json
 IDF/idf.csv
-Word2Vec/w2v_model.bin
+Word2Vec/word2vec.model*
 Word2Vec/corpus.txt
 */__pycache__

@@ -47,15 +47,15 @@ def to_csv(idf_dict, file_name="idf.csv"):
 
     print("successfully wrote data to the csv file.\n")
 
-def from_csv(file_name="idf.csv"):
-    idf_metric_dict = {}
-    with open(file_name, encoding="utf8") as f:
-        read_csv = csv.reader(csvfile, delimiter=',')
-        print("loading idf metrics")
-        for row in read_csv:
-            idf_metric_dict[row[0]] = row[1]
+# def from_csv(file_name="idf.csv"):
+#     idf_metric_dict = {}
+#     with open(file_name, encoding="utf8") as f:
+#         read_csv = csv.reader(csvfile, delimiter=',')
+#         print("loading idf metrics")
+#         for row in read_csv:
+#             idf_metric_dict[row[0]] = row[1]
 
-    return idf_metric_dict
+#     return idf_metric_dict
 
 
 if __name__ == '__main__':

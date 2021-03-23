@@ -2,17 +2,21 @@ import csv
 import sys
 sys.path.append("../IDF")
 sys.path.append("../Word2Vec")
-from idf import from_csv
 from gensim.models import Word2Vec
 
 
 class RCA:
     def get_idf_metrics(self):
-        idf_metric_dict = from_csv()
+        idf_metric_dict = {}
+        with open("../IDF/idf.csv", encoding="utf8") as f:
+            read_csv = csv.reader(f, delimiter=',')
+            print("loading idf metrics")
+            for row in read_csv:
+                idf_metric_dict[row[0]] = row[1]
 
     def get_word2vec_model(self):
         print("loading word2vec model")
-        model = Word2Vec.load("../Word2Vec/word2vec.bin")
+        model = Word2Vec.load("../Word2Vec/word2vec.model")
         print("model loaded successfully")
         return model
 
@@ -60,4 +64,5 @@ class RCA:
         return average_relevance
 
 if __name__ == "__main__":
-    pass
+    rca = RCA()
+    rca.get_word2vec_model()

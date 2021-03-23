@@ -12,7 +12,7 @@ def create_model(sentences):
                      window=context)
 
     # save bin file(about 3G), and using KeyedVectors.load_word2vec_format("w2v_model.bin", binary=True) load later
-    model.wv.save_word2vec_format("w2v_model.bin", binary=True)
+    model.save("word2vec.model")
     return model
 
 if __name__ == '__main__':

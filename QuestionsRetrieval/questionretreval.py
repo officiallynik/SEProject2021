@@ -1,7 +1,9 @@
-
 import sys
-sys.path.append("../preprocessor")
+sys.path.append("../PreProcessor")
 sys.path.append("../es_search")
+from question_es import search_question
+from preprocessor import PreprocessPostContent
+from RCA import RCA
 
 
 def custom_key(e):
@@ -9,9 +11,6 @@ def custom_key(e):
 
 
 def retrieve_top_matched_questions(query, number_of_questions):
-    from question_es import search_question
-    from preprocessor import PreprocessPostContent
-    from RCA import RCA
 
     relevance_calculator = RCA()
     questions = search_question(query)
@@ -21,9 +20,13 @@ def retrieve_top_matched_questions(query, number_of_questions):
 
     for q in questions:
         processed_question_titles.append(
-            preprocessor.get_single_para_word_list({'id': q["id"], 'title': q["title"]}))
+            {
+                'id': q["id"], 
+                'title': preprocessor.get_single_para_word_list(q["title"])
+            }
+        )
 
-    print(processed_question_titles)
+    # (processed_question_titles)
 
     preprocessed_query = preprocessor.get_single_para_word_list(query)
 
@@ -35,12 +38,12 @@ def retrieve_top_matched_questions(query, number_of_questions):
             preprocessed_query, processed_q['title'])
         relevance_scores.append({'score': score, 'question': processed_q})
 
-    print(relevance_scores)
+    # print(relevance_scores)
 
     relevance_scores.sort(reverse=True, key=custom_key)
     # sort the questions in descending order with respect to their scores
 
-    print(relevance_scores)
+    # print(relevance_scores)
 
     final_questions_list = []
 
