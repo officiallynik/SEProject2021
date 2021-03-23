@@ -4,9 +4,7 @@ from elasticsearch import Elasticsearch
 def search_question(query):
     # Query Passed by user
     size = 1000
-    url = "http://localhost:9200"
-
-    es = Elasticsearch([url])
+    es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
 
     doc = {
         "query": {
@@ -18,9 +16,18 @@ def search_question(query):
         }
     }
     returned_questions = es.search(
-        index="questions", doc_type="", body=doc, size=size)
+        index="answerbot_questions", doc_type="questions", body=doc, size=size)
     relevant_questions = []
     for res in returned_questions['hits']['hits']:
         relevant_questions.append(res['_source'])
 
     return relevant_questions
+
+
+if __name__ == "__main__":
+    query = "sort array in reverse"
+    res = search_question(query)
+    for q in res:
+        print(q)
+        print("\n\n")
+    print(len(res))
