@@ -31,7 +31,6 @@ class RCA:
         idf_values = []
 
         for query in query_list:
-
             total_rel = []
             for question in Question_List:
                 try:
@@ -44,6 +43,7 @@ class RCA:
                 idf = float(idf_val)
             except Exception as e:
                 idf = 0
+
             total_rel.append(0)
             max_rel = max(total_rel)
             rel_idf_summation.append(max_rel * idf)

@@ -4,6 +4,9 @@ from elasticsearch import Elasticsearch
 from paragraph import Paragraph
 from preprocessor import PreprocessPostContent
 from html.parser import HTMLParser
+import nltk
+import re
+from html.parser import HTMLParser
 
 class MyHTMLParser(HTMLParser):
     def handle_starttag(self, tag, attrs):
@@ -14,6 +17,8 @@ class MyHTMLParser(HTMLParser):
 
     def handle_data(self, data):
         print(data)
+
+parserHTML = MyHTMLParser()
 
 def get_answers_list(qid):
     # Query Passed by user
@@ -50,12 +55,13 @@ def process_answers(answer_list):
 def sort_paragraphs(paragraph_obj_list, query):
     # calculate score and sort
     preprocessor = PreprocessPostContent()
-    query_word_list = preprocessor.get_single_para_word_list(query)
+    preprocessed_query = preprocessor.get_single_para_word_list(query)
+    query_tokens = nltk.word_tokenize(preprocessed_query)
     relevance_list = []
     entropy_list = []
     vote_score_list = []
     for para_obj in paragraph_obj_list:
-        para_obj.cal_relevance(query_word_list)
+        para_obj.cal_relevance(query_tokens)
         para_obj.cal_entropy()
         para_obj.cal_semantic_pattern()
         para_obj.cal_format_pattern()
@@ -72,6 +78,11 @@ def sort_paragraphs(paragraph_obj_list, query):
 
     return paragraph_obj_list
 
+def answer_display(answer_raw):
+    processed_answer = re.sub(r"<.*?>", "", answer_raw)
+    processed_answer = re.sub(r"</.*?>", "", processed_answer)
+    parserHTML.feed(processed_answer)
+
 if __name__ == '__main__':
     print(get_answers_list('43432675'))
     query = "sort array in reverse"
@@ -84,10 +95,9 @@ if __name__ == '__main__':
         paragraph_obj_list.extend(process_answers(answer_list))
 
     paragraph_obj_list_sorted = sort_paragraphs(paragraph_obj_list, query)
-    parser = MyHTMLParser()
     for cnt, para_obj in enumerate(paragraph_obj_list_sorted, 1):
         print("answer no.", cnt)
         print("overall score:", para_obj.overall_score)
         print("body:")
-        parser.feed(para_obj.raw_text)
+        answer_display(para_obj.raw_text)
         print("---------------------------\n\n")

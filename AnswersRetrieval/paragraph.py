@@ -88,7 +88,6 @@ class Paragraph():
             self.vote_score = (self.vote_score - vote_min) / (vote_max - vote_min)
         else:
             self.vote_score = self.vote_score - vote_min
-        self.vote_score = 0
         
     def cal_overall_score(self):
         # print(self.vote_score, self.relevance_score, self.entity_score, self.infor_entropy, self.semantic_pattern, self.format_pattern)
