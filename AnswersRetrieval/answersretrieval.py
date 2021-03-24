@@ -3,6 +3,17 @@ sys.path.append('../PreProcessor')
 from elasticsearch import Elasticsearch
 from paragraph import Paragraph
 from preprocessor import PreprocessPostContent
+from html.parser import HTMLParser
+
+class MyHTMLParser(HTMLParser):
+    def handle_starttag(self, tag, attrs):
+        pass
+
+    def handle_endtag(self, tag):
+        pass
+
+    def handle_data(self, data):
+        print(data)
 
 def get_answers_list(qid):
     # Query Passed by user
@@ -29,10 +40,10 @@ def process_answers(answer_list):
     preprocessor = PreprocessPostContent()
     paragraph_obj_list = []
     for answer in answer_list:
-        paragraph_list = preprocessor.getParagraphs(answer['body'])
-        for pos, para in enumerate(paragraph_list, 1):
-            paragraph_obj_list.append(
-                Paragraph(para, preprocessor.get_single_para_word_list(para), vote_score=answer['score'], position=pos))
+        # paragraph_list = preprocessor.getParagraphs(answer['body'])
+        # for pos, para in enumerate(paragraph_list, 1):
+        paragraph_obj_list.append(
+            Paragraph(answer['body'], preprocessor.get_single_para_word_list(answer['body']), vote_score=int(answer['score']), position=1))
 
     return paragraph_obj_list
 
@@ -48,7 +59,6 @@ def sort_paragraphs(paragraph_obj_list, query):
         para_obj.cal_entropy()
         para_obj.cal_semantic_pattern()
         para_obj.cal_format_pattern()
-        para_obj.cal_pos_score()
         relevance_list.append(para_obj.relevance_score)
         entropy_list.append(para_obj.infor_entropy)
         vote_score_list.append(para_obj.vote_score)
@@ -74,8 +84,10 @@ if __name__ == '__main__':
         paragraph_obj_list.extend(process_answers(answer_list))
 
     paragraph_obj_list_sorted = sort_paragraphs(paragraph_obj_list, query)
+    parser = MyHTMLParser()
     for cnt, para_obj in enumerate(paragraph_obj_list_sorted, 1):
         print("answer no.", cnt)
         print("overall score:", para_obj.overall_score)
-        print("body:", para_obj.raw_text)
+        print("body:")
+        parser.feed(para_obj.raw_text)
         print("---------------------------\n\n")

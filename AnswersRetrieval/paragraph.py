@@ -36,7 +36,7 @@ class Paragraph():
         idf_list = []
         for word in self.word_list:
             try:
-                idf = +self.idf_metric_dict[word]
+                idf = self.idf_metric_dict[word]
             except:
                 idf = 0
 
@@ -67,11 +67,11 @@ class Paragraph():
                 self.format_pattern = 1
                 break
 
-    def cal_pos_score(self):
-        if self.position >= 1 and self.position <= 3:
-            self.pos_score = 1 / self.position
-        else:
-            self.pos_score = 0
+    # def cal_pos_score(self):
+    #     if self.position >= 1 and self.position <= 3:
+    #         self.pos_score = 1 / self.position
+    #     else:
+    #         self.pos_score = 0
 
     def normalized(self, relevance_min, relevance_max, entropy_min, entropy_max, vote_min, vote_max):
         if relevance_max - relevance_min != 0:
@@ -84,15 +84,14 @@ class Paragraph():
         else:
             self.infor_entropy = self.infor_entropy - entropy_min
             
-        # vote_max = int(vote_max)
-        # vote_min = int(vote_min)
-        # if vote_max - vote_min != 0:
-        #     self.vote_score = (self.vote_score - vote_min) / (vote_max - vote_min)
-        # else:
-        #     self.vote_score = self.vote_score - vote_min
+        if vote_max - vote_min != 0:
+            self.vote_score = (self.vote_score - vote_min) / (vote_max - vote_min)
+        else:
+            self.vote_score = self.vote_score - vote_min
         self.vote_score = 0
         
     def cal_overall_score(self):
+        # print(self.vote_score, self.relevance_score, self.entity_score, self.infor_entropy, self.semantic_pattern, self.format_pattern)
         self.overall_score += self.vote_score
         self.overall_score += self.relevance_score
         self.overall_score += self.entity_score
