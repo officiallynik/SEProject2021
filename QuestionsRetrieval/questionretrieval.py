@@ -1,6 +1,6 @@
 import sys
-sys.path.append("../PreProcessor")
-sys.path.append("../es_search")
+sys.path.append("./PreProcessor")
+sys.path.append("./es_search")
 from question_es import search_question
 from preprocessor import PreprocessPostContent
 from RCA import RCA
@@ -9,8 +9,14 @@ import nltk
 def custom_key(e):
     return e['score']
 
+def questions_display(questions, display=False):
+    if display:
+        for cnt, question in enumerate(questions, 1):
+            print('question no.:', cnt)
+            print('question:', question['question']['title'])
+            print()
 
-def retrieve_top_matched_questions(query, number_of_questions):
+def retrieve_top_matched_questions(query, number_of_questions, display):
 
     relevance_calculator = RCA()
     questions = search_question(query)
@@ -48,12 +54,11 @@ def retrieve_top_matched_questions(query, number_of_questions):
     relevance_questions.sort(reverse=True, key=custom_key)
     # sort the questions in descending order with respect to their scores
 
-    # print(relevance_questions)
+    questions_display(relevance_questions[:number_of_questions], display)
 
-    return relevance_questions[:10]
-
+    return relevance_questions[:number_of_questions]
 
 if __name__ == "__main__":
     query = "sort array in reverse"
 
-    print(retrieve_top_matched_questions(query, 10))
+    retrieve_top_matched_questions(query, 10, True)

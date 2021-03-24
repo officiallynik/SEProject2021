@@ -1,25 +1,25 @@
 import csv
 import sys
-sys.path.append("../IDF")
-sys.path.append("../Word2Vec")
+sys.path.append("./IDF")
+sys.path.append("./Word2Vec")
 from gensim.models import Word2Vec
 
 
 class RCA:
     def get_idf_metrics(self):
         idf_metric_dict = {}
-        with open("../IDF/idf.csv", encoding="utf8") as f:
+        with open("./IDF/idf.csv", encoding="utf8") as f:
             read_csv = csv.reader(f, delimiter=',')
-            print("loading idf metrics")
+            # print("loading idf metrics")
             for row in read_csv:
                 idf_metric_dict[row[0]] = row[1]
 
         return idf_metric_dict
 
     def get_word2vec_model(self):
-        print("loading word2vec model")
-        model = Word2Vec.load("../Word2Vec/word2vec.model")
-        print("model loaded successfully")
+        # print("loading word2vec model")
+        model = Word2Vec.load("./Word2Vec/word2vec.model")
+        # print("model loaded successfully")
         return model
 
     def __init__(self):

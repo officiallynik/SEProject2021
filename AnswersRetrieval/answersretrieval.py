@@ -1,5 +1,5 @@
 import sys
-sys.path.append('../PreProcessor')
+sys.path.append('./PreProcessor')
 from elasticsearch import Elasticsearch
 from paragraph import Paragraph
 from preprocessor import PreprocessPostContent
@@ -83,21 +83,41 @@ def answer_display(answer_raw):
     processed_answer = re.sub(r"</.*?>", "", processed_answer)
     parserHTML.feed(processed_answer)
 
-if __name__ == '__main__':
-    print(get_answers_list('43432675'))
-    query = "sort array in reverse"
-
+def retrieve_top_matched_answers(questions, query):
     answer_list_list = []
-    answer_list_list.append(get_answers_list('43432675'))
-
-    paragraph_obj_list = []
+    for question in questions:
+        answer_list_list.append(get_answers_list(question['question']['id']))
+    
+    answer_obj_list = []
     for answer_list in answer_list_list:
-        paragraph_obj_list.extend(process_answers(answer_list))
+        answer_obj_list.extend(process_answers(answer_list))
 
-    paragraph_obj_list_sorted = sort_paragraphs(paragraph_obj_list, query)
-    for cnt, para_obj in enumerate(paragraph_obj_list_sorted, 1):
-        print("answer no.", cnt)
-        print("overall score:", para_obj.overall_score)
-        print("body:")
+    answer_obj_list_sorted = sort_paragraphs(answer_obj_list, query)
+    answer_obj_list_sorted = answer_obj_list_sorted[:5]
+
+    for cnt, para_obj in enumerate(answer_obj_list_sorted, 1):
+        print(f"answer no. {cnt}")
+        print("\nanswer:")
         answer_display(para_obj.raw_text)
-        print("---------------------------\n\n")
+        print("--------------------------------------------------------------------------------------------\n\n")
+
+if __name__ == '__main__':
+    pass
+    # testing
+    # print(get_answers_list('43432675'))
+    # query = "sort array in reverse"
+
+    # answer_list_list = []
+    # answer_list_list.append(get_answers_list('43432675'))
+
+    # paragraph_obj_list = []
+    # for answer_list in answer_list_list:
+    #     paragraph_obj_list.extend(process_answers(answer_list))
+
+    # paragraph_obj_list_sorted = sort_paragraphs(paragraph_obj_list, query)
+    # for cnt, para_obj in enumerate(paragraph_obj_list_sorted, 1):
+    #     print("answer no.", cnt)
+    #     print("overall score:", para_obj.overall_score)
+    #     print("body:")
+    #     answer_display(para_obj.raw_text)
+    #     print("---------------------------\n\n")
