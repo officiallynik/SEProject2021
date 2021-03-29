@@ -90,7 +90,7 @@ class Paragraph():
             self.vote_score = self.vote_score - vote_min
         
     def cal_overall_score(self):
-        # print(self.vote_score, self.relevance_score, self.entity_score, self.infor_entropy, self.semantic_pattern, self.format_pattern)
+        #print(self.vote_score, self.relevance_score, self.entity_score, self.infor_entropy, self.semantic_pattern, self.format_pattern)
         self.overall_score += self.vote_score
         self.overall_score += self.relevance_score
         self.overall_score += self.entity_score

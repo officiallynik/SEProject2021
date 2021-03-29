@@ -4,3 +4,5 @@ gensim
 pandas
 elasticsearch
 wheel
+numpy
+sklearn

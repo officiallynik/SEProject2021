@@ -99,6 +99,7 @@ def retrieve_top_matched_answers(questions, query):
         print(f"answer no. {cnt}")
         print("\nanswer:")
         answer_display(para_obj.raw_text)
+        print("Score: ",para_obj.overall_score)
         print("--------------------------------------------------------------------------------------------\n\n")
 
 if __name__ == '__main__':
