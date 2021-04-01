@@ -101,3 +101,6 @@ class Paragraph():
 
     def __gt__(self, other):
         return self.overall_score > other.overall_score
+
+
+        
