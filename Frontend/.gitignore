@@ -1,7 +1,8 @@
+out
 node_modules
-.yarnrc
-vsc-extension-quickstart.md
-**/*.map
-**/.eslintrc.json
-.vscode/**
-.vscode-test/**
+.vscode-test/
+*.vsix
+
+app/node_modules
+app/public/bundle.*
+app/src/stores/static-models.js

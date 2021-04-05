@@ -1,9 +1,22 @@
 .vscode/**
 .vscode-test/**
-test/**
+out/test/**
+src/**
 .gitignore
-.yarnrc
 vsc-extension-quickstart.md
-**/jsconfig.json
+**/tsconfig.json
+**/tslint.json
 **/*.map
-**/.eslintrc.json
+**/*.ts
+
+# Extra files to ignore
+app/node_modules/**
+app/src/**
+app/public/*.map
+app/public/favicon.png
+app/*.json
+app/**.md
+app/rollup.config.js
+assets/snippet.gif
+tsconfig.json
+webpack.config.js
