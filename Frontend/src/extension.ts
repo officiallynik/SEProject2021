@@ -7,50 +7,34 @@ export function activate(context: vscode.ExtensionContext) {
   let searchPyStackBot = vscode.commands.registerCommand('extension.searchPyStackBot', () => {
 
     const editor = vscode.window.activeTextEditor;
-    let text = "";
-    if(editor) {
-      text = editor.document.getText(editor.selection);
+    let searchQuery = "";
+    if (editor) {
+      searchQuery = editor.document.getText(editor.selection);
     }
 
-    console.log(text);
 
-    // Search options
-    const searchOptions: vscode.InputBoxOptions = {
-      placeHolder: 'Search',
-      prompt: '*Required',
-      value: text || "",
-    };
-
-    // Show Input
-    vscode.window.showInputBox(searchOptions).then((searchQuery: string | undefined) => {
-
-      if (searchQuery) {
-
-        // Get language
-        const currentLanguageSelection = vscode.workspace.getConfiguration().get('English');
-        // Get sort type
-        const currentSortTypeSelection = vscode.workspace.getConfiguration().get('Relevance');
-        // Create webview panel
-        const stackoverflowPanel = createWebViewPanel("PyStackBot", context.extensionPath);
-        // Set webview - svelte - built to ./app/public/*
-        stackoverflowPanel.webview.html = AppPageHtml(context.extensionPath, stackoverflowPanel);
-        // Post search term, read in App.svelte as window.addEventListener("message"
-        stackoverflowPanel.webview.postMessage({
-          action: 'search',
-          query: searchQuery,
-          language: currentLanguageSelection,
-          sortType: currentSortTypeSelection
-        });
-
-        // Show progress loader
-        windowProgress(stackoverflowPanel);
-
-        // Listen for changes to window title
-        changeWindowTitle(stackoverflowPanel);
-
-      }
-
+    // Get language
+    const currentLanguageSelection = vscode.workspace.getConfiguration().get('English');
+    // Get sort type
+    const currentSortTypeSelection = vscode.workspace.getConfiguration().get('Relevance');
+    // Create webview panel
+    const stackoverflowPanel = createWebViewPanel("PyStackBot", context.extensionPath);
+    // Set webview - svelte - built to ./app/public/*
+    stackoverflowPanel.webview.html = AppPageHtml(context.extensionPath, stackoverflowPanel);
+    // Post search term, read in App.svelte as window.addEventListener("message"
+    stackoverflowPanel.webview.postMessage({
+      action: 'search',
+      query: searchQuery,
+      language: currentLanguageSelection,
+      sortType: currentSortTypeSelection
     });
+
+    // Show progress loader
+    windowProgress(stackoverflowPanel);
+
+    // Listen for changes to window title
+    changeWindowTitle(stackoverflowPanel);
+
   });
 
 

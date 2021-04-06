@@ -11,10 +11,10 @@
 </script>
 
 <p>
-  {$i18n.text.no_results_abbr_01}
+  Sorry no results found :(
   <strong>
     <i>"{query}"</i>
     .
   </strong>
-  {$i18n.text.no_results_abbr_02}
+  Tip: Be less specific, try tagged search 
 </p>

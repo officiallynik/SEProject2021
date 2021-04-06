@@ -27,7 +27,7 @@
     "keybindings": [
       {
         "command": "extension.searchPyStackBot",
-        "key": "ctrl+alt+s",
+        "key": "ctrl+alt+d",
         "mac": "ctrl+cmd+s"
       }
     ]

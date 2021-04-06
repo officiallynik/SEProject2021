@@ -21,30 +21,19 @@
   let tagData;
   let gif;
 
-  /**
-   * Posted properties on search from extension.ts => showInputBox()
-   * action: 'search', // or topPick
-   * query: searchQuery, // inputbox value
-   * language: currentLanguageSelection, // user settings configuation
-   * sortType: currentSortTypeSelection // user settings configuation
-   */
-  // window.addEventListener("message", event => {
-  //   extensionAction = event.data.action;
+  window.addEventListener("message", event => {
+    console.log(event);
+    extensionAction = event.data.action;
 
-  //   if (event.data.action === "search") {
-  //     searchQuery.set(event.data.query);
+    if (event.data.action === "search") {
+      searchQuery.set(event.data.query);
 
-  //     // Find & set sort filter
-  //     const searchFilterToSetAsSelected = resultFilters.find(
-  //       _ => _.label === event.data.sortType
-  //     );
-  //     selectedSearchFilter.set(searchFilterToSetAsSelected);
-  //     // Set section
-  //     section.set("search");
+      selectedSearchFilter.set("Relevance");
 
-  //     search();
-  //   }
-  // });
+      section.set("search");
+      search();
+    }
+  });
 
   function handleGotoQuestion(event) {
     section.set("question");
@@ -133,30 +122,23 @@
 
   // Main search functionality
   function search() {
-    if (
-      $searchQuery[0] === "[" &&
-      $searchQuery[$searchQuery.length - 1] === "]"
-    ) {
-      const tag = $searchQuery.substring(1, $searchQuery.length - 1);
-      handleTagSelected({ detail: { tag: tag } }); // (o.0)
-      return;
-    }
+    console.log("searching...")
 
     vscodeProgress("start", "Loading Search Results", false);
     isLoading = true;
     tagData = null;
     selectedTag = null;
 
-    const uri = `https://stackoverflow.com/search/advanced?q=${$searchQuery}&page=${$page}&pagesize=10&order=${$selectedSearchFilter.apiOrder}&sort=${$selectedSearchFilter.apiSort}&site=&filter=&key=`;
+    const uri = `https://api.stackexchange.com/2.2/search/advanced?order=desc&sort=Relevance&q=${$searchQuery}&site=stackoverflow&filter=withbody`;
 
     axios
       .get(uri)
       .then(response => {
         isLoading = false;
-        console.log(response)
+        console.log(response.data)
         if (response.status === 200) {
           searchData = response.data.items;
-          totalResults = response.data.total;
+          totalResults = searchData.length;
           vscodeProgress("stop", null, false);
         } else {
           vscodeProgress("stop", null, true);
@@ -171,19 +153,20 @@
 
 <Header on:goBack={handleGotoSearch} {extensionAction} />
 
-<Search
-  on:gotoQuestion={handleGotoQuestion}
-  on:gotoTagLearnMore={() => section.set("tag")}
-  on:searchByTag={handleTagSelected}
-  on:searchInput={search}
-  on:searchByPage={handlePageSearch}
-  on:filterChange={handleFilterChangeSearch}
-  {isLoading}
-  {searchData}
-  {tagData}
-  {totalResults}
-/>
-{#if $section === "question"}
+{#if $section === "search"}
+  <Search
+    on:gotoQuestion={handleGotoQuestion}
+    on:gotoTagLearnMore={() => section.set("tag")}
+    on:searchByTag={handleTagSelected}
+    on:searchInput={search}
+    on:searchByPage={handlePageSearch}
+    on:filterChange={handleFilterChangeSearch}
+    {isLoading}
+    {searchData}
+    {tagData}
+    {totalResults}
+  />
+{:else if $section === "question"}
   <Question
     on:searchByTag={handleTagFromQuestionSearch}
     {questionId}
