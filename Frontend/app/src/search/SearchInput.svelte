@@ -1,11 +1,16 @@
 <script>
   import { createEventDispatcher, onMount } from "svelte";
   import { page, searchQuery } from "../stores/common.js";
-  import { i18n } from "../stores/i18n.js";
+  import SearchTips from "./SearchTips.svelte";
 
+  let showTips = false;
   export let tagData;
   export let isLoading;
   let searchQueryPreviousValue;
+
+  function toggleSearchTips() {
+    showTips = !showTips;
+  }
 
   onMount(() => {
     searchQueryPreviousValue = $searchQuery;
@@ -37,6 +42,41 @@
   }
 </script>
 
+<svelte:window on:keydown={handleSearchByEnterKey} />
+
+<section>
+  <div class="text-capitalize">
+    Showing Results for
+    <strong>
+      <i>
+        {#if searchQueryPreviousValue}{searchQueryPreviousValue}{/if}
+      </i>
+    </strong>
+
+    <span
+      class="link advanced-search-tips link-search"
+      on:click={toggleSearchTips}
+    >
+      {#if !showTips}
+        Search Tips
+      {:else}Close Tips{/if}
+    </span>
+  </div>
+
+  <input type="text" bind:value={$searchQuery} />
+
+  <button on:click={handleSearch} class="text-capitalize"> Search </button>
+
+  <div on:click={handleSearch} class="link link-search">
+    Stack Overflow Direct Search
+  </div>
+</section>
+
+{#if showTips}
+  <h3>Search Tips</h3>
+  <SearchTips />
+{/if}
+
 <style>
   section {
     display: block;
@@ -61,25 +101,18 @@
     min-width: 100px;
     max-width: 100px;
   }
+
+  .advanced-search-tips {
+    float: right;
+  }
+
+  .link-search {
+    color: var(--vscode-textLink-foreground);
+    user-select: none;
+    opacity: 0.8;
+  }
+  .link-search:hover {
+    opacity: 1;
+  }
+
 </style>
-
-<svelte:window on:keydown={handleSearchByEnterKey} />
-
-<section>
-
-  <div class="text-capitalize">
-    {$i18n.text.results_for}
-    <strong>
-      <i>
-        {#if searchQueryPreviousValue}{searchQueryPreviousValue}{/if}
-      </i>
-    </strong>
-  </div>
-
-  <input type="text" bind:value={$searchQuery} />
-
-  <button on:click={handleSearch} class="text-capitalize">
-    {$i18n.text.search}
-  </button>
-
-</section>

@@ -26,7 +26,8 @@ export function AppPageHtml(contextPath: string, panel: WebviewPanel) {
         
       </head>
 
-      <body></body>
+      <body>
+      </body>
 
     </html>`;
 }

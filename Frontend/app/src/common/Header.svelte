@@ -1,5 +1,4 @@
 <script>
-  import { i18n } from "../stores/i18n.js";
   import { section } from "../stores/common.js";
   import { createEventDispatcher } from "svelte";
 
@@ -44,14 +43,9 @@
   {#if ($section === 'question' && extensionAction === 'search') || $section === 'tag'}
     <div class="back text-capitalize" on:click={goBack}>
       <span />
-      {$i18n.text.back_to_search_results}
+      Back
     </div>
   {:else}
     <strong>PyStackBot</strong>
-    {#if $i18n && $i18n.code !== ''}
-      <small>
-        <i>{$i18n.language}</i>
-      </small>
-    {/if}
   {/if}
 </h3>

@@ -6,10 +6,19 @@ export function activate(context: vscode.ExtensionContext) {
 
   let searchPyStackBot = vscode.commands.registerCommand('extension.searchPyStackBot', () => {
 
+    const editor = vscode.window.activeTextEditor;
+    let text = "";
+    if(editor) {
+      text = editor.document.getText(editor.selection);
+    }
+
+    console.log(text);
+
     // Search options
     const searchOptions: vscode.InputBoxOptions = {
       placeHolder: 'Search',
       prompt: '*Required',
+      value: text || "",
     };
 
     // Show Input
