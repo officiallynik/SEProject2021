@@ -45,10 +45,10 @@ def process_answers(answer_list):
     preprocessor = PreprocessPostContent()
     paragraph_obj_list = []
     for answer in answer_list:
-        # paragraph_list = preprocessor.getParagraphs(answer['body'])
-        # for pos, para in enumerate(paragraph_list, 1):
-        paragraph_obj_list.append(
-            Paragraph(answer['body'], preprocessor.get_single_para_word_list(answer['body']), vote_score=int(answer['score']), position=1))
+        paragraph_list = preprocessor.getParagraphs(answer['body'])
+        for pos, para in enumerate(paragraph_list, 1):
+            paragraph_obj_list.append(
+                Paragraph(para, preprocessor.get_single_para_word_list(para), vote_score=int(answer['score']), position=pos))
 
     return paragraph_obj_list
 
@@ -87,13 +87,13 @@ def retrieve_top_matched_answers(questions, query):
     answer_list_list = []
     for question in questions:
         answer_list_list.append(get_answers_list(question['question']['id']))
-    
+    #print(answer_list_list)
     answer_obj_list = []
     for answer_list in answer_list_list:
         answer_obj_list.extend(process_answers(answer_list))
 
     answer_obj_list_sorted = sort_paragraphs(answer_obj_list, query)
-    answer_obj_list_sorted = answer_obj_list_sorted[:5]
+    answer_obj_list_sorted = answer_obj_list_sorted[:10]
 
     for cnt, para_obj in enumerate(answer_obj_list_sorted, 1):
         print(f"answer no. {cnt}")
@@ -101,6 +101,8 @@ def retrieve_top_matched_answers(questions, query):
         answer_display(para_obj.raw_text)
         print("Score: ",para_obj.overall_score)
         print("--------------------------------------------------------------------------------------------\n\n")
+    
+    return answer_obj_list_sorted
 
 if __name__ == '__main__':
     pass

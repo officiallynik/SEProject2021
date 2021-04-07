@@ -38,18 +38,21 @@ class RCA:
                     rel = self.word2Vec.similarity(query, question)
                 except Exception as e:
                     rel = 0
+                
                 total_rel.append(rel)
             try:
                 idf_val = self.idf_dict[query]
                 idf = float(idf_val)
             except Exception as e:
                 idf = 0
+            
             total_rel.append(0)
             max_rel = max(total_rel)
             rel_idf_summation.append(max_rel * idf)
             idf_values.append(idf)
 
         idf_summation = sum(idf_values)
+        
 
         if idf_summation != 0:
             asymmetric_rel = sum(rel_idf_summation) / idf_summation
@@ -59,9 +62,11 @@ class RCA:
         return asymmetric_rel
 
     def calc_symmetric_relevance(self, query_list, Question_List):
+        
         rel_q_to_Q = self.calc_asymmetric_val(query_list, Question_List)
         rel_Q_to_q = self.calc_asymmetric_val(Question_List, query_list)
         average_relevance = (rel_q_to_Q + rel_Q_to_q) / 2
+       
         return average_relevance
 
 if __name__ == "__main__":
