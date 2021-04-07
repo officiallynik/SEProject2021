@@ -222,7 +222,7 @@ class PreprocessPostContent(object):
         # print(paragraphs_candidates)
         for p in paragraphs_candidates:
             # print(TextBlob(p).words)
-            if len(TextBlob(p).words) == 0:
+            if len(TextBlob(p).words) < self.min_words_paragraph:
                 continue
             paragraphs.append(p)
         return paragraphs
