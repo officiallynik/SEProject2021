@@ -95,12 +95,12 @@ def retrieve_top_matched_answers(questions, query):
     answer_obj_list_sorted = sort_paragraphs(answer_obj_list, query)
     answer_obj_list_sorted = answer_obj_list_sorted[:10]
 
-    for cnt, para_obj in enumerate(answer_obj_list_sorted, 1):
-        print(f"answer no. {cnt}")
-        print("\nanswer:")
-        answer_display(para_obj.raw_text)
-        print("Score: ",para_obj.overall_score)
-        print("--------------------------------------------------------------------------------------------\n\n")
+    # for cnt, para_obj in enumerate(answer_obj_list_sorted, 1):
+    #     print(f"answer no. {cnt}")
+    #     print("\nanswer:")
+    #     answer_display(para_obj.raw_text)
+    #     print("Score: ",para_obj.overall_score)
+    #     print("--------------------------------------------------------------------------------------------\n\n")
     
     return answer_obj_list_sorted
 

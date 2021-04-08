@@ -5,8 +5,8 @@ import software_tokenizer as tokenizer
 import nltk
 from nltk.stem import WordNetLemmatizer  # used for stemming
 from remove_stopwords import remove_stopwords
-nltk.download('punkt')
-nltk.download('wordnet')
+nltk.download('punkt',quiet=True)
+nltk.download('wordnet',quiet=True)
 
 
 class PreprocessPostContent(object):
