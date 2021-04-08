@@ -1,7 +1,7 @@
 import csv
 import sys
-sys.path.append("../PreProcessor")
-sys.path.append("../Data")
+sys.path.append("./AnswerSearch/PreProcessor")
+sys.path.append("./AnswerSearch/Data")
 from sklearn.feature_extraction.text import TfidfVectorizer
 import pandas as pd
 from preprocessor import PreprocessPostContent

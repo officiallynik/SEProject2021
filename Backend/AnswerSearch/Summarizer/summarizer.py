@@ -2,7 +2,7 @@
 
 from mmr import mmr
 import sys
-sys.path.append('../AnswersRetrieval')
+sys.path.append('./AnswerSearch/QuestionRetrieval')
 from RCA import RCA
 relevance = RCA()
 

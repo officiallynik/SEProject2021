@@ -1,8 +1,9 @@
 import sys,os
-sys.path.append(os.path.join(sys.path[0],'QuestionsRetrieval'))
+
+sys.path.append("./AnswerSearch/QuestionsRetrieval")
 #sys.path.append('./AnswerSearch/QuestionsRetrieval')
-sys.path.append('./AnswersRetrieval')
-sys.path.append('./Summarizer')
+sys.path.append('./AnswerSearch/AnswersRetrieval')
+sys.path.append('./AnswerSearch/Summarizer')
 from questionretrieval import retrieve_top_matched_questions
 from answersretrieval import retrieve_top_matched_answers
 from summarizer import mmr_handler

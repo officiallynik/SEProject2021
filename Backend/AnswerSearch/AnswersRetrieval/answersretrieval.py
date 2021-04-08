@@ -1,5 +1,5 @@
 import sys
-sys.path.append('./PreProcessor')
+sys.path.append('./AnswerSearch/PreProcessor')
 from elasticsearch import Elasticsearch
 from paragraph import Paragraph
 from preprocessor import PreprocessPostContent

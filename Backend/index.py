@@ -1,7 +1,7 @@
 import sys
 sys.path.append("./AnswerSearch")
 from flask import Flask,request
-from main.py import search_query
+from main import search_query
 
 app=Flask(__name__)
 
