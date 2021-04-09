@@ -20,10 +20,7 @@
 {/if}
 
 {#if searchData && totalResults !== 0}
-  {console.log(searchData)}
   <SearchItem {isLoading} {searchData} on:gotoQuestion on:searchByTag />
 {:else if !isLoading}
   <SearchNoResults />
 {/if}
-
-<!-- <SearchPager {totalResults} on:searchByPage /> -->

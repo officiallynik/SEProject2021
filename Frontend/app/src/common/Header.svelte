@@ -43,7 +43,7 @@
   {#if ($section === 'question' && extensionAction === 'search') || $section === 'tag'}
     <div class="back text-capitalize" on:click={goBack}>
       <span />
-      Back
+      Back to Questions
     </div>
   {:else}
     <strong>PyStackBot</strong>

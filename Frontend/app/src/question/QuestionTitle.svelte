@@ -1,5 +1,4 @@
 <script>
-  import { createEventDispatcher } from "svelte";
   import { fade } from "svelte/transition";
   import { i18n } from "../stores/i18n.js";
   import { formatNumber } from "../stores/common.js";
@@ -21,6 +20,42 @@
   }
 </script>
 
+<h1>
+  {@html title}
+</h1>
+
+<div class="question-title-container" in:fade>
+  <div class="metrics">
+    {#if creationDate}
+      asked
+      <span>{timeAgo(creationDate, $i18n)}</span>
+    {/if}
+
+    {#if totalViews}
+      views
+      <span>{totalViews}</span>
+    {/if}
+
+    <span
+      class="link view-related-questions"
+      class:hide-related-questions={showRelatedQuestions}
+      on:click={toggleRelatedQuestions}
+    >
+      {#if !showRelatedQuestions}
+        view related questions
+      {:else}hide related questions{/if}
+    </span>
+
+    {#if showRelatedQuestions}
+      <QuestionsRelated
+        {relatedQuestions}
+        on:closeRelatedQuestions={toggleRelatedQuestions}
+        on:relatedQuestionSearch
+      />
+    {/if}
+  </div>
+</div>
+
 <style>
   .question-title-container {
     border-bottom: 2px solid var(--vscode-textSeparator-foreground);
@@ -40,52 +75,20 @@
   }
   .metrics span.view-related-questions,
   .metrics span.hide-related-questions {
-    margin-right: 0;
+    float: right;
   }
   .view-related-questions {
-    float: right;
+    color: var(--vscode-textLink-activeForeground);
+    opacity: 0.8;
+  }
+  .view-related-questions:hover {
+    opacity: 1;
   }
   .hide-related-questions {
     color: var(--vscode-textLink-activeForeground);
+    opacity: 0.8;
+  }
+  .hide-related-questions:hover {
+    opacity: 1;
   }
 </style>
-
-<h1>
-  {@html title}
-</h1>
-
-<div class="question-title-container" in:fade>
-  <div class="metrics">
-
-    {#if creationDate}
-      {$i18n.text.asked}
-      <span>{timeAgo(creationDate, $i18n)}</span>
-    {/if}
-    {#if lastActivityDate}
-      {$i18n.text.active}
-      <span>{timeAgo(lastActivityDate, $i18n)}</span>
-    {/if}
-    {#if totalViews}
-      {$i18n.text.viewed}
-      <span>{totalViews} {$i18n.text.times}</span>
-    {/if}
-
-    {#if extensionAction !== 'topPick'}
-      <span
-        class="link view-related-questions"
-        class:hide-related-questions={showRelatedQuestions}
-        on:click={toggleRelatedQuestions}>
-        {#if !showRelatedQuestions}
-          {$i18n.text.view_related_questions}
-        {:else}{$i18n.text.hide_related_questions}{/if}
-      </span>
-    {/if}
-
-    {#if showRelatedQuestions}
-      <QuestionsRelated
-        {relatedQuestions}
-        on:closeRelatedQuestions={toggleRelatedQuestions}
-        on:relatedQuestionSearch />
-    {/if}
-  </div>
-</div>

@@ -32,10 +32,10 @@
 </style>
 
 <div in:fade>
-  <h1>{$i18n.text.about}</h1>
+  <h1>about</h1>
   <span>{tagData.tag_name}</span>
 
-  <h3 class="text-capitalize">{$i18n.text.tag_info}</h3>
+  <h3 class="text-capitalize">tag info</h3>
 
   <div class="excerpt">
     {@html tagData.excerpt}

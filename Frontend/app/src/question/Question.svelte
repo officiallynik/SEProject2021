@@ -1,8 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
-  import { i18n } from "../stores/i18n.js";
-  import { vscodeWindowTitle, vscodeProgress } from "../stores/vscode-api.js";
+  import { vscodeProgress } from "../stores/vscode-api.js";
   import axios from "axios";
   import Comments from "../Common/Comments.svelte";
   import RowLayout from "../Common/RowLayout.svelte";
@@ -12,15 +11,14 @@
   import QuestionTitle from "./QuestionTitle.svelte";
   import QuestionAnswers from "./QuestionAnswers.svelte";
   import QuestionIndices from "./QuestionIndices.svelte";
-  import QuestionNotice from "./QuestionNotice.svelte";
-  import QuestionClosed from "./QuestionClosed.svelte";
 
   export let questionId;
   export let questionTitle;
   export let gif;
   export let extensionAction;
+  export let isAnswersLoading;
+  export let answers;
   let question;
-  let answers;
   let isLoading = true;
   let relatedQuestions;
 
@@ -32,17 +30,16 @@
     isLoading = true;
     questionId = event.detail.questionId;
     questionTitle = event.detail.questionTitle;
-    vscodeWindowTitle(questionTitle);
     fetchQuestion();
   }
 
   function fetchRelatedQuestions() {
     isLoading = true;
 
-    const site = `${$i18n.code}stackoverflow`;
-    const uri = `https://stackoverflow.com/questions/${questionId}/related?order=desc&sort=activity&site=${site}&filter=&key=`;
+    const site = `stackoverflow`;
+    const uri = `https://api.stackexchange.com/2.2/questions/${questionId}/related?order=desc&sort=activity&site=${site}`;
 
-    axios.get(uri).then(response => {
+    axios.get(uri).then((response) => {
       isLoading = false;
       if (response.status === 200) {
         relatedQuestions = response.data.items;
@@ -55,20 +52,88 @@
 
   function fetchQuestion() {
     vscodeProgress("start", "Loading Search Results", false);
-    const site = `${$i18n.code}stackoverflow`;
-    const uri = `https://stackoverflow.com/questions/${questionId}?site=${site}&filter=&key=`;
+    const site = `stackoverflow`;
+    const uri = `https://api.stackexchange.com/2.2/questions/${questionId}?site=${site}&filter=!3zl2.5epWZZhmbtbF`;
 
-    axios.get(uri).then(response => {
+    axios.get(uri).then((response) => {
       isLoading = false;
       if (response.status === 200) {
         question = response.data.items[0];
         fetchRelatedQuestions();
+        fetchAnswers();
+      } else {
+        vscodeProgress("stop", null, true);
+      }
+    });
+  }
+
+  function fetchAnswers() {
+    const uri = `https://api.stackexchange.com/2.2/questions/${questionId}/answers?order=desc&sort=votes&site=stackoverflow&filter=!3zl2.GhG14q1O7U25`;
+
+    axios.get(uri).then(response => {
+      isLoading = false;
+      if (response.status === 200) {
+        answers = response.data.items;
       } else {
         vscodeProgress("stop", null, true);
       }
     });
   }
 </script>
+
+<QuestionTitle
+  on:relatedQuestionSearch={handleOnRelatedSearch}
+  title={questionTitle}
+  creationDate={question && question.creation_date}
+  viewCount={question && question.view_count}
+  {relatedQuestions}
+  {extensionAction}
+/>
+
+{#if isLoading}
+  <Loader />
+{/if}
+
+{#if question}
+  <RowLayout>
+    <div slot="left">
+      <QuestionIndices
+        score={question.score}
+        favorite={question.favorite_count}
+      />
+    </div>
+
+    <div slot="right">
+      <div class="content">
+        {@html question.body}
+      </div>
+
+      <div class="tags">
+        <Tags tags={question.tags} on:searchByTag />
+      </div>
+
+      <div class="question-answer-bottom">
+        <!-- <div class="view-online">
+          <a href={question.link} target="_blank">view online</a>
+        </div> -->
+
+        <User
+          user={question.owner}
+          createdDate={question.creation_date}
+          isQuestion={true}
+        />
+      </div>
+
+      {#if question.comments}
+        <Comments comments={question.comments} />
+      {/if}
+    </div>
+  </RowLayout>
+
+  {#if question.answer_count > 0}
+    <QuestionAnswers {answers} />
+  {/if}
+{/if}
 
 <style>
   .content {
@@ -92,80 +157,4 @@
     float: left;
     margin-top: 38px;
   }
-  iframe {
-    min-height: 500px;
-    min-width: 500px;
-  }
 </style>
-
-{#if gif && question}
-  <iframe src={gif} frameborder="0" title="haha" />
-{/if}
-
-<QuestionTitle
-  on:relatedQuestionSearch={handleOnRelatedSearch}
-  title={questionTitle}
-  creationDate={question && question.creation_date}
-  lastActivityDate={question && question.last_activity_date}
-  viewCount={question && question.view_count}
-  {relatedQuestions}
-  {extensionAction} />
-
-{#if isLoading}
-  <Loader />
-{/if}
-
-{#if question}
-  <RowLayout>
-
-    <div slot="left">
-      <QuestionIndices
-        score={question.score}
-        favorite={question.favorite_count} />
-    </div>
-
-    <div slot="right">
-
-      <div class="content">
-        {@html question.body}
-      </div>
-
-      {#if extensionAction !== 'topPick'}
-        <div class="tags">
-          <Tags tags={question.tags} on:searchByTag />
-        </div>
-      {/if}
-
-      <div class="question-answer-bottom">
-        <div class="view-online">
-          <a href={question.link} target="_blank">{$i18n.text.view_online}</a>
-        </div>
-
-        <User
-          user={question.owner}
-          createdDate={question.creation_date}
-          isQuestion={true} />
-      </div>
-
-      {#if question.closed_details}
-        <QuestionClosed
-          details={question.closed_details}
-          reason={question.closed_reason}
-          closedDate={question.closed_date} />
-      {/if}
-
-      {#if question.notice}
-        <QuestionNotice notice={question.notice} />
-      {/if}
-
-      {#if question.comments}
-        <Comments comments={question.comments} />
-      {/if}
-    </div>
-
-  </RowLayout>
-
-  {#if question.answer_count > 0}
-    <QuestionAnswers {questionId} />
-  {/if}
-{/if}

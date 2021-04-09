@@ -1,9 +1,8 @@
 <script>
   import { page, section, searchQuery } from "./stores/common.js";
-  import { vscodeProgress, vscodeWindowTitle } from "./stores/vscode-api.js";
+  import { vscodeProgress } from "./stores/vscode-api.js";
   import {
-    selectedSearchFilter,
-    resultFilters,
+    selectedSearchFilter
   } from "./stores/results-filter.js";
   import axios from "axios";
   import Header from "./common/Header.svelte";
@@ -37,14 +36,12 @@
 
   function handleGotoQuestion(event) {
     section.set("question");
-    vscodeWindowTitle(event.detail.questionTitle);
     questionId = event.detail.questionId;
     questionTitle = event.detail.questionTitle;
   }
 
   function handleGotoSearch(event) {
     section.set("search");
-    vscodeWindowTitle($searchQuery);
   }
 
   function handlePageSearch() {
@@ -97,7 +94,6 @@
 
   function tagSearch(selectedTag) {
     isLoading = true;
-    vscodeWindowTitle(`[${selectedTag}]`);
     searchQuery.set(`[${selectedTag}]`);
 
     const uri = `https://stackoverflow.com/search/advanced?tagged=${selectedTag}&page=${$page}&pagesize=10&order=${$selectedSearchFilter.apiOrder}&sort=${$selectedSearchFilter.apiSort}&site=&filter=&key=`;
@@ -149,7 +145,41 @@
         vscodeProgress("stop", null, true);
       });
   }
+
+  // function scrollTop() {
+  //   document.documentElement.animate({scrollTop: 0});
+  // }
 </script>
+
+<!-- <style>
+#topBtn {
+  display: inline-block;
+  background: url('topBtn.png');
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  border-radius: 4px;
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  transition: background-color .3s, 
+    opacity .5s, visibility .5s;
+  opacity: 1;
+  visibility: visible;
+  z-index: 1000;
+}
+#topBtn:hover {
+  cursor: pointer;
+  background-color: #333;
+}
+#topBtn:active {
+  background-color: #555;
+}
+</style> -->
+
+<!-- svelte-ignore a11y-missing-attribute
+<!-- svelte-ignore a11y-missing-content -->
+<!-- <a id="topBtn" on:click={scrollTop}></a> -->
 
 <Header on:goBack={handleGotoSearch} {extensionAction} />
 

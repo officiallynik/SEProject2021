@@ -64,7 +64,7 @@
 
     <div class="information">
 
-      <header>
+      <header on:click={() => navigateToQuestion(searchItem.question_id, searchItem.title)}>
         {@html searchItem.title}
       </header>
 

@@ -1,11 +1,6 @@
 <script>
-  import { onDestroy } from "svelte";
   // import { i18n, languages } from "../stores/i18n.js";
   // import { formatNumber, section } from "../stores/common.js";
-  import {
-    resultFilters,
-    selectedAnswerFilter
-  } from "../stores/results-filter.js";
 
   export let results;
   export let isLoading;
@@ -54,6 +49,7 @@
     </h2>
 
   </div>
+  
   <div class="link link-questions">
     View Related Questions
   </div>

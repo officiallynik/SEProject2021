@@ -76,9 +76,9 @@
 
   <span class="link" on:click={toggleComments}>
     {#if comments.length > commentsShowAmount}
-      {`${$i18n.text.show} ${commentsLength} ${$i18n.text.more_comments}`}
+      {`show ${commentsLength} more comments`}
     {:else if comments.length === commentsShowAmount}
-      {$i18n.text.hide_comments}
+      hide comments
     {/if}
   </span>
 

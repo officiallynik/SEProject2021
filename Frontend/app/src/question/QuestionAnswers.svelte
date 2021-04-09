@@ -1,12 +1,5 @@
 <script>
   import { onMount } from "svelte";
-  import { i18n } from "../stores/i18n.js";
-  import { vscodeProgress } from "../stores/vscode-api.js";
-  import {
-    selectedAnswerFilter,
-    resultFilters
-  } from "../stores/results-filter.js";
-  import axios from "axios";
   import Comments from "../common/Comments.svelte";
   import RowLayout from "../common/RowLayout.svelte";
   import ResultsBar from "../Common/ResultsBar.svelte";
@@ -16,31 +9,13 @@
   import QuestionAnswerIndicies from "./QuestionAnswerIndicies.svelte";
 
   export let questionId;
-  let answers = [];
-  let isLoading = true;
+  export let answers;
+  export let isAnswersLoading;
 
   onMount(() => {
-    fetchAnswers();
+
   });
-
-  function handleFilterChangeSearch(event) {
-    isLoading = true;
-    fetchAnswers();
-  }
-
-  function fetchAnswers() {
-    const site = `${$i18n.code}stackoverflow`;
-    const uri = `https://stackoverflow.com/questions/${questionId}/answers?order=${$selectedAnswerFilter.apiOrder}&sort=${$selectedAnswerFilter.apiSort}&site=${site}&filter=&key=`;
-
-    axios.get(uri).then(response => {
-      isLoading = false;
-      if (response.status === 200) {
-        answers = response.data.items;
-      } else {
-        vscodeProgress("stop", null, true);
-      }
-    });
-  }
+  
 </script>
 
 <style>
@@ -59,11 +34,10 @@
 </style>
 
 <ResultsBar
-  {isLoading}
-  results={answers.length}
-  on:filterChange={handleFilterChangeSearch} />
+  {isAnswersLoading}
+/>
 
-{#if isLoading}
+{#if isAnswersLoading}
   <Loader />
 {/if}
 

@@ -13,9 +13,9 @@ function formatDate(dateAsUnix, i18n, type) {
   let suffix = "";
 
   if (["search", "question"].includes(type)) {
-    prefix = `${i18n.text.asked} `;
+    prefix = `asked `;
   } else if (type === "answer") {
-    prefix = `${i18n.text.answered} `;
+    prefix = `answered `;
   }
 
   let year = `'${unixDateConverted.getFullYear().toString().substring(2, 4)}`;
@@ -26,7 +26,7 @@ function formatDate(dateAsUnix, i18n, type) {
   if (type !== "generic") {
     const uctMinutes = unixDateConverted.getUTCMinutes();
     const minutes = uctMinutes < 10 ? `0${uctMinutes}` : uctMinutes;
-    suffix = ` ${i18n.text.at} ${unixDateConverted.getUTCHours()}:${minutes}`;
+    suffix = ` at ${unixDateConverted.getUTCHours()}:${minutes}`;
   }
 
   return `${prefix}${monthNames[month]} ${day} ${year}${suffix}`;
@@ -52,24 +52,24 @@ function timeAgo(timeAgo, i18n) {
     const months = Math.floor(diffInMonths / 12);
     switch (months) {
       case 0:
-        timeAgoFormatted = `${diffInYears} ${i18n.text.years_ago}`
+        timeAgoFormatted = `${diffInYears} years ago`
         break;
       case 1:
-        timeAgoFormatted = `${diffInYears} ${i18n.text.years} ${months} ${i18n.text.month_ago}`
+        timeAgoFormatted = `${diffInYears} years ${months} month ago`
         break;
-      default: timeAgoFormatted = `${diffInYears} ${i18n.text.years} ${months} ${i18n.text.months_ago}`
+      default: timeAgoFormatted = `${diffInYears} years ${months} months ago`
         break;
     }
   } else if (diffInMonths < 12 && diffInMonths > 1) {
-    timeAgoFormatted = `${diffInMonths} ${i18n.text.months_ago}`
+    timeAgoFormatted = `${diffInMonths} months ago`
   } else if (diffInMonths === 1) {
-    timeAgoFormatted = `${diffInMonths} ${i18n.text.month_ago}`
+    timeAgoFormatted = `${diffInMonths} month ago`
   } else if (diffInDays < 30 && diffInDays > 1) {
-    timeAgoFormatted = `${diffInDays} ${i18n.text.days_ago}`
+    timeAgoFormatted = `${diffInDays} days ago`
   } else if (diffInDays === 1) {
-    timeAgoFormatted = `${i18n.text.yesterday}`
+    timeAgoFormatted = `yesterday`
   } else {
-    timeAgoFormatted = `${i18n.text.today}`
+    timeAgoFormatted = `today`
   }
 
   return timeAgoFormatted;
