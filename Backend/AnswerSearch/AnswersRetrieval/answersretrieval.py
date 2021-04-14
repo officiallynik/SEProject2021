@@ -45,10 +45,47 @@ def process_answers(answer_list):
     preprocessor = PreprocessPostContent()
     paragraph_obj_list = []
     for answer in answer_list:
+        paragraph_obj_list.append({'answer':answer,
+        'para_object':(Paragraph(answer['body'], preprocessor.get_single_para_word_list(answer['body']), vote_score=int(answer['score']), position=1))})
+
+    return paragraph_obj_list
+
+def process_answers_into_paragraphs(answer_list):
+    preprocessor = PreprocessPostContent()
+    paragraph_obj_list = []
+    for answer in answer_list:
         paragraph_list = preprocessor.getParagraphs(answer['body'])
         for pos, para in enumerate(paragraph_list, 1):
             paragraph_obj_list.append(
                 Paragraph(para, preprocessor.get_single_para_word_list(para), vote_score=int(answer['score']), position=pos))
+
+    return paragraph_obj_list
+
+def sort_answers(paragraph_obj_list, query):
+    # calculate score and sort
+    preprocessor = PreprocessPostContent()
+    preprocessed_query = preprocessor.get_single_para_word_list(query)
+    query_tokens = nltk.word_tokenize(preprocessed_query)
+    relevance_list = []
+    entropy_list = []
+    vote_score_list = []
+    for answer in paragraph_obj_list:
+        para_obj=answer['para_object']
+        para_obj.cal_relevance(query_tokens)
+        para_obj.cal_entropy()
+        para_obj.cal_semantic_pattern()
+        para_obj.cal_format_pattern()
+        relevance_list.append(para_obj.relevance_score)
+        entropy_list.append(para_obj.infor_entropy)
+        vote_score_list.append(para_obj.vote_score)
+
+    for answer in paragraph_obj_list:
+        para_obj=answer['para_object']
+        para_obj.normalized(min(relevance_list), max(relevance_list), min(entropy_list), max(entropy_list),
+                            min(vote_score_list), max(vote_score_list))
+        para_obj.cal_overall_score()
+
+    paragraph_obj_list.sort(key=lambda x: x['para_object'],reverse=True)
 
     return paragraph_obj_list
 
@@ -83,7 +120,7 @@ def answer_display(answer_raw):
     processed_answer = re.sub(r"</.*?>", "", processed_answer)
     parserHTML.feed(processed_answer)
 
-def retrieve_top_matched_answers(questions, query):
+def retrieve_top_matched_answers(questions,query):
     answer_list_list = []
     for question in questions:
         answer_list_list.append(get_answers_list(question['question']['id']))
@@ -92,8 +129,24 @@ def retrieve_top_matched_answers(questions, query):
     for answer_list in answer_list_list:
         answer_obj_list.extend(process_answers(answer_list))
 
+    answer_obj_list_sorted = sort_answers(answer_obj_list, query)
+    #print(answer_obj_list_sorted)
+    
+    answer_obj_list_sorted = answer_obj_list_sorted[:10]
+    return answer_obj_list_sorted
+
+def retrieve_top_matched_answer_paragraphs(questions, query):
+    answer_list_list = []
+    for question in questions:
+        answer_list_list.append(get_answers_list(question['question']['id']))
+    #print(answer_list_list)
+    answer_obj_list = []
+    for answer_list in answer_list_list:
+        answer_obj_list.extend(process_answers_into_paragraphs(answer_list))
+
     answer_obj_list_sorted = sort_paragraphs(answer_obj_list, query)
     answer_obj_list_sorted = answer_obj_list_sorted[:10]
+    
 
     # for cnt, para_obj in enumerate(answer_obj_list_sorted, 1):
     #     print(f"answer no. {cnt}")

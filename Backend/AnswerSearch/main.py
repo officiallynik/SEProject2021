@@ -5,7 +5,7 @@ sys.path.append("./AnswerSearch/QuestionsRetrieval")
 sys.path.append('./AnswerSearch/AnswersRetrieval')
 sys.path.append('./AnswerSearch/Summarizer')
 from questionretrieval import retrieve_top_matched_questions
-from answersretrieval import retrieve_top_matched_answers
+from answersretrieval import retrieve_top_matched_answers,retrieve_top_matched_answer_paragraphs
 from summarizer import mmr_handler
 from html.parser import HTMLParser
 import re
@@ -29,10 +29,25 @@ def answer_display(answer_raw):
     processed_answer = re.sub(r"</.*?>", "", processed_answer)
     parserHTML.feed(processed_answer)
 
-def search_query(query):
+def getAnswers(query):
+    questions = retrieve_top_matched_questions(query, 5, False)
+    answers_list=retrieve_top_matched_answers(questions,query)
+    #print(answers_list)
+    final_answers_list=[]
+    for answer in answers_list:
+        final_answers_list.append(answer['answer'])
+    #print(final_answers_list)
+    respose={"questions":questions,"answers":final_answers_list}
+
+
+    json_res=json.dumps(respose)
+    #print(json_res)
+    return json_res
+
+def getSummarizedAnswer(query):
     questions = retrieve_top_matched_questions(query, 5, False)
 
-    sorted_paragraphs=retrieve_top_matched_answers(questions, query)
+    sorted_paragraphs=retrieve_top_matched_answer_paragraphs(questions, query)
     final_paragraphs=mmr.rank_mmr(sorted_paragraphs)
 
     response_paragraphs=[]
@@ -50,7 +65,7 @@ def search_query(query):
 
 
     json_res=json.dumps(respose)
-    print(json_res)
+    #print(json_res)
     return json_res
     
 
