@@ -1,5 +1,4 @@
 <script>
-  import { i18n } from "../stores/i18n.js";
   import { fade } from "svelte/transition";
 
   export let tagData;

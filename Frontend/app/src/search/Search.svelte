@@ -9,13 +9,16 @@
   export let totalResults;
   export let tagData;
   export let isLoading;
+  export let showInstructions;
 </script>
 
-<SearchInput {tagData} {isLoading} on:searchInput />
+<SearchInput {tagData} {isLoading} on:searchInput {showInstructions} />
 
+{#if !showInstructions}
 <ResultsBar {isLoading} />
+{/if}
 
-{#if isLoading}
+{#if isLoading && !showInstructions}
   <Loader />
 {/if}
 

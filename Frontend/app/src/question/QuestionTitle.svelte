@@ -1,8 +1,6 @@
 <script>
   import { fade } from "svelte/transition";
-  import { i18n } from "../stores/i18n.js";
   import { formatNumber } from "../stores/common.js";
-  import { timeAgo } from "../stores/format-date.js";
   import QuestionsRelated from "./QuestionsRelated.svelte";
 
   export let title;
@@ -28,7 +26,7 @@
   <div class="metrics">
     {#if creationDate}
       asked
-      <span>{timeAgo(creationDate, $i18n)}</span>
+      <span>{new Date(creationDate*1000).toDateString()}</span>
     {/if}
 
     {#if totalViews}

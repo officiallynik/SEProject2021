@@ -6,7 +6,10 @@
   let showTips = false;
   export let tagData;
   export let isLoading;
+  export let showInstructions;
   let searchQueryPreviousValue;
+
+  console.log("showinstructions", showInstructions);
 
   function toggleSearchTips() {
     showTips = !showTips;
@@ -53,14 +56,16 @@
       </i>
     </strong>
 
+    {#if !showInstructions}
     <span
       class="link advanced-search-tips link-search"
       on:click={toggleSearchTips}
-    >
+    >}
       {#if !showTips}
         Search Tips
       {:else}Close Tips{/if}
     </span>
+    {/if}
   </div>
 
   <input type="text" bind:value={$searchQuery} />
@@ -72,7 +77,7 @@
   </div>
 </section>
 
-{#if showTips}
+{#if showTips || showInstructions}
   <h3>Search Tips</h3>
   <SearchTips />
 {/if}

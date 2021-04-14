@@ -1,6 +1,5 @@
 <script>
   import { onMount } from "svelte";
-  import { i18n } from "../stores/i18n.js";
   import { searchQuery } from "../stores/common.js";
 
   let query;

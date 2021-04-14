@@ -19,6 +19,7 @@
   let selectedTag;
   let tagData;
   let gif;
+  let showInstructions = true;
 
   window.addEventListener("message", event => {
     console.log(event);
@@ -26,11 +27,14 @@
 
     if (event.data.action === "search") {
       searchQuery.set(event.data.query);
-
-      selectedSearchFilter.set("Relevance");
-
+      
+      if(event.data.query){
+        showInstructions = false;
+        selectedSearchFilter.set("Relevance");
+        search();
+      }
+      
       section.set("search");
-      search();
     }
   });
 
@@ -195,6 +199,7 @@
     {searchData}
     {tagData}
     {totalResults}
+    {showInstructions}
   />
 {:else if $section === "question"}
   <Question
