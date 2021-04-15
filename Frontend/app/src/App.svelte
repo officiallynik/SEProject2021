@@ -1,5 +1,5 @@
 <script>
-  import { page, section, searchQuery } from "./stores/common.js";
+  import { section, searchQuery } from "./stores/common.js";
   import { vscodeProgress } from "./stores/vscode-api.js";
   import {
     selectedSearchFilter
@@ -42,18 +42,11 @@
   }
 
   function handlePageSearch() {
-    if (!selectedTag) {
-      window.scroll({ top: 80, behavior: "smooth" });
-      search();
-    } else {
-      window.scroll({ top: 0, behavior: "smooth" });
-      tagSearch(selectedTag);
-    }
+
   }
 
   function handleFilterChangeSearch() {
-    page.set(1);
-    !selectedTag ? search() : tagSearch(selectedTag);
+
   }
 
   function handleTagFromQuestionSearch(event) {
@@ -74,8 +67,11 @@
       .get(uri)
       .then(response => {
         if (response.status === 200) {
-          tagData = response.data.items[0];
-          section.set("tag");
+          tagData = response.data.items[0]
+          // section.set("tag");
+        }
+        if(tagData === undefined) {
+          tagData = { tag_name: selectedTag, error_msg: "No wiki found for given tag :("}
         }
       })
       .catch(() => {
@@ -94,11 +90,13 @@
       $searchQuery[0] === "[" &&
       $searchQuery[$searchQuery.length - 1] === "]"
     ) {
+      console.log("tag search...")
       const tag = $searchQuery.substring(1, $searchQuery.length - 1);
       handleTagSelected({ detail: { tag: tag } });
       return;
     }
 
+    console.log("query search...")
     vscodeProgress("start", "Loading Search Results", false);
     isLoading = true;
     tagData = null;
@@ -182,6 +180,4 @@
     {questionTitle}
     {extensionAction}
   />
-{:else if $section === "tag"}
-  <Tag {tagData} />
 {/if}

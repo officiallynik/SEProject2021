@@ -1,6 +1,5 @@
 <script>
   import { onMount } from "svelte";
-  import { fade } from "svelte/transition";
   import { vscodeProgress } from "../stores/vscode-api.js";
   import axios from "axios";
   import Comments from "../Common/Comments.svelte";
@@ -57,6 +56,7 @@
 
     axios.get(uri).then((response) => {
       isLoading = false;
+      
       if (response.status === 200) {
         question = response.data.items[0];
         fetchRelatedQuestions();

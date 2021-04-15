@@ -28,14 +28,19 @@
 </style>
 
 <div in:fade>
-  <h1>about</h1>
-  <span class="text-capitalize"><h1>{tagData.tag_name}</h1></span>
 
-  <h3 class="text-capitalize">tag info</h3>
+  {#if tagData.error_msg}
+    <h2>{tagData.error_msg}</h2>
+  {:else}
+    <h1>about</h1>
+    <span class="text-capitalize"><h1>{tagData.tag_name}</h1></span>
 
-  <div class="excerpt">
-    {@html tagData.excerpt}
-  </div>
+    <h3 class="text-capitalize">tag info</h3>
 
-  {@html tagData.body}
+    <div class="excerpt">
+      {@html tagData.excerpt}
+    </div>
+
+    {@html tagData.body}
+  {/if}
 </div>

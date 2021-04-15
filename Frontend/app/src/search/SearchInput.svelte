@@ -40,6 +40,7 @@
     searchQueryPreviousValue = $searchQuery;
     dispatch("searchInput");
   }
+
 </script>
 
 <svelte:window on:keydown={handleSearchByEnterKey} />
@@ -49,7 +50,11 @@
     Showing Results for
     <strong>
       <i>
-        {#if searchQueryPreviousValue}{searchQueryPreviousValue}{/if}
+        {#if tagData && tagData.tag_name}
+          {tagData.tag_name}
+        {:else if searchQueryPreviousValue}
+          {searchQueryPreviousValue}
+        {/if}
       </i>
     </strong>
 
