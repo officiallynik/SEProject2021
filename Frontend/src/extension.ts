@@ -4,15 +4,22 @@ import { AppPageHtml } from './app-page';
 
 export function activate(context: vscode.ExtensionContext) {
 
-  let searchPyStackBot = vscode.commands.registerCommand('extension.searchPyStackBot', () => {
+ 
+
+  let searchPyStackBot = vscode.commands.registerCommand('extension.searchPyStackBot', (data) => {
+    console.log("Here",data)
 
     const editor = vscode.window.activeTextEditor;
     let searchQuery = "";
+    
     if (editor) {
       searchQuery = editor.document.getText(editor.selection);
     }
+    if(data){
+      searchQuery=data;
+    }
 
-
+    console.log(searchQuery)
     // Get language
     const currentLanguageSelection = vscode.workspace.getConfiguration().get('English');
     // Get sort type
@@ -37,8 +44,29 @@ export function activate(context: vscode.ExtensionContext) {
 
   });
 
+  let getTerminalLog= vscode.commands.registerCommand('extension.getTerminalLog',()=>{
+    console.log('Get Terminal Log');
+    // vscode.commands.executeCommand('workbench.action.terminal.selectToPreviousCommand').then(() => {
+    //   vscode.commands.executeCommand('workbench.action.terminal.copySelection').then(() => {
+    //     vscode.commands.executeCommand('workbench.action.terminal.clearSelection').then(async () => {
+    //       // vscode.commands.executeCommand('workbench.action.files.newUntitledFile').then(() => {
+    //       //   vscode.commands.executeCommand('editor.action.clipboardPasteAction');
+    //       // });
+    //       let clipboard_content = await vscode.env.clipboard.readText(); 
+    //       console.log(clipboard_content)
+    //     });
+    //   });
+    // });
+    vscode.window.onDidChangeActiveTerminal(()=>{
+        console.log("Terminal CHanges")
+        vscode.commands.executeCommand('extension.searchPyStackBot',"Bubble Sort")
+    })
+
+  })
+
 
   context.subscriptions.push(searchPyStackBot);
+  context.subscriptions.push(getTerminalLog);
 }
 
 /**
