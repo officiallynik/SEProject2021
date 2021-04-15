@@ -9,8 +9,6 @@
   export let showInstructions;
   let searchQueryPreviousValue;
 
-  console.log("showinstructions", showInstructions);
-
   function toggleSearchTips() {
     showTips = !showTips;
   }
@@ -39,7 +37,6 @@
 
   const dispatch = createEventDispatcher();
   function search() {
-    page.set(1);
     searchQueryPreviousValue = $searchQuery;
     dispatch("searchInput");
   }
@@ -60,7 +57,7 @@
     <span
       class="link advanced-search-tips link-search"
       on:click={toggleSearchTips}
-    >}
+    >
       {#if !showTips}
         Search Tips
       {:else}Close Tips{/if}

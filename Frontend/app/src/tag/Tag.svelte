@@ -15,13 +15,10 @@
     margin-top: 6px;
   }
   div span {
-    background-color: var(--vscode-badge-background);
     color: var(--vscode-badge-foreground);
-    padding: 0 4px 4px 4px;
-    margin: 12px;
+    padding: 0 5px;
+    margin: 0 5px;
     border-radius: 2px;
-    font-size: 16px;
-    font-weight: bold;
     position: absolute;
   }
   .excerpt {
@@ -32,7 +29,7 @@
 
 <div in:fade>
   <h1>about</h1>
-  <span>{tagData.tag_name}</span>
+  <span class="text-capitalize"><h1>{tagData.tag_name}</h1></span>
 
   <h3 class="text-capitalize">tag info</h3>
 

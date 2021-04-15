@@ -9,21 +9,20 @@
   export let totalResults;
   export let tagData;
   export let isLoading;
-  export let showInstructions;
+
 </script>
 
-<SearchInput {tagData} {isLoading} on:searchInput {showInstructions} />
+<SearchInput {tagData} {isLoading} on:searchInput on:searchByTag />
 
-{#if !showInstructions}
-<ResultsBar {isLoading} />
-{/if}
+{#if true}
+  <ResultsBar {isLoading} />
+  {#if isLoading }
+    <Loader />
+  {/if}
 
-{#if isLoading && !showInstructions}
-  <Loader />
-{/if}
-
-{#if searchData && totalResults !== 0}
-  <SearchItem {isLoading} {searchData} on:gotoQuestion on:searchByTag />
-{:else if !isLoading}
-  <SearchNoResults />
+  {#if searchData && totalResults !== 0}
+    <SearchItem {isLoading} {searchData} on:gotoQuestion on:searchByTag />
+  {:else if !isLoading}
+    <SearchNoResults />
+  {/if}
 {/if}

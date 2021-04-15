@@ -15,5 +15,5 @@
     <i>"{query}"</i>
     .
   </strong>
-  Tip: Be less specific, try tagged search 
+  Tip: Be less specific, try different combination of words
 </p>

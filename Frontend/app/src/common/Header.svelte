@@ -42,8 +42,13 @@
 <h3 class="text-capitalize">
   {#if ($section === 'question' && extensionAction === 'search') || $section === 'tag'}
     <div class="back text-capitalize" on:click={goBack}>
-      <span />
-      Back to Questions
+      {#if $section === 'tag'}
+        <span />
+        Back to Search
+      {:else}
+        <span />
+        Back to Questions
+      {/if}
     </div>
   {:else}
     <strong>PyStackBot</strong>

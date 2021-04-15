@@ -18,22 +18,14 @@
   let extensionAction;
   let selectedTag;
   let tagData;
-  let gif;
-  let showInstructions = true;
 
   window.addEventListener("message", event => {
-    console.log(event);
     extensionAction = event.data.action;
 
     if (event.data.action === "search") {
       searchQuery.set(event.data.query);
-      
-      if(event.data.query){
-        showInstructions = false;
-        selectedSearchFilter.set("Relevance");
-        search();
-      }
-      
+      selectedSearchFilter.set("Relevance");
+      search();
       section.set("search");
     }
   });
@@ -46,6 +38,7 @@
 
   function handleGotoSearch(event) {
     section.set("search");
+    showInstructions = false;
   }
 
   function handlePageSearch() {
@@ -64,7 +57,6 @@
   }
 
   function handleTagFromQuestionSearch(event) {
-    section.set("search");
     handleTagSelected(event);
   }
 
@@ -75,61 +67,44 @@
     isLoading = true;
     window.scroll({ top: 0, behavior: "smooth" });
     selectedTag = event.detail.tag;
-    page.set(1);
 
-    const uri = `https://stackoverflow.com/tags/${selectedTag}/wikis?site=&filter=&key=`;
+    const uri = `https://api.stackexchange.com/2.2/tags/${selectedTag}/wikis?site=stackoverflow&filter=!9_bDDrGXY`;
 
     axios
       .get(uri)
       .then(response => {
         if (response.status === 200) {
           tagData = response.data.items[0];
-          tagSearch(selectedTag);
-        } else {
-          isLoading = false;
-          vscodeProgress("stop", null, true);
+          section.set("tag");
         }
       })
       .catch(() => {
-        isLoading = false;
-        vscodeProgress("stop", null, true);
-      });
-  }
 
-  function tagSearch(selectedTag) {
-    isLoading = true;
-    searchQuery.set(`[${selectedTag}]`);
-
-    const uri = `https://stackoverflow.com/search/advanced?tagged=${selectedTag}&page=${$page}&pagesize=10&order=${$selectedSearchFilter.apiOrder}&sort=${$selectedSearchFilter.apiSort}&site=&filter=&key=`;
-
-    axios
-      .get(uri)
-      .then(response => {
-        isLoading = false;
-        if (response.status === 200) {
-          searchData = response.data.items;
-          totalResults = response.data.total;
-          vscodeProgress("stop", null, false);
-        } else {
-          vscodeProgress("stop", null, true);
-        }
       })
-      .catch(() => {
+      .finally(() => {
         isLoading = false;
         vscodeProgress("stop", null, true);
-      });
+      })
   }
 
   // Main search functionality
   function search() {
-    console.log("searching...")
+
+    if (
+      $searchQuery[0] === "[" &&
+      $searchQuery[$searchQuery.length - 1] === "]"
+    ) {
+      const tag = $searchQuery.substring(1, $searchQuery.length - 1);
+      handleTagSelected({ detail: { tag: tag } });
+      return;
+    }
 
     vscodeProgress("start", "Loading Search Results", false);
     isLoading = true;
     tagData = null;
     selectedTag = null;
 
-    const uri = `https://api.stackexchange.com/2.2/search/advanced?order=desc&sort=Relevance&q=${$searchQuery}&site=stackoverflow&filter=withbody`;
+    const uri = `https://api.stackexchange.com/2.2/search/advanced?order=desc&sort=relevance&q=${$searchQuery}&site=stackoverflow&filter=withbody`;
 
     axios
       .get(uri)
@@ -199,7 +174,6 @@
     {searchData}
     {tagData}
     {totalResults}
-    {showInstructions}
   />
 {:else if $section === "question"}
   <Question
@@ -207,7 +181,6 @@
     {questionId}
     {questionTitle}
     {extensionAction}
-    {gif}
   />
 {:else if $section === "tag"}
   <Tag {tagData} />
