@@ -8,7 +8,6 @@
   import Header from "./common/Header.svelte";
   import Question from "./question/Question.svelte";
   import Search from "./search/Search.svelte";
-  import Tag from "./tag/tag.svelte";
 
   let searchData;
   let questionId;
@@ -18,6 +17,7 @@
   let extensionAction;
   let selectedTag;
   let tagData;
+  let initialInstruction = true;
 
   window.addEventListener("message", event => {
     extensionAction = event.data.action;
@@ -85,6 +85,10 @@
 
   // Main search functionality
   function search() {
+
+    if($searchQuery.length !== 0){
+      initialInstruction = false;
+    }
 
     if (
       $searchQuery[0] === "[" &&
@@ -172,6 +176,7 @@
     {searchData}
     {tagData}
     {totalResults}
+    {initialInstruction}
   />
 {:else if $section === "question"}
   <Question

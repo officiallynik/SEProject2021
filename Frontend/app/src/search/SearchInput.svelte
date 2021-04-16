@@ -1,12 +1,12 @@
 <script>
   import { createEventDispatcher, onMount } from "svelte";
-  import { page, searchQuery } from "../stores/common.js";
+  import { searchQuery } from "../stores/common.js";
   import SearchTips from "./SearchTips.svelte";
 
   let showTips = false;
   export let tagData;
   export let isLoading;
-  export let showInstructions;
+  export let initialInstruction;
   let searchQueryPreviousValue;
 
   function toggleSearchTips() {
@@ -58,7 +58,7 @@
       </i>
     </strong>
 
-    {#if !showInstructions}
+    {#if !initialInstruction}
     <span
       class="link advanced-search-tips link-search"
       on:click={toggleSearchTips}
@@ -79,7 +79,7 @@
   </div>
 </section>
 
-{#if showTips || showInstructions}
+{#if initialInstruction || showTips}
   <h3>Search Tips</h3>
   <SearchTips />
 {/if}

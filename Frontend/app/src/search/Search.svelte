@@ -10,6 +10,7 @@
   export let totalResults;
   export let tagData;
   export let isLoading;
+  export let initialInstruction;
 
 </script>
 
@@ -19,24 +20,26 @@
   }
 </style>
 
-<SearchInput {tagData} {isLoading} on:searchInput />
+<SearchInput {tagData} {isLoading} {initialInstruction} on:searchInput />
 
-{#if tagData === null}
-  <ResultsBar {isLoading} />
-  {#if isLoading }
-  <Loader />
-  {/if}
+{#if !initialInstruction}
+  {#if tagData === null}
+    <ResultsBar {isLoading} />
+    {#if isLoading }
+    <Loader />
+    {/if}
 
-  {#if searchData && totalResults !== 0}
-  <SearchItem {isLoading} {searchData} on:gotoQuestion on:searchByTag />
-  {:else if !isLoading}
-  <SearchNoResults />
+    {#if searchData && totalResults !== 0}
+    <SearchItem {isLoading} {searchData} on:gotoQuestion on:searchByTag />
+    {:else if !isLoading}
+    <SearchNoResults />
+    {/if}
+  {:else}
+    {#if isLoading }
+      <div class="tag-loader">
+        <Loader />
+      </div>
+    {/if}
+    <Tag {tagData} />
   {/if}
-{:else}
-  {#if isLoading }
-    <div class="tag-loader">
-      <Loader />
-    </div>
-  {/if}
-  <Tag {tagData} />
 {/if}

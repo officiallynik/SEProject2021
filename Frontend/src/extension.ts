@@ -2,9 +2,7 @@ import * as vscode from 'vscode';
 import { posix } from 'path';
 import { AppPageHtml } from './app-page';
 
-export function activate(context: vscode.ExtensionContext) {
-
- 
+export function activate(context: vscode.ExtensionContext) { 
 
   let searchPyStackBot = vscode.commands.registerCommand('extension.searchPyStackBot', (data) => {
     console.log("Here",data)
