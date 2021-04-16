@@ -2,11 +2,9 @@ import * as vscode from 'vscode';
 import { posix } from 'path';
 import { AppPageHtml } from './app-page';
 
-export function activate(context: vscode.ExtensionContext) { 
+export function activate(context: vscode.ExtensionContext) {
 
   let searchPyStackBot = vscode.commands.registerCommand('extension.searchPyStackBot', (data) => {
-    console.log("Here",data)
-
     const editor = vscode.window.activeTextEditor;
     let searchQuery = "";
     
@@ -42,25 +40,102 @@ export function activate(context: vscode.ExtensionContext) {
 
   });
 
-  let getTerminalLog= vscode.commands.registerCommand('extension.getTerminalLog',()=>{
-    console.log('Get Terminal Log');
-    // vscode.commands.executeCommand('workbench.action.terminal.selectToPreviousCommand').then(() => {
-    //   vscode.commands.executeCommand('workbench.action.terminal.copySelection').then(() => {
-    //     vscode.commands.executeCommand('workbench.action.terminal.clearSelection').then(async () => {
-    //       // vscode.commands.executeCommand('workbench.action.files.newUntitledFile').then(() => {
-    //       //   vscode.commands.executeCommand('editor.action.clipboardPasteAction');
-    //       // });
-    //       let clipboard_content = await vscode.env.clipboard.readText(); 
-    //       console.log(clipboard_content)
-    //     });
-    //   });
-    // });
-    vscode.window.onDidChangeActiveTerminal(()=>{
-        console.log("Terminal CHanges")
-        vscode.commands.executeCommand('extension.searchPyStackBot',"Bubble Sort")
-    })
+  let getTerminalLog = vscode.commands.registerCommand('extension.getTerminalLog', () => {
 
-  })
+    if(!vscode.window.activeTerminal) {
+      vscode.window.showErrorMessage("No Terminal Found");
+      return;
+    } 
+
+    const pythonErrors: { [key: string]: string } = {
+      "AssertionError": "Raised when an <code>assert</code> statement fails.",
+      "AttributeError": "Raised when attribute assignment or reference fails.",
+      "EOFError": "Raised when the <code>input()</code> function hits end-of-file condition.",
+      "FloatingPointError": "Raised when a floating point operation fails.",
+      "GeneratorExit": "Raise when a generator's <code>close()</code> method is called.",
+      "ImportError": "Raised when the imported module is not found.",
+      "IndexError": "Raised when the index of a sequence is out of range.",
+      "KeyError": "Raised when a key is not found in a dictionary.",
+      "KeyboardInterrupt": "Raised when the user hits the interrupt key (<code>Ctrl+C</code> or <code>Delete</code>).",
+      "MemoryError": "Raised when an operation runs out of memory.",
+      "NameError": "Raised when a variable is not found in local or global scope.",
+      "NotImplementedError": "Raised by abstract methods.",
+      "OSError": "Raised when system operation causes system related error.",
+      "OverflowError": "Raised when the result of an arithmetic operation is too large to be represented.",
+      "ReferenceError": "Raised when a weak reference proxy is used to access a garbage collected referent.",
+      "RuntimeError": "Raised when an error does not fall under any other category.",
+      "StopIteration": "Raised by <code>next()</code> function to indicate that there is no further item to be returned by iterator.",
+      "SyntaxError": "Raised by parser when syntax error is encountered.",
+      "IndentationError": "Raised when there is incorrect indentation.",
+      "TabError": "Raised when indentation consists of inconsistent tabs and spaces.",
+      "SystemError": "Raised when interpreter detects internal error.",
+      "SystemExit": "Raised by <code>sys.exit()</code> function.",
+      "TypeError": "Raised when a function or operation is applied to an object of incorrect type.",
+      "UnboundLocalError": "Raised when a reference is made to a local variable in a function or method, but no value has been bound to that variable.",
+      "UnicodeError": "Raised when a Unicode-related encoding or decoding error occurs.",
+      "UnicodeEncodeError": "Raised when a Unicode-related error occurs during encoding.",
+      "UnicodeDecodeError": "Raised when a Unicode-related error occurs during decoding.",
+      "UnicodeTranslateError": "Raised when a Unicode-related error occurs during translating.",
+      "ValueError": "Raised when a function gets an argument of correct type but improper value.",
+      "ZeroDivisionError": "Raised when the second operand of division or modulo operation is zero."
+    }
+
+    const createError = (text:Array<string>) => {
+      let errorLine = -1;
+      let errorType = "";
+      
+      text.forEach((line, lineNumber) => {
+        let errorList = line.match(/.*Error/g)
+        if(errorList){
+          errorLine = lineNumber;
+          errorType = errorList[0];
+        }
+      })
+
+      if(errorLine === -1){
+        return null;
+      }
+      
+      const error = text[errorLine];
+      const errorInfo = pythonErrors[errorType];
+      const fileName = text[errorLine-2].match(/".*"/g)![0];
+      const lineNumber = text[errorLine-2].match(/line \d*/g)![0];
+
+      return {
+        error,
+        errorType,
+        errorInfo,
+        fileName,
+        lineNumber
+      };
+    }
+
+    var clipboard_content:string = "";
+
+    vscode.commands.executeCommand('workbench.action.terminal.selectToPreviousCommand').then(() => {
+      vscode.commands.executeCommand('workbench.action.terminal.copySelection').then(() => {
+        vscode.commands.executeCommand('workbench.action.terminal.clearSelection').then(async () => {
+
+          clipboard_content = await vscode.env.clipboard.readText();
+
+          let isPython = clipboard_content.match(/.*python.*/g);
+          if(isPython === null){
+            vscode.window.showErrorMessage("Python Execution Not Found, Use 'python(3) <filename>.py' To Execute");
+            return;
+          }
+          
+          const text = clipboard_content.split("\n");
+          const errorObj = createError(text);
+          if(!errorObj){
+            vscode.window.showInformationMessage("No Error Found, Python Executed Without Errors");
+            return;
+          }
+          
+        });
+      });
+    });
+
+  });
 
 
   context.subscriptions.push(searchPyStackBot);

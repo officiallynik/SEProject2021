@@ -15,7 +15,8 @@
   ],
   "activationEvents": [
     "onCommand:extension.searchPyStackBot",
-    "onCommand:extension.getTerminalLog"
+    "onCommand:extension.getTerminalLog",
+    "onLanguage:python"
   ],
   "main": "./out/extension.js",
   "contributes": {
