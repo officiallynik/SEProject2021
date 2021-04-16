@@ -31,7 +31,6 @@ class RCA:
         idf_values = []
 
         for query in query_list:
-
             total_rel = []
             for question in Question_List:
                 try:
@@ -44,6 +43,7 @@ class RCA:
                 idf = float(idf_val)
             except Exception as e:
                 idf = 0
+
             total_rel.append(0)
             max_rel = max(total_rel)
             rel_idf_summation.append(max_rel * idf)
@@ -59,9 +59,11 @@ class RCA:
         return asymmetric_rel
 
     def calc_symmetric_relevance(self, query_list, Question_List):
+        print("hello")
         rel_q_to_Q = self.calc_asymmetric_val(query_list, Question_List)
         rel_Q_to_q = self.calc_asymmetric_val(Question_List, query_list)
         average_relevance = (rel_q_to_Q + rel_Q_to_q) / 2
+        print(average_relevance)
         return average_relevance
 
 if __name__ == "__main__":

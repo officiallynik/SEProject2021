@@ -1,5 +1,5 @@
 import sys
-sys.path.append('./IDF')
+sys.path.append('./AnswerSearch/IDF')
 import csv
 from RCA import RCA
 relevance = RCA()
@@ -21,7 +21,7 @@ class Paragraph():
 
     def get_idf_metrics(self):
         idf_metric_dict = {}
-        with open("./IDF/idf.csv", encoding="utf8") as f:
+        with open("./AnswerSearch/IDF/idf.csv", encoding="utf8") as f:
             read_csv = csv.reader(f, delimiter=',')
             # print("loading idf metrics")
             for row in read_csv:

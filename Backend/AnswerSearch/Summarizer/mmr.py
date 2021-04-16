@@ -2,7 +2,7 @@
 
 from RCA import RCA
 import sys
-sys.path.append('../AnswersRetrieval')
+sys.path.append('./AnswerSearch/QuestionsRetrieval')
 relevance = RCA()
 
 

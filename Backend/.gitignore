@@ -1,8 +1,9 @@
-env
-linux-env
-Data
-DataQuery/config.json
-IDF/idf.csv
-Word2Vec/word2vec.model*
-Word2Vec/corpus.txt
-*/__pycache__
+AnswerSearch/env
+AnswerSearch/linux-env
+AnswerSearch/Data
+AnswerSearch/DataQuery/config.json
+AnswerSearch/IDF/idf.csv
+AnswerSearch/Word2Vec/word2vec.model*
+AnswerSearch/Word2Vec/corpus.txt
+AnswerSearch/*/__pycache__
+node_modules

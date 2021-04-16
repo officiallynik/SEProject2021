@@ -1,6 +1,6 @@
 import sys
-sys.path.append("./PreProcessor")
-sys.path.append("./es_search")
+sys.path.append("./AnswerSearch/PreProcessor")
+sys.path.append("./AnswerSearch/es_search")
 from question_es import search_question
 from preprocessor import PreprocessPostContent
 from RCA import RCA
