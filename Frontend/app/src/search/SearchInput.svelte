@@ -1,11 +1,12 @@
 <script>
   import { createEventDispatcher, onMount } from "svelte";
-  import { page, searchQuery } from "../stores/common.js";
+  import { searchQuery } from "../stores/common.js";
   import SearchTips from "./SearchTips.svelte";
 
   let showTips = false;
   export let tagData;
   export let isLoading;
+  export let initialInstruction;
   let searchQueryPreviousValue;
 
   function toggleSearchTips() {
@@ -36,10 +37,10 @@
 
   const dispatch = createEventDispatcher();
   function search() {
-    page.set(1);
     searchQueryPreviousValue = $searchQuery;
     dispatch("searchInput");
   }
+
 </script>
 
 <svelte:window on:keydown={handleSearchByEnterKey} />
@@ -49,10 +50,15 @@
     Showing Results for
     <strong>
       <i>
-        {#if searchQueryPreviousValue}{searchQueryPreviousValue}{/if}
+        {#if tagData && tagData.tag_name}
+          {tagData.tag_name}
+        {:else if searchQueryPreviousValue}
+          {searchQueryPreviousValue}
+        {/if}
       </i>
     </strong>
 
+    {#if !initialInstruction}
     <span
       class="link advanced-search-tips link-search"
       on:click={toggleSearchTips}
@@ -61,6 +67,7 @@
         Search Tips
       {:else}Close Tips{/if}
     </span>
+    {/if}
   </div>
 
   <input type="text" bind:value={$searchQuery} />
@@ -72,7 +79,7 @@
   </div>
 </section>
 
-{#if showTips}
+{#if initialInstruction || showTips}
   <h3>Search Tips</h3>
   <SearchTips />
 {/if}

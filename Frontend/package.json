@@ -14,7 +14,8 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:extension.searchPyStackBot"
+    "onCommand:extension.searchPyStackBot",
+    "onCommand:extension.getTerminalLog"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -22,13 +23,22 @@
       {
         "command": "extension.searchPyStackBot",
         "title": "PyStackBot: Search"
+      },
+      {
+        "command": "extension.getTerminalLog",
+        "title": "PyStackBot: terminalLog"
       }
     ],
     "keybindings": [
       {
         "command": "extension.searchPyStackBot",
-        "key": "ctrl+alt+s",
+        "key": "ctrl+alt+d",
         "mac": "ctrl+cmd+s"
+      },
+      {
+        "command": "extension.getTerminalLog",
+        "key": "ctrl+alt+e",
+        "mac": "ctrl+cmd+e"
       }
     ]
   },

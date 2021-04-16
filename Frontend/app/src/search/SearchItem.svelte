@@ -1,8 +1,6 @@
 <script>
   import { createEventDispatcher } from "svelte";
   import { fade } from "svelte/transition";
-  import { i18n } from "../stores/i18n.js";
-  import { formatDate } from "../stores/format-date.js";
   import SearchItemScore from "./SearchItemScore.svelte";
   import Tags from "../common/Tags.svelte";
 
@@ -66,12 +64,8 @@
 
     <div class="information">
 
-      <header
-        on:click={() => navigateToQuestion(searchItem.question_id, searchItem.title)}>
+      <header on:click={() => navigateToQuestion(searchItem.question_id, searchItem.title)}>
         {@html searchItem.title}
-        {#if searchItem.closed_date && searchItem.closed_details.on_hold}
-          [{$i18n.text.on_hold}]
-        {:else if searchItem.closed_date}[{$i18n.text.closed}]{/if}
       </header>
 
       <p>
@@ -81,11 +75,6 @@
 
       <div class="information-bottom">
         <Tags tags={searchItem.tags} on:searchByTag />
-        <div class="asked-info">
-          {formatDate(searchItem.creation_date, $i18n, 'search')}
-          {$i18n.text.by}
-          <i>{searchItem.owner.display_name}</i>
-        </div>
       </div>
 
     </div>

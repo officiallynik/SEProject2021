@@ -1,29 +1,45 @@
 <script>
   import SearchInput from "./SearchInput.svelte";
   import ResultsBar from "../Common/ResultsBar.svelte";
-  // import SearchItem from "./SearchItem.svelte";
-  // import SearchNoResults from "./SearchNoResults.svelte";
-  // import SearchPager from "./SearchPager.svelte";
+  import SearchItem from "./SearchItem.svelte";
+  import SearchNoResults from "./SearchNoResults.svelte";
   import Loader from "../common/Loader.svelte";
+  import Tag from "../tag/tag.svelte";
 
   export let searchData;
   export let totalResults;
   export let tagData;
   export let isLoading;
+  export let initialInstruction;
+
 </script>
 
-<SearchInput {tagData} {isLoading} on:searchInput />
+<style>
+  .tag-loader {
+    margin-top: 20px;
+  }
+</style>
 
-<ResultsBar {isLoading} />
+<SearchInput {tagData} {isLoading} {initialInstruction} on:searchInput />
 
-{#if isLoading}
-  <Loader />
+{#if !initialInstruction}
+  {#if tagData === null}
+    <ResultsBar {isLoading} />
+    {#if isLoading }
+    <Loader />
+    {/if}
+
+    {#if searchData && totalResults !== 0}
+    <SearchItem {isLoading} {searchData} on:gotoQuestion on:searchByTag />
+    {:else if !isLoading}
+    <SearchNoResults />
+    {/if}
+  {:else}
+    {#if isLoading }
+      <div class="tag-loader">
+        <Loader />
+      </div>
+    {/if}
+    <Tag {tagData} />
+  {/if}
 {/if}
-
-<!-- {#if searchData && totalResults !== 0}
-  <SearchItem {isLoading} {searchData} on:gotoQuestion on:searchByTag />
-{:else if !isLoading}
-  <SearchNoResults />
-{/if}
-
-<SearchPager {totalResults} on:searchByPage /> -->

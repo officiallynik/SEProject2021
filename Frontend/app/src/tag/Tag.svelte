@@ -1,5 +1,4 @@
 <script>
-  import { i18n } from "../stores/i18n.js";
   import { fade } from "svelte/transition";
 
   export let tagData;
@@ -16,13 +15,10 @@
     margin-top: 6px;
   }
   div span {
-    background-color: var(--vscode-badge-background);
     color: var(--vscode-badge-foreground);
-    padding: 0 4px 4px 4px;
-    margin: 12px;
+    padding: 0 5px;
+    margin: 0 5px;
     border-radius: 2px;
-    font-size: 16px;
-    font-weight: bold;
     position: absolute;
   }
   .excerpt {
@@ -32,14 +28,19 @@
 </style>
 
 <div in:fade>
-  <h1>{$i18n.text.about}</h1>
-  <span>{tagData.tag_name}</span>
 
-  <h3 class="text-capitalize">{$i18n.text.tag_info}</h3>
+  {#if tagData.error_msg}
+    <h2>{tagData.error_msg}</h2>
+  {:else}
+    <h1>about</h1>
+    <span class="text-capitalize"><h1>{tagData.tag_name}</h1></span>
 
-  <div class="excerpt">
-    {@html tagData.excerpt}
-  </div>
+    <h3 class="text-capitalize">tag info</h3>
 
-  {@html tagData.body}
+    <div class="excerpt">
+      {@html tagData.excerpt}
+    </div>
+
+    {@html tagData.body}
+  {/if}
 </div>

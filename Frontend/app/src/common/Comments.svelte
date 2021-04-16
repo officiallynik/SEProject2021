@@ -1,8 +1,4 @@
 <script>
-  import { fade } from "svelte/transition";
-  import { i18n } from "../stores/i18n.js";
-  import { formatDate } from "../stores/format-date.js";
-
   export let comments;
   let commentsShowAmount = 5;
 
@@ -67,7 +63,7 @@
           <i>
             &nbsp;&nbsp;–&nbsp;&nbsp
             <span class="display-name">{comment.owner.display_name}</span>
-            &nbsp {formatDate(comment.creation_date, $i18n, 'generic')}
+            &nbsp {new Date(comment.creation_date * 1000).toDateString()}
           </i>
         </div>
       </div>
@@ -76,9 +72,9 @@
 
   <span class="link" on:click={toggleComments}>
     {#if comments.length > commentsShowAmount}
-      {`${$i18n.text.show} ${commentsLength} ${$i18n.text.more_comments}`}
+      {`show ${commentsLength} more comments`}
     {:else if comments.length === commentsShowAmount}
-      {$i18n.text.hide_comments}
+      hide comments
     {/if}
   </span>
 

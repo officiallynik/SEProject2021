@@ -1,14 +1,11 @@
 <script>
-  import { i18n } from "../stores/i18n.js";
   import { formatNumber } from "../stores/common.js";
-  import { formatDate } from "../stores/format-date.js";
 
   export let user;
   export let createdDate;
   export let isQuestion = false;
 
-  const isTypeOf = isQuestion ? "question" : "answer";
-  $: atTime = formatDate(createdDate, $i18n, isTypeOf);
+  $: atTime = new Date(createdDate * 1000).toDateString();
   $: rep = formatNumber(user.reputation);
 </script>
 

@@ -17,6 +17,7 @@
 <style>
   section {
     margin-top: 26px;
+    border-bottom: 2px solid var(--vscode-textSeparator-foreground);
   }
   header {
     float: left;

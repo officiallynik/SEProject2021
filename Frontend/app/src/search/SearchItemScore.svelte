@@ -1,6 +1,4 @@
 <script>
-  import { i18n } from "../stores/i18n.js";
-
   export let searchItem;
 </script>
 
@@ -41,8 +39,8 @@
     <h3>{searchItem.score}</h3>
     <small>
       {#if searchItem.score === 1}
-        {$i18n.text.vote}
-      {:else}{$i18n.text.votes}{/if}
+        vote
+      {:else}votes{/if}
     </small>
   </div>
   <div
@@ -52,8 +50,8 @@
     <h3>{searchItem.answer_count}</h3>
     <small>
       {#if searchItem.answer_count === 1}
-        {$i18n.text.answer}
-      {:else}{$i18n.text.answers}{/if}
+        answer
+      {:else}answers{/if}
     </small>
   </div>
 </section>
