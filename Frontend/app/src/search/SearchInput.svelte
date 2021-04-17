@@ -1,12 +1,14 @@
 <script>
   import { createEventDispatcher, onMount } from "svelte";
   import { searchQuery } from "../stores/common.js";
+  import Tags from "../common/Tags.svelte";
   import SearchTips from "./SearchTips.svelte";
 
   let showTips = false;
   export let tagData;
   export let isLoading;
   export let initialInstruction;
+  export let errorObj;
   let searchQueryPreviousValue;
 
   function toggleSearchTips() {
@@ -77,6 +79,21 @@
   <div on:click={handleSearch} class="link link-search">
     Stack Overflow Direct Search
   </div>
+
+  {#if errorObj !== null}
+    <div class="errorBox">
+      <div class="errorType">
+        Error Type
+        <Tags tags={[errorObj.errorType]} on:searchByTag />
+      </div>
+      <div class="errorInfo">
+        {@html errorObj.errorInfo}
+      </div>
+      <div class="errorTip">
+        Tip: Install python linter, it helps reduce errors (eg: NameError, ImportError etc) during development. 
+      </div>
+    </div>
+  {/if}
 </section>
 
 {#if initialInstruction || showTips}
@@ -120,6 +137,21 @@
   }
   .link-search:hover {
     opacity: 1;
+  }
+
+  .errorBox {
+    margin-top: 10px;
+    border: 1px solid var(--vscode-input-foreground);
+    padding: 10px;
+  }
+
+  .errorInfo {
+    font-size: 16px;
+    margin-top: 10px;
+  }
+
+  .errorTip {
+    margin-top: 10px;
   }
 
 </style>

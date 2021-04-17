@@ -18,6 +18,7 @@
   let selectedTag;
   let tagData;
   let initialInstruction = true;
+  let errorObj;
 
   window.addEventListener("message", event => {
     extensionAction = event.data.action;
@@ -27,6 +28,14 @@
       selectedSearchFilter.set("Relevance");
       search();
       section.set("search");
+    }
+
+    if (event.data.action === "searchError") {
+      searchQuery.set(event.data.query.error);
+      selectedSearchFilter.set("Relevance");
+      search();
+      section.set("search");
+      errorObj = event.data.query;
     }
   });
 
@@ -97,6 +106,7 @@
       console.log("tag search...")
       const tag = $searchQuery.substring(1, $searchQuery.length - 1);
       handleTagSelected({ detail: { tag: tag } });
+      errorObj = null;
       return;
     }
 
@@ -105,6 +115,7 @@
     isLoading = true;
     tagData = null;
     selectedTag = null;
+    errorObj = null;
 
     const uri = `https://api.stackexchange.com/2.2/search/advanced?order=desc&sort=relevance&q=${$searchQuery}&site=stackoverflow&filter=withbody`;
 
@@ -126,41 +137,7 @@
         vscodeProgress("stop", null, true);
       });
   }
-
-  // function scrollTop() {
-  //   document.documentElement.animate({scrollTop: 0});
-  // }
 </script>
-
-<!-- <style>
-#topBtn {
-  display: inline-block;
-  background: url('topBtn.png');
-  width: 50px;
-  height: 50px;
-  text-align: center;
-  border-radius: 4px;
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  transition: background-color .3s, 
-    opacity .5s, visibility .5s;
-  opacity: 1;
-  visibility: visible;
-  z-index: 1000;
-}
-#topBtn:hover {
-  cursor: pointer;
-  background-color: #333;
-}
-#topBtn:active {
-  background-color: #555;
-}
-</style> -->
-
-<!-- svelte-ignore a11y-missing-attribute
-<!-- svelte-ignore a11y-missing-content -->
-<!-- <a id="topBtn" on:click={scrollTop}></a> -->
 
 <Header on:goBack={handleGotoSearch} {extensionAction} />
 
@@ -177,6 +154,7 @@
     {tagData}
     {totalResults}
     {initialInstruction}
+    {errorObj}
   />
 {:else if $section === "question"}
   <Question

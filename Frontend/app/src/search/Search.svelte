@@ -11,6 +11,7 @@
   export let tagData;
   export let isLoading;
   export let initialInstruction;
+  export let errorObj;
 
 </script>
 
@@ -20,7 +21,7 @@
   }
 </style>
 
-<SearchInput {tagData} {isLoading} {initialInstruction} on:searchInput />
+<SearchInput {tagData} {isLoading} {initialInstruction} {errorObj} on:searchInput on:searchByTag />
 
 {#if !initialInstruction}
   {#if tagData === null}

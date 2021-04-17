@@ -4,40 +4,62 @@ import { AppPageHtml } from './app-page';
 
 export function activate(context: vscode.ExtensionContext) {
 
-  let searchPyStackBot = vscode.commands.registerCommand('extension.searchPyStackBot', (data) => {
+  let existingPanel: vscode.WebviewPanel|null = null;
+
+  let searchPyStackBot = vscode.commands.registerCommand('extension.searchPyStackBot', (errorObj) => {
+
     const editor = vscode.window.activeTextEditor;
     let searchQuery = "";
     
     if (editor) {
       searchQuery = editor.document.getText(editor.selection);
     }
-    if(data){
-      searchQuery=data;
+    if(errorObj){
+      searchQuery = errorObj;
     }
 
-    console.log(searchQuery)
-    // Get language
+    if (existingPanel) {
+      existingPanel.webview.postMessage({
+        action: 'search',
+        query: searchQuery,
+        language: "English",
+        sortType: "Relevance"
+      });
+
+      return;
+    }
+
     const currentLanguageSelection = vscode.workspace.getConfiguration().get('English');
-    // Get sort type
+
     const currentSortTypeSelection = vscode.workspace.getConfiguration().get('Relevance');
-    // Create webview panel
+
     const stackoverflowPanel = createWebViewPanel("PyStackBot", context.extensionPath);
-    // Set webview - svelte - built to ./app/public/*
+    existingPanel = stackoverflowPanel;
+
     stackoverflowPanel.webview.html = AppPageHtml(context.extensionPath, stackoverflowPanel);
-    // Post search term, read in App.svelte as window.addEventListener("message"
-    stackoverflowPanel.webview.postMessage({
-      action: 'search',
-      query: searchQuery,
-      language: currentLanguageSelection,
-      sortType: currentSortTypeSelection
-    });
+
+    if(!errorObj){
+      stackoverflowPanel.webview.postMessage({
+        action: 'search',
+        query: searchQuery,
+        language: currentLanguageSelection,
+        sortType: currentSortTypeSelection
+      });
+    }
+    else {
+      stackoverflowPanel.webview.postMessage({
+        action: 'searchError',
+        query: searchQuery,
+        language: currentLanguageSelection,
+        sortType: currentSortTypeSelection
+      });
+    }
 
     // Show progress loader
     windowProgress(stackoverflowPanel);
 
     // Listen for changes to window title
     changeWindowTitle(stackoverflowPanel);
-
   });
 
   let getTerminalLog = vscode.commands.registerCommand('extension.getTerminalLog', () => {
@@ -98,7 +120,8 @@ export function activate(context: vscode.ExtensionContext) {
       
       const error = text[errorLine];
       const errorInfo = pythonErrors[errorType];
-      const fileName = text[errorLine-2].match(/".*"/g)![0];
+      let fileName = text[errorLine-2].match(/".*"/g)![0];
+      fileName = fileName.slice(1, fileName.length-1);
       const lineNumber = text[errorLine-2].match(/line \d*/g)![0];
 
       return {
@@ -130,6 +153,19 @@ export function activate(context: vscode.ExtensionContext) {
             vscode.window.showInformationMessage("No Error Found, Python Executed Without Errors");
             return;
           }
+
+          if(existingPanel) {
+            existingPanel.webview.postMessage({
+              action: 'searchError',
+              query: errorObj,
+              language: "English",
+              sortType: "Relevance"
+            });
+
+            return;
+          }
+
+          vscode.commands.executeCommand('extension.searchPyStackBot', errorObj);
           
         });
       });
