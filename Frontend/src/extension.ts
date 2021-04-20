@@ -6,7 +6,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   let existingPanel: vscode.WebviewPanel|null = null;
 
-  let searchPyStackBot = vscode.commands.registerCommand('extension.searchPyStackBot', (errorObj) => {
+  let searchWithTextBox = vscode.commands.registerCommand('extension.searchWithTextBox', (errorObj) => {
 
     const editor = vscode.window.activeTextEditor;
     let searchQuery = "";
@@ -55,6 +55,11 @@ export function activate(context: vscode.ExtensionContext) {
       });
     }
 
+    // run on dispose
+    stackoverflowPanel.onDidDispose(() => {
+      existingPanel = null;
+    });
+
     // Show progress loader
     windowProgress(stackoverflowPanel);
 
@@ -62,7 +67,7 @@ export function activate(context: vscode.ExtensionContext) {
     changeWindowTitle(stackoverflowPanel);
   });
 
-  let getTerminalLog = vscode.commands.registerCommand('extension.getTerminalLog', () => {
+  let searchTerminalErrors = vscode.commands.registerCommand('extension.searchTerminalErrors', () => {
 
     if(!vscode.window.activeTerminal) {
       vscode.window.showErrorMessage("No Terminal Found");
@@ -173,9 +178,70 @@ export function activate(context: vscode.ExtensionContext) {
 
   });
 
+  let searchWithAutoQuery = vscode.commands.registerCommand('extension.searchWithAutoQuery', (errorObj) => {
 
-  context.subscriptions.push(searchPyStackBot);
-  context.subscriptions.push(getTerminalLog);
+    const editor = vscode.window.activeTextEditor;
+    let searchQuery = "";
+    
+    if (editor) {
+      searchQuery = editor.document.getText(editor.selection);
+    }
+    if(errorObj){
+      searchQuery = errorObj;
+    }
+
+    if (existingPanel) {
+      existingPanel.webview.postMessage({
+        action: 'search',
+        query: searchQuery,
+        language: "English",
+        sortType: "Relevance"
+      });
+
+      return;
+    }
+
+    const currentLanguageSelection = vscode.workspace.getConfiguration().get('English');
+
+    const currentSortTypeSelection = vscode.workspace.getConfiguration().get('Relevance');
+
+    const stackoverflowPanel = createWebViewPanel("PyStackBot", context.extensionPath);
+    existingPanel = stackoverflowPanel;
+
+    stackoverflowPanel.webview.html = AppPageHtml(context.extensionPath, stackoverflowPanel);
+
+    if(!errorObj){
+      stackoverflowPanel.webview.postMessage({
+        action: 'search',
+        query: searchQuery,
+        language: currentLanguageSelection,
+        sortType: currentSortTypeSelection
+      });
+    }
+    else {
+      stackoverflowPanel.webview.postMessage({
+        action: 'searchError',
+        query: searchQuery,
+        language: currentLanguageSelection,
+        sortType: currentSortTypeSelection
+      });
+    }
+
+    // run on dispose
+    stackoverflowPanel.onDidDispose(() => {
+      existingPanel = null;
+    });
+
+    // Show progress loader
+    windowProgress(stackoverflowPanel);
+
+    // Listen for changes to window title
+    changeWindowTitle(stackoverflowPanel);
+  });
+
+  context.subscriptions.push(searchWithTextBox);
+  context.subscriptions.push(searchTerminalErrors);
+  context.subscriptions.push(searchWithAutoQuery);
 }
 
 /**

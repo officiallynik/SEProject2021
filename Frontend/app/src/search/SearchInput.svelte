@@ -79,8 +79,14 @@
   <div on:click={handleSearch} class="link link-search">
     Stack Overflow Direct Search
   </div>
+</section>
 
-  {#if errorObj !== null}
+{#if initialInstruction || showTips}
+  <h3>Search Tips</h3>
+  <SearchTips />
+{/if}
+
+{#if errorObj !== null}
     <div class="errorBox">
       <div class="errorType">
         Error Type
@@ -93,12 +99,6 @@
         Tip: Install python linter, it helps reduce errors (eg: NameError, ImportError etc) during development. 
       </div>
     </div>
-  {/if}
-</section>
-
-{#if initialInstruction || showTips}
-  <h3>Search Tips</h3>
-  <SearchTips />
 {/if}
 
 <style>

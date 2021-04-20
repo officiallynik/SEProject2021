@@ -1,6 +1,6 @@
 {
-  "name": "pystackbot",
-  "displayName": "PyStackBot",
+  "name": "easyso",
+  "displayName": "EasySO",
   "description": "",
   "version": "0.0.1",
   "license": "MIT",
@@ -14,32 +14,44 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:extension.searchPyStackBot",
-    "onCommand:extension.getTerminalLog",
-    "onLanguage:python"
+    "onCommand:extension.searchWithTextBox",
+    "onCommand:extension.searchTerminalErrors",
+    "onCommand:extension.searchWithAutoQuery"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "extension.searchPyStackBot",
-        "title": "PyStackBot: Search"
+        "command": "extension.searchWithTextBox",
+        "title": "Search",
+        "category": "EasySO"
       },
       {
-        "command": "extension.getTerminalLog",
-        "title": "PyStackBot: terminalLog"
+        "command": "extension.searchTerminalErrors",
+        "title": "Search Terminal Errors",
+        "category": "EasySO"
+      },
+      {
+        "command": "extension.searchWithAutoQuery",
+        "title": "Search with AutoQuery",
+        "category": "EasySO"
       }
     ],
     "keybindings": [
       {
-        "command": "extension.searchPyStackBot",
-        "key": "ctrl+alt+d",
-        "mac": "ctrl+cmd+s"
+        "command": "extension.searchWithTextBox",
+        "key": "ctrl+alt+s",
+        "mac": "cmd+alt+s"
       },
       {
-        "command": "extension.getTerminalLog",
-        "key": "ctrl+alt+e",
-        "mac": "ctrl+cmd+e"
+        "command": "extension.searchTerminalErrors",
+        "key": "ctrl+alt+t",
+        "mac": "cmd+alt+t"
+      },
+      {
+        "command": "extension.searchWithAutoQuery",
+        "key": "ctrl+alt+a",
+        "mac": "cmd+alt+a"
       }
     ]
   },
