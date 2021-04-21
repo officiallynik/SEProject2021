@@ -2,7 +2,16 @@ from elasticsearch import Elasticsearch
 
 
 def search_question(query):
-    # Query Passed by user
+    """
+    Returns 100 questions whose titles are similar to passed query
+
+    Parameters:
+    query (String): User Query
+
+    Returns:
+    list: Similar Questions
+
+   """
     size = 100
     es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
 
