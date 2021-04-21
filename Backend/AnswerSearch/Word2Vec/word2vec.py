@@ -1,3 +1,9 @@
+"""
+
+Contains relevant methods for creating a Word2Vec Model
+
+"""
+
 import sys
 from gensim.models.word2vec import Word2Vec, LineSentence
 
