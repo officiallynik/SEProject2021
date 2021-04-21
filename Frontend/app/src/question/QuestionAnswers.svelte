@@ -1,4 +1,5 @@
 <script>
+  import { afterUpdate } from 'svelte';
   import Comments from "../common/Comments.svelte";
   import RowLayout from "../common/RowLayout.svelte";
   import ResultsBar from "../Common/ResultsBar.svelte";
@@ -10,6 +11,36 @@
   export let questionId;
   export let answers;
   export let isAnswersLoading;
+
+  afterUpdate(() => {
+    const copyBtns = document.getElementsByClassName('copy-code-btn');
+    for(let i=0; i<copyBtns.length; i++){
+      copyBtns[i].parentElement.remove(copyBtns[i]);
+    }
+
+    const codeElements = document.getElementsByTagName('pre');
+    for(let i=0; i<codeElements.length; i++){
+      const copyBtn = document.createElement('button');
+      copyBtn.innerHTML = "copy";
+      copyBtn.classList.add("copy-code-btn");
+      copyBtn.style.float = "right";
+      copyBtn.style.display = "none";
+
+      codeElements[i].id = `code-block-${i}`;
+      copyBtn.onclick = function() {
+        const code = document.getElementById(`code-block-${i}`).innerText;
+        console.log("code", code);
+      }
+
+      codeElements[i].onmouseover = function () {
+        copyBtn.style.display = "block";
+      }
+
+      codeElements[i].onmouseout = function () {
+        copyBtn.style.display = "none";
+      }
+    }
+  });
   
 </script>
 
