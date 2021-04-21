@@ -3,25 +3,22 @@ sys.path.append('./AnswerSearch/PreProcessor')
 from elasticsearch import Elasticsearch
 from paragraph import Paragraph
 from preprocessor import PreprocessPostContent
-from html.parser import HTMLParser
 import nltk
 import re
-from html.parser import HTMLParser
-
-class MyHTMLParser(HTMLParser):
-    def handle_starttag(self, tag, attrs):
-        pass
-
-    def handle_endtag(self, tag):
-        pass
-
-    def handle_data(self, data):
-        print(data)
-
-parserHTML = MyHTMLParser()
 
 def get_answers_list(qid):
-    # Query Passed by user
+
+    """
+    Extracts the StackOverFlow Answers from ElasticSearch Server
+
+    Parameters:
+    qid (string): ID of the StackOverFlow question whose answers are to be extracted
+
+    Returns:
+    list: Extracted Answers
+
+   """
+    
     es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
 
     doc = {
@@ -33,6 +30,7 @@ def get_answers_list(qid):
             }
         }
     }
+
     returned_answers = es.search(
         index="answerbot_answers", body=doc)
     relevant_answers = []
@@ -42,6 +40,21 @@ def get_answers_list(qid):
     return relevant_answers
 
 def process_answers(answer_list):
+    """
+    Converts the whole answer into a paragraph object
+
+    Parameters:
+    answer_list (list): All Relevant Answers extracted from ElasticSearch Server
+
+    Returns:
+    list: 
+        Type: Dictionary
+        Keys:
+            'answer': Contains the original Answer Object from StackOverFlow Server
+            'para_object': Contains the paragraph object created from body of the original answer
+
+   """
+    
     preprocessor = PreprocessPostContent()
     paragraph_obj_list = []
     for answer in answer_list:
@@ -51,6 +64,18 @@ def process_answers(answer_list):
     return paragraph_obj_list
 
 def process_answers_into_paragraphs(answer_list):
+    """
+    Splits the answers into paragraphs and then convert them into paragraph objects
+
+    Parameters:
+    answer_list (list): All Relevant Answers extracted from ElasticSearch Server
+
+    Returns:
+    list: 
+        Type: Paragraph Object
+        Description: Paragraph Objects created from paragraphs of the answers passed
+
+   """
     preprocessor = PreprocessPostContent()
     paragraph_obj_list = []
     for answer in answer_list:
@@ -62,7 +87,19 @@ def process_answers_into_paragraphs(answer_list):
     return paragraph_obj_list
 
 def sort_answers(paragraph_obj_list, query):
-    # calculate score and sort
+    """
+    Calculates the score of whole answer and sorts them
+
+    Parameters:
+    paragraph_obj_list (list): All Relevant Answers converted into Paragraph Objects
+    query (string) : Text Query whose answers are to be found
+
+    Returns:
+    list: 
+        Type: Paragraph Object
+        Description: Sorted Paragraph Object List
+
+   """
     preprocessor = PreprocessPostContent()
     preprocessed_query = preprocessor.get_single_para_word_list(query)
     query_tokens = nltk.word_tokenize(preprocessed_query)
@@ -90,7 +127,19 @@ def sort_answers(paragraph_obj_list, query):
     return paragraph_obj_list
 
 def sort_paragraphs(paragraph_obj_list, query):
-    # calculate score and sort
+    """
+    Calculates the score of paragraphs and sort them
+
+    Parameters:
+    paragraph_obj_list (list): All Relevant Answer Paragraphs converted into Paragraph Objects
+    query (string) : Text Query whose answer summary is to be created
+
+    Returns:
+    list: 
+        Type: Paragraph Object
+        Description: Sorted Paragraph Object List
+
+   """
     preprocessor = PreprocessPostContent()
     preprocessed_query = preprocessor.get_single_para_word_list(query)
     query_tokens = nltk.word_tokenize(preprocessed_query)
@@ -115,65 +164,56 @@ def sort_paragraphs(paragraph_obj_list, query):
 
     return paragraph_obj_list
 
-def answer_display(answer_raw):
-    processed_answer = re.sub(r"<.*?>", "", answer_raw)
-    processed_answer = re.sub(r"</.*?>", "", processed_answer)
-    parserHTML.feed(processed_answer)
-
 def retrieve_top_matched_answers(questions,query):
+    """
+    Returns the top matched StackOverFlow Answers based on passed query and relevant Questions Extracted
+
+    Parameters:
+    questions (list): All Relevant questions extracted
+    query (string) : Text Query whose answers are to be found
+
+    Returns:
+    list: 
+        Type: Paragraph Object
+        Description: Top Relevant StackOverFlow Answers (Sorted)
+
+   """
+    
     answer_list_list = []
     for question in questions:
         answer_list_list.append(get_answers_list(question['question']['id']))
-    #print(answer_list_list)
     answer_obj_list = []
     for answer_list in answer_list_list:
         answer_obj_list.extend(process_answers(answer_list))
 
     answer_obj_list_sorted = sort_answers(answer_obj_list, query)
-    #print(answer_obj_list_sorted)
-    
     answer_obj_list_sorted = answer_obj_list_sorted[:10]
     return answer_obj_list_sorted
 
 def retrieve_top_matched_answer_paragraphs(questions, query):
+     """
+    Returns the top matched StackOverFlow Answer Paragraphs based on passed query and relevant Questions Extracted
+
+    Parameters:
+    questions (list): All Relevant questions extracted
+    query (string) : Text Query whose answer summary is to be created
+
+    Returns:
+    list: 
+        Type: Paragraph Object
+        Description: Top Relevant StackOverFlow Answer Paragraphs(Sorted)
+
+   """
     answer_list_list = []
     for question in questions:
         answer_list_list.append(get_answers_list(question['question']['id']))
-    #print(answer_list_list)
     answer_obj_list = []
     for answer_list in answer_list_list:
         answer_obj_list.extend(process_answers_into_paragraphs(answer_list))
 
     answer_obj_list_sorted = sort_paragraphs(answer_obj_list, query)
     answer_obj_list_sorted = answer_obj_list_sorted[:10]
-    
-
-    # for cnt, para_obj in enumerate(answer_obj_list_sorted, 1):
-    #     print(f"answer no. {cnt}")
-    #     print("\nanswer:")
-    #     answer_display(para_obj.raw_text)
-    #     print("Score: ",para_obj.overall_score)
-    #     print("--------------------------------------------------------------------------------------------\n\n")
-    
     return answer_obj_list_sorted
 
 if __name__ == '__main__':
     pass
-    # testing
-    # print(get_answers_list('43432675'))
-    # query = "sort array in reverse"
-
-    # answer_list_list = []
-    # answer_list_list.append(get_answers_list('43432675'))
-
-    # paragraph_obj_list = []
-    # for answer_list in answer_list_list:
-    #     paragraph_obj_list.extend(process_answers(answer_list))
-
-    # paragraph_obj_list_sorted = sort_paragraphs(paragraph_obj_list, query)
-    # for cnt, para_obj in enumerate(paragraph_obj_list_sorted, 1):
-    #     print("answer no.", cnt)
-    #     print("overall score:", para_obj.overall_score)
-    #     print("body:")
-    #     answer_display(para_obj.raw_text)
-    #     print("---------------------------\n\n")
