@@ -1,5 +1,4 @@
 <script>
-  import { onMount } from "svelte";
   import Comments from "../common/Comments.svelte";
   import RowLayout from "../common/RowLayout.svelte";
   import ResultsBar from "../Common/ResultsBar.svelte";
@@ -11,10 +10,6 @@
   export let questionId;
   export let answers;
   export let isAnswersLoading;
-
-  onMount(() => {
-
-  });
   
 </script>
 

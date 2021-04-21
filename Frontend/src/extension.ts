@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { posix } from 'path';
 import { AppPageHtml } from './app-page';
+import GeneratorQuery from './generate-query';
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -33,7 +34,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     const currentSortTypeSelection = vscode.workspace.getConfiguration().get('Relevance');
 
-    const stackoverflowPanel = createWebViewPanel("PyStackBot", context.extensionPath);
+    const stackoverflowPanel = createWebViewPanel("EasySO", context.extensionPath);
     existingPanel = stackoverflowPanel;
 
     stackoverflowPanel.webview.html = AppPageHtml(context.extensionPath, stackoverflowPanel);
@@ -184,10 +185,18 @@ export function activate(context: vscode.ExtensionContext) {
     let searchQuery = "";
     
     if (editor) {
-      searchQuery = editor.document.getText(editor.selection);
+      const fileType = editor.document.fileName.slice(editor.document.fileName.length-2).toLowerCase();
+      if(fileType !== "py") {
+        vscode.window.showErrorMessage("Auto query only works on python files for now :(");
+        return;
+      }
+
+      console.log(editor.document.getText(editor.selection))
+      searchQuery = "python" + GeneratorQuery(editor.document.getText(editor.selection));
     }
-    if(errorObj){
-      searchQuery = errorObj;
+    else {
+      vscode.window.showErrorMessage("Auto query only works if text is selected in python file editor");
+      return;
     }
 
     if (existingPanel) {
@@ -197,7 +206,6 @@ export function activate(context: vscode.ExtensionContext) {
         language: "English",
         sortType: "Relevance"
       });
-
       return;
     }
 
@@ -205,27 +213,17 @@ export function activate(context: vscode.ExtensionContext) {
 
     const currentSortTypeSelection = vscode.workspace.getConfiguration().get('Relevance');
 
-    const stackoverflowPanel = createWebViewPanel("PyStackBot", context.extensionPath);
+    const stackoverflowPanel = createWebViewPanel("EasySO", context.extensionPath);
     existingPanel = stackoverflowPanel;
 
     stackoverflowPanel.webview.html = AppPageHtml(context.extensionPath, stackoverflowPanel);
 
-    if(!errorObj){
-      stackoverflowPanel.webview.postMessage({
-        action: 'search',
-        query: searchQuery,
-        language: currentLanguageSelection,
-        sortType: currentSortTypeSelection
-      });
-    }
-    else {
-      stackoverflowPanel.webview.postMessage({
-        action: 'searchError',
-        query: searchQuery,
-        language: currentLanguageSelection,
-        sortType: currentSortTypeSelection
-      });
-    }
+    stackoverflowPanel.webview.postMessage({
+      action: 'search',
+      query: searchQuery,
+      language: currentLanguageSelection,
+      sortType: currentSortTypeSelection
+    });
 
     // run on dispose
     stackoverflowPanel.onDidDispose(() => {

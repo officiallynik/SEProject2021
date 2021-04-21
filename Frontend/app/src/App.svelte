@@ -47,7 +47,6 @@
 
   function handleGotoSearch(event) {
     section.set("search");
-    showInstructions = false;
   }
 
   function handlePageSearch() {
@@ -89,6 +88,7 @@
       .finally(() => {
         isLoading = false;
         vscodeProgress("stop", null, true);
+        addCopyOption();
       })
   }
 
