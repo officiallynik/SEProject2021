@@ -1,8 +1,10 @@
-# emoticon recognition via patterns.
+"""
+emoticon recognition via patterns.
 
+"""
 import sys
 import re
-# import sane_re
+
 def mycompile(pat): return re.compile(pat,  re.UNICODE)
 
 
@@ -55,23 +57,3 @@ def analyze_text(text):
     if s:
         return "SAD"
     return "NA"
-
-    # more complex & harder, so disabled for now
-    #w= Wink_RE.search(text)
-    #t= Tongue_RE.search(text)
-    #a= Other_RE.search(text)
-    #h,w,s,t,a = [bool(x) for x in [h,w,s,t,a]]
-    # if sum([h,w,s,t,a])>1: return "MULTIPLE"
-    # if sum([h,w,s,t,a])==1:
-    #  if h: return "HAPPY"
-    #  if s: return "SAD"
-    #  if w: return "WINK"
-    #  if a: return "OTHER"
-    #  if t: return "TONGUE"
-    # return "NA"
-
-
-# if __name__ == '__main__':
-#     for line in sys.stdin:
-#         sane_re._S(line[:-1]).show_match(Emoticon_RE, numbers=False)
-    #print(analyze_tweet(line.strip()), line.strip(), sep="\t")

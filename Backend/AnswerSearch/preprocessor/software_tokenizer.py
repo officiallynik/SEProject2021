@@ -1,3 +1,9 @@
+"""
+    Contains relevant methods for tokenization during preprocessing phase
+
+"""
+
+
 import re
 import sys
 import emoticons as emoticons
@@ -106,10 +112,10 @@ ProtectThese = [
     Separators,
     Decorations,
     EmbeddedApostrophe,
-    API,  # Deheng
-    PunctSeq,  # Deheng
-    plural,  # Deheng
-    ProgrammingOperators  # Deheng
+    API,  
+    PunctSeq,  
+    plural,  
+    ProgrammingOperators  
 ]
 Protect_RE = mycompile(regex_or(*ProtectThese))
 
@@ -147,7 +153,7 @@ def align(toks, orig):
             s_i += 1
             if s_i >= len(orig):
                 raise AlignmentFailed((orig, toks, alignments))
-            # if orig[s_i] != ' ': raise AlignmentFailed("nonspace advance: %s" % ((s_i,orig),))
+            
     if any(a is None for a in alignments):
         raise AlignmentFailed((orig, toks, alignments))
 
@@ -159,11 +165,10 @@ class AlignmentFailed(Exception):
 
 
 def tokenize(tweet):
-    # tweet = re.sub(u'—', ' ', tweet) # Deheng
-    # tweet = tweet.replace('\x97', ' ') # Deheng
+    
     text = tweet
-    text = re.sub(u'—', ' ', text)  # Deheng
-    text = re.sub('(?<=\w)/(\s|$)', ' ', text)  # Deheng
+    text = re.sub(u'—', ' ', text)  
+    text = re.sub('(?<=\w)/(\s|$)', ' ', text)  
     text = squeeze_whitespace(text)
     # Convert HTML escape sequences into their actual characters (so that the tokenizer and emoticon finder are not fooled).
     text = re.sub(r'&lt;', '<', text)
@@ -198,15 +203,12 @@ def simple_tokenize(text):
 
     goods = [s[i:j] for i, j in goods]
     bads = [s[i:j] for i, j in bads]
-    # print goods
-    # print bads
     goods = [unprotected_tokenize(x) for x in goods]
     res = []
     for i in range(len(bads)):
         res += goods[i]
         res.append(bads[i])
     res += goods[-1]
-    # res = post_process(res)
     return res
 
 
@@ -233,12 +235,8 @@ def squeeze_whitespace(s):
     return new_string.strip()
 
 
-# fun: copy and paste outta http://en.wikipedia.org/wiki/Smart_quotes
-# EdgePunct      = r"""[  ' " “ ” ‘ ’ * < > « » { } ( \) [ \]  ]""".replace(' ','')
-# Removed < and > because they were causing problems with <3 emoticons
+
 EdgePunct = r"""[  ' " “ ” ‘ ’ * « » { } ( \) [ \]  ]""".replace(' ', '')
-# EdgePunct = r'[^a-zA-Z0-9\s]'
-# NotEdgePunct = r"""[^'"([\)\]]"""  # alignment failures?
 NotEdgePunct = r"""[a-zA-Z0-9]"""
 EdgePunctLeft = r"""(\s|^)(%s+)(%s)""" % (EdgePunct, NotEdgePunct)
 
@@ -259,7 +257,5 @@ def unprotected_tokenize(s):
 
 
 if __name__ == '__main__':
-    # for line in sys.stdin:
-    #   print(" ".join(tokenize(line[:-1])))
     s = "What’s the equivalent of Carbon.ControlAccessor() in python __init__?"
     print(tokenize(s))
