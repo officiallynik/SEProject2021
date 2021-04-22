@@ -9,19 +9,21 @@ PyStackBot is a StackOverFlow answer summarizer for automated/manually generated
 # Table of contents
 
 - [Usage](#usage)
+- [API Documentation](#api)
 - [Installation](#installation)
 - [Recommended configurations](#recommended-configurations)
-- [Custom configurations](#custom-configurations)
-- [Updating](#updating)
-- [Uninstallation](#uninstallation)
+- [Resources](#resources)
 - [Contributing](#contributing)
-- [License](#license)
+
 
 # Usage
 
 [(Back to top)](#table-of-contents)
 
-Man pages have been added. Checkout `man colorls`.
+Go to AnswerSearch Directory. Then run the below command
+ ```bash
+    python3 main.py
+    ```
 
 ### Flags
 
