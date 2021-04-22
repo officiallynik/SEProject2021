@@ -3,7 +3,7 @@
 [![forthebadge](https://forthebadge.com/images/badges/made-with-python.svg)](http://forthebadge.com)
 
 
-PyStackBot is a stackoverflow answer summarizer for automated/manually generated queries in vscode for python developers. 
+PyStackBot is a StackOverFlow answer summarizer for automated/manually generated queries in vscode for python developers. 
 
 
 # Table of contents
