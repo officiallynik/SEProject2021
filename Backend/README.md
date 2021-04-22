@@ -11,7 +11,6 @@ PyStackBot is a StackOverFlow answer summarizer for automated/manually generated
 - [Usage](#usage)
 - [API Documentation](#api)
 - [Installation](#installation)
-- [Recommended configurations](#recommended-configurations)
 - [Resources](#resources)
 - [Contributing](#contributing)
 
@@ -37,8 +36,20 @@ Follow below given rules for searching your query in the given CLI.
 
 [(Back to top)](#table-of-contents)
 
-1. Install Ruby (preferably, version >= 2.5)
-2. Install the patched fonts of powerline nerd-font and/or font-awesome. Have a look at the [Nerd Font README](https://github.com/ryanoasis/nerd-fonts/blob/master/readme.md) for more installation instructions.
+1. Run the below command to install the required packages.
+  ```bash
+    pip3 install -R ./AnswerSearch/requirements.txt
+  ```
+2. Download all the files given in [this drive link](https://drive.google.com/drive/u/0/folders/1WmS67_kypdYC6gCuK2MYif1a-gJX3TDE). 
+   Place the files in the given directories.
+   - questions_data.csv   -> Backend/AnswerSearch/Data (Create a new directory in AnswerSearch Directory)
+   - answers_data_new.csv -> Backend/AnswerSearch/Data
+   - corpus.txt           -> Backend/AnswerSearch/Word2Vec
+   - word2vec.model       -> Backend/AnswerSearch/Word2Vec
+   - word2vec.model.trainables.syn1neg.npy -> Backend/AnswerSearch/Word2Vec
+   - word2vec.model.wv.vectors.npy -> Backend/AnswerSearch/Word2Vec
+   - idf.csv ->-> Backend/AnswerSearch/IDF
+4. Install the patched fonts of powerline nerd-font and/or font-awesome. Have a look at the [Nerd Font README](https://github.com/ryanoasis/nerd-fonts/blob/master/readme.md) for more installation instructions.
 
     *Note for `iTerm2` users - Please enable the Nerd Font at iTerm2 > Preferences > Profiles > Text > Non-ASCII font > Hack Regular Nerd Font Complete.*
 
