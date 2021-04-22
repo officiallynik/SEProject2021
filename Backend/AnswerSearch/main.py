@@ -7,8 +7,26 @@ from answersretrieval import retrieve_top_matched_answers,retrieve_top_matched_a
 from summarizer import mmr_handler
 import re
 import json
+from html.parser import HTMLParser
 mmr=mmr_handler()
 
+class MyHTMLParser(HTMLParser):
+    def handle_starttag(self, tag, attrs):
+        pass
+
+    def handle_endtag(self, tag):
+        pass
+
+    def handle_data(self, data):
+        print(data)
+
+
+parserHTML = MyHTMLParser()
+
+def answer_display(answer_raw):
+    processed_answer = re.sub(r"<.*?>", "", answer_raw)
+    processed_answer = re.sub(r"</.*?>", "", processed_answer)
+    parserHTML.feed(processed_answer)
 
 
 def getAnswers(query):
@@ -62,3 +80,25 @@ def getSummarizedAnswer(query):
 
     json_res=json.dumps(respose)
     return json_res
+
+
+if __name__=="__main__":
+    """
+
+    Using PyStackBot from CLI
+
+    """
+    while True:
+        inp = input("query > ")
+        if inp == "exit":
+            break
+        inp = inp.split("--")
+        query = inp[0]
+        
+        questions = retrieve_top_matched_questions(query, 5, len(inp)>1)
+        
+        sorted_paragraphs=retrieve_top_matched_answer_paragraphs(questions, query)
+        final_paragraphs=mmr.rank_mmr(sorted_paragraphs)
+        for cnt, para_obj in enumerate(final_paragraphs, 1):
+            answer_display(para_obj["paragraph"].raw_text)
+            print("--------------------------------------------------------------------------------------------")

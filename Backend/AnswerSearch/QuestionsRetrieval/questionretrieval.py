@@ -9,8 +9,8 @@ import nltk
 def custom_key(e):
     return e['score']
 
-def questions_display(questions, display=False):
-     """
+def questions_display(questions, display):
+    """
         Displays the relevant questions 
         
         Parameters:
@@ -20,7 +20,7 @@ def questions_display(questions, display=False):
         Returns:
         None
             
-        """
+    """
     if display:
         for cnt, question in enumerate(questions, 1):
             print('question no.:', cnt)
@@ -28,7 +28,7 @@ def questions_display(questions, display=False):
             print()
 
 def retrieve_top_matched_questions(query, number_of_questions, display):
-     """
+    """
         Returns a top matched StackOverFlow Questions
         
         Parameters:
@@ -39,7 +39,7 @@ def retrieve_top_matched_questions(query, number_of_questions, display):
         Returns:
         List: top matched StackOverFlow Questions
             
-        """
+    """
 
     relevance_calculator = RCA()
     questions = search_question(query)

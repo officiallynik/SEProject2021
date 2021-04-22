@@ -68,13 +68,13 @@ class Paragraph():
         """
         idf_list = []
         for word in self.word_list:
+            
             try:
                 idf = self.idf_metric_dict[word]
             except:
                 idf = 0
-
-            idf_list.append(idf)
-
+            idf_list.append(float(idf))
+        
         self.infor_entropy = sum(idf_list)
 
     def cal_semantic_pattern(self):

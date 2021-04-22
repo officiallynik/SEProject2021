@@ -17,7 +17,7 @@ def get_answers_list(qid):
     Returns:
     list: Extracted Answers
 
-   """
+    """
     
     es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
 
@@ -53,13 +53,13 @@ def process_answers(answer_list):
             'answer': Contains the original Answer Object from StackOverFlow Server
             'para_object': Contains the paragraph object created from body of the original answer
 
-   """
+    """
     
     preprocessor = PreprocessPostContent()
     paragraph_obj_list = []
     for answer in answer_list:
         paragraph_obj_list.append({'answer':answer,
-        'para_object':(Paragraph(answer['body'], preprocessor.get_single_para_word_list(answer['body']), vote_score=int(answer['score']), position=1))})
+        'para_object':(Paragraph(answer['body'], nltk.word_tokenize(preprocessor.get_single_para_word_list(answer['body'])), vote_score=int(answer['score']), position=1))})
 
     return paragraph_obj_list
 
@@ -75,14 +75,14 @@ def process_answers_into_paragraphs(answer_list):
         Type: Paragraph Object
         Description: Paragraph Objects created from paragraphs of the answers passed
 
-   """
+    """
     preprocessor = PreprocessPostContent()
     paragraph_obj_list = []
     for answer in answer_list:
         paragraph_list = preprocessor.getParagraphs(answer['body'])
         for pos, para in enumerate(paragraph_list, 1):
             paragraph_obj_list.append(
-                Paragraph(para, preprocessor.get_single_para_word_list(para), vote_score=int(answer['score']), position=pos))
+                Paragraph(para, nltk.word_tokenize(preprocessor.get_single_para_word_list(para)), vote_score=int(answer['score']), position=pos))
 
     return paragraph_obj_list
 
@@ -99,7 +99,7 @@ def sort_answers(paragraph_obj_list, query):
         Type: Paragraph Object
         Description: Sorted Paragraph Object List
 
-   """
+    """
     preprocessor = PreprocessPostContent()
     preprocessed_query = preprocessor.get_single_para_word_list(query)
     query_tokens = nltk.word_tokenize(preprocessed_query)
@@ -191,7 +191,7 @@ def retrieve_top_matched_answers(questions,query):
     return answer_obj_list_sorted
 
 def retrieve_top_matched_answer_paragraphs(questions, query):
-     """
+    """
     Returns the top matched StackOverFlow Answer Paragraphs based on passed query and relevant Questions Extracted
 
     Parameters:

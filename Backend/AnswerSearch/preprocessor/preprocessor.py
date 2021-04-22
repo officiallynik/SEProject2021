@@ -214,8 +214,8 @@ class PreprocessPostContent(object):
     def getParagraphs(self, raw_txt):
         raw_txt = self.filterNILStr(raw_txt)
         paragraphs_candidates = re.findall(self.paragraph, raw_txt)
-        paragraphs_candidates = [p[3:-4]
-                                 for p in paragraphs_candidates if len(p[3:-4]) > 0]
+        # paragraphs_candidates = [p[3:-4]
+        #                          for p in paragraphs_candidates if len(p[3:-4]) > 0]
         paragraphs = []
         for p in paragraphs_candidates:
             if len(TextBlob(p).words) < self.min_words_paragraph:
