@@ -19,6 +19,7 @@
   let tagData;
   let initialInstruction = true;
   let errorObj;
+  let PyStackBotResults;
 
   window.addEventListener("message", event => {
     extensionAction = event.data.action;
@@ -26,14 +27,14 @@
     if (event.data.action === "search") {
       searchQuery.set(event.data.query);
       selectedSearchFilter.set("Relevance");
-      search();
+      searchPySO();
       section.set("search");
     }
 
     if (event.data.action === "searchError") {
       searchQuery.set(event.data.query.error);
       selectedSearchFilter.set("Relevance");
-      search();
+      searchSO();
       section.set("search");
       errorObj = event.data.query;
     }
@@ -61,8 +62,7 @@
     handleTagSelected(event);
   }
 
-  // Search by selected tag - Only gets the wiki info -
-  // Full search still needs to be done based on tag name with added property &tagged= to uri
+  // Search by selected tag - Only gets the wiki info
   function handleTagSelected(event) {
     vscodeProgress("start", "Loading Tag Results", false);
     isLoading = true;
@@ -92,8 +92,9 @@
       })
   }
 
-  // Main search functionality
-  function search() {
+
+  // stackoverflow direct search functionality
+  function searchSO() {
 
     if($searchQuery.length !== 0){
       initialInstruction = false;
@@ -137,6 +138,50 @@
         vscodeProgress("stop", null, true);
       });
   }
+
+  // stackoverflow direct search functionality
+  function searchPyStackBot() {
+    console.log("pystackbot search....");
+    if($searchQuery.length !== 0){
+      initialInstruction = false;
+    }
+
+    if (
+      $searchQuery[0] === "[" &&
+      $searchQuery[$searchQuery.length - 1] === "]"
+    ) {
+      const tag = $searchQuery.substring(1, $searchQuery.length - 1);
+      handleTagSelected({ detail: { tag: tag } });
+      errorObj = null;
+      return;
+    }
+
+    vscodeProgress("start", "Searching PyStackBot", false);
+    isLoading = true;
+    tagData = null;
+    selectedTag = null;
+    errorObj = null;
+
+    const uri = `http://localhost:5000/search?query=${$searchQuery}`;
+
+    axios
+      .get(uri)
+      .then(response => {
+        isLoading = false;
+
+        if (response.status === 200) {
+          PyStackBotResults = response.data.items;
+          vscodeProgress("stop", null, false);
+        } else {
+          vscodeProgress("stop", null, true);
+        }
+
+      })
+      .catch(() => {
+        isLoading = false;
+        vscodeProgress("stop", null, true);
+      });
+  }
 </script>
 
 <Header on:goBack={handleGotoSearch} {extensionAction} />
@@ -146,7 +191,8 @@
     on:gotoQuestion={handleGotoQuestion}
     on:gotoTagLearnMore={() => section.set("tag")}
     on:searchByTag={handleTagSelected}
-    on:searchInput={search}
+    on:searchInput={searchSO}
+    on:searchPyStackBot={searchPyStackBot}
     on:searchByPage={handlePageSearch}
     on:filterChange={handleFilterChangeSearch}
     {isLoading}
@@ -155,6 +201,7 @@
     {totalResults}
     {initialInstruction}
     {errorObj}
+    {PyStackBotResults}
   />
 {:else if $section === "question"}
   <Question

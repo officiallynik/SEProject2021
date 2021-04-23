@@ -1,14 +1,13 @@
 <script>
-  // import { i18n, languages } from "../stores/i18n.js";
-  // import { formatNumber, section } from "../stores/common.js";
-
+  import QuestionsRelated from "../question/QuestionsRelated.svelte";
   export let results;
   export let isLoading;
+  export let relatedQuestions;
+  let showRelatedQuestions;
 
-  // $: total = formatNumber(results);
-  // $: title = $section === "search" ? $i18n.text.results : $i18n.text.answers;
-  // $: titleForNoResults =
-  //   $section === "search" ? $i18n.text.no_results_found : $i18n.text.no_answers;
+  function toggleRelatedQuestions() {
+    showRelatedQuestions = !showRelatedQuestions;
+  }
 </script>
 
 <style>
@@ -19,10 +18,6 @@
   }
   div:first-of-type {
     width: 30%;
-  }
-  div:first-of-type header {
-    margin: 10px 0;
-    font-size: 16px;
   }
   div:last-of-type {
     width: 70%;
@@ -49,8 +44,20 @@
     </h2>
 
   </div>
-  
-  <div class="link link-questions">
-    View Related Questions
-  </div>
+  {#if relatedQuestions}
+    <div class="link link-questions">
+      {#if !showRelatedQuestions}
+        view related questions
+      {:else}hide related questions{/if}
+    </div>
+  {/if}
+
 </section>
+
+{#if relatedQuestions}
+  <QuestionsRelated
+      {relatedQuestions}
+      on:closeRelatedQuestions={toggleRelatedQuestions}
+      on:relatedQuestionSearch
+  />
+{/if}

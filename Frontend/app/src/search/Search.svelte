@@ -12,6 +12,8 @@
   export let isLoading;
   export let initialInstruction;
   export let errorObj;
+  export let PyStackBotResults;
+  let relatedQuestions = null;
 
 </script>
 
@@ -25,7 +27,7 @@
 
 {#if !initialInstruction}
   {#if tagData === null}
-    <ResultsBar {isLoading} />
+    <ResultsBar {isLoading} {relatedQuestions} />
     {#if isLoading }
     <Loader />
     {/if}

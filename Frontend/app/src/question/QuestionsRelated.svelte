@@ -46,15 +46,26 @@
 
 <section in:fade>
   {#each relatedQuestions as question}
-    <header
-      class:is-answered={question.is_answered}
-      class:has-answer={question.answer_count}>
-      {question.score}
-    </header>
-    <p
-      class="link"
-      on:click={() => gotoRelatedQuestion(question.question_id, question.title)}>
-      {@html question.title}
-    </p>
+    {#if question.score && question.is_answered && question.answer_count}
+      <header
+        class:is-answered={question.is_answered}
+        class:has-answer={question.answer_count}>
+        {question.score}
+      </header>
+    {/if}
+    {#if question.question_id && question.title}
+      <p
+        class="link"
+        on:click={() => gotoRelatedQuestion(question.question_id, question.title)}>
+        {@html question.title}
+      </p>
+    {/if}
+    {#if question.id && question.title}
+      <p
+        class="link"
+        on:click={() => gotoRelatedQuestion(question.id, question.title)}>
+        {@html question.title}
+      </p>
+    {/if}
   {/each}
 </section>
