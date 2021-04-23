@@ -1,9 +1,0 @@
-nltk
-textblob
-gensim
-pandas
-elasticsearch
-wheel
-numpy
-sklearn
-flask
