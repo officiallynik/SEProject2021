@@ -9,7 +9,18 @@ import nltk
 def custom_key(e):
     return e['score']
 
-def questions_display(questions, display=False):
+def questions_display(questions, display):
+    """
+        Displays the relevant questions 
+        
+        Parameters:
+        questions (list)
+        display (Boolean): Whether user wants to view questions or not
+
+        Returns:
+        None
+            
+    """
     if display:
         for cnt, question in enumerate(questions, 1):
             print('question no.:', cnt)
@@ -17,6 +28,18 @@ def questions_display(questions, display=False):
             print()
 
 def retrieve_top_matched_questions(query, number_of_questions, display):
+    """
+        Returns a top matched StackOverFlow Questions
+        
+        Parameters:
+        query (string): User query
+        number_of_questions (int) : Number of questions to be retrieved
+        display (Boolean): Whether user wants to view questions or not 
+
+        Returns:
+        List: top matched StackOverFlow Questions
+            
+    """
 
     relevance_calculator = RCA()
     questions = search_question(query)
@@ -24,7 +47,7 @@ def retrieve_top_matched_questions(query, number_of_questions, display):
 
     processed_question_titles = []
 
-    # print("number of questions:", len(questions))
+    
 
     for q in questions:
         processed_question_titles.append(
@@ -34,11 +57,11 @@ def retrieve_top_matched_questions(query, number_of_questions, display):
             }
         )
 
-    # print(processed_question_titles)
+    
 
     preprocessed_query = preprocessor.get_single_para_word_list(query)
     query_tokens = nltk.word_tokenize(preprocessed_query)
-    # print(query_tokens)
+    
 
     relevance_questions = []
     # stores dict of questions and it's score
@@ -46,10 +69,10 @@ def retrieve_top_matched_questions(query, number_of_questions, display):
     for processed_q in processed_question_titles:
         question_tokens = nltk.word_tokenize(processed_q['title'])
         score = relevance_calculator.calc_symmetric_relevance(query_tokens, question_tokens)
-        # print(question_tokens, score)
+       
         relevance_questions.append({'score': score, 'question': processed_q})
 
-    # print(relevance_questions)
+    
 
     relevance_questions.sort(reverse=True, key=custom_key)
     # sort the questions in descending order with respect to their scores

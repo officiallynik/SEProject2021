@@ -1,13 +1,29 @@
-# Given a list of paragraphs, returns a summarized version removing redundancy while maintaining novelty.
+"""
 
-from mmr import mmr
+Given a list of paragraphs, returns a summarized version removing redundancy while maintaining novelty.
+
+"""
 import sys
 sys.path.append('./AnswerSearch/QuestionRetrieval')
 from RCA import RCA
 relevance = RCA()
 
 class mmr_handler:
+    """ 
+        Contains relevant methods for Maximal Marginal Relevance (MMR) Calculation.
+    """
     def build_mmr_matrix(self,sorted_paragraphs):
+        """
+        Returns MMR Matrix
+        
+        Parameters:
+        sorted_paragraphs (list)
+       
+
+        Returns:
+        2D List: MMR Matrix
+            
+        """
         n=len(sorted_paragraphs)
 
         mmr_matrix = [[0.0 for i in range(n)] for j in range(n)]
@@ -17,9 +33,6 @@ class mmr_handler:
                 if(i == j):
                     mmr_matrix[i][j] = 0.0
                 else:
-                    # print(i,j)
-                    # print(sorted_paragraphs[i].word_list)
-                    # print(sorted_paragraphs[j].word_list)
                     mmr_matrix[i][j] = relevance.calc_symmetric_relevance(
                         sorted_paragraphs[i].word_list, sorted_paragraphs[j].word_list)
                     
@@ -28,9 +41,19 @@ class mmr_handler:
 
 
     def rank_mmr(self,sorted_paragraphs):
+        """
+        Sorts the passed paragraphs based on MMR scores and returns the top 5 paragraphs.
+        
+        Parameters:
+        sorted_paragraphs (list)
+       
+
+        Returns:
+        List: Paragraphs sorted based on MMR scores
+            
+        """
         mmr_matrix = self.build_mmr_matrix(sorted_paragraphs)
-        # for i in range(len(mmr_matrix)):
-        #     print(mmr_matrix[i])
+        
         final_paragraphs = []
 
         para_ranked = []

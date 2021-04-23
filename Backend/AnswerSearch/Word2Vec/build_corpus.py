@@ -1,3 +1,9 @@
+"""
+
+Contains relevant methods for building the text corpus from questions dataset
+
+"""
+
 import sys
 sys.path.append("../PreProcessor")
 sys.path.append("../Data")
@@ -5,7 +11,6 @@ import pandas as pd
 from preprocessor import PreprocessPostContent
 
 def process_data(data):
-    # print("processing...")
     preprocessor = PreprocessPostContent()
     title = preprocessor.get_single_para_word_list(data[0])
     body = preprocessor.get_mul_para_wordlist_list(data[1])
