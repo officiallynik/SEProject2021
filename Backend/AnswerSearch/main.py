@@ -31,16 +31,15 @@ def answer_display(answer_raw):
 
 def getAnswers(query):
     questions = retrieve_top_matched_questions(query, 5, False)
-    answers_list=retrieve_top_matched_answers(questions,query)
+    answers_list = retrieve_top_matched_answers(questions,query)
     #print(answers_list)
     final_answers_list=[]
     for answer in answers_list:
         final_answers_list.append(answer['answer'])
     #print(final_answers_list)
-    respose={"questions":questions,"answers":final_answers_list}
+    respose = {"questions":questions, "answers":final_answers_list}
 
-
-    json_res=json.dumps(respose)
+    json_res = json.dumps(respose)
     #print(json_res)
     return json_res
 
@@ -67,30 +66,20 @@ def getSummarizedAnswer(query):
     json_res=json.dumps(respose)
     #print(json_res)
     return json_res
-    
 
+if __name__=="__main__":
+    while True:
+        query = input("query > ")
+        print(getAnswers(query))
 
+        # sorted_paragraphs=retrieve_top_matched_answers(questions, query)
+        # final_paragraphs=mmr.rank_mmr(sorted_paragraphs)
+        # #print(final_paragraphs)
+        # print("\n\n")
+        # for cnt, para_obj in enumerate(final_paragraphs, 1):
+        #     #print(f"answer no. {cnt}")
+        #     #print("\nanswer:")
 
-
-# if __name__=="__main__":
-#     get_answer_summary("print in python")
-#     while True:
-#         inp = input("query > ")
-#         if inp == "exit":
-#             break
-#         inp = inp.split("--")
-#         query = inp[0]
-
-#         questions = retrieve_top_matched_questions(query, 5, len(inp)>1)
-
-#         sorted_paragraphs=retrieve_top_matched_answers(questions, query)
-#         final_paragraphs=mmr.rank_mmr(sorted_paragraphs)
-#         #print(final_paragraphs)
-#         print("\n\n")
-#         for cnt, para_obj in enumerate(final_paragraphs, 1):
-#             #print(f"answer no. {cnt}")
-#             #print("\nanswer:")
-
-#             answer_display(para_obj["paragraph"].raw_text)
-#             #print("MMR Score: ",para_obj["mmr_score"])
-#             print("--------------------------------------------------------------------------------------------")
+        #     answer_display(para_obj["paragraph"].raw_text)
+        #     #print("MMR Score: ",para_obj["mmr_score"])
+        #     print("--------------------------------------------------------------------------------------------")

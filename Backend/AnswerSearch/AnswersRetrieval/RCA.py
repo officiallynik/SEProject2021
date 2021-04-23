@@ -59,11 +59,11 @@ class RCA:
         return asymmetric_rel
 
     def calc_symmetric_relevance(self, query_list, Question_List):
-        print("hello")
+        # print("hello")
         rel_q_to_Q = self.calc_asymmetric_val(query_list, Question_List)
         rel_Q_to_q = self.calc_asymmetric_val(Question_List, query_list)
         average_relevance = (rel_q_to_Q + rel_Q_to_q) / 2
-        print(average_relevance)
+        # print(average_relevance)
         return average_relevance
 
 if __name__ == "__main__":

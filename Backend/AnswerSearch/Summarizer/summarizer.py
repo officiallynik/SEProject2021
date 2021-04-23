@@ -29,8 +29,8 @@ class mmr_handler:
 
     def rank_mmr(self,sorted_paragraphs):
         mmr_matrix = self.build_mmr_matrix(sorted_paragraphs)
-        for i in range(len(mmr_matrix)):
-            print(mmr_matrix[i])
+        # for i in range(len(mmr_matrix)):
+        #     print(mmr_matrix[i])
         final_paragraphs = []
 
         para_ranked = []
