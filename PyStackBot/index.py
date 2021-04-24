@@ -16,12 +16,14 @@ CORS(app)
 @app.route('/search')
 def search():
     query=request.args.get('query')
+    print(query)
     json_res=getAnswers(query)
     return json_res
 
 @app.route('/search/summary')
 def search_summary():
 	query=request.args.get('query')
+	print(query)
 	json_res=getSummarizedAnswer(query)
 	return json_res
 
