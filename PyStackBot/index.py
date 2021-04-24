@@ -8,22 +8,22 @@ import sys
 sys.path.append("./AnswerSearch")
 from flask import Flask, request
 from main import getAnswers
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/search')
 def search():
-    body=request.form
-    query=body["query"]
+    query=request.args.get('query')
     json_res=getAnswers(query)
     return json_res
 
 @app.route('/search/summary')
 def search_summary():
-    body=request.form
-    query=body["query"]
-    json_res=getSummarizedAnswer(query)
-    return json_res
+	query=request.args.get('query')
+	json_res=getSummarizedAnswer(query)
+	return json_res
 
 app.debug = False
 app.run()
