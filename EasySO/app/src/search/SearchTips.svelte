@@ -10,49 +10,68 @@
 </style>
 
 <div>
-  <i>Tags:</i>
-  <strong>[tag]</strong>
-  <br />
-  <i>Exact:</i>
-  <strong>"words here"</strong>
-  <br />
-  <i>Author:</i>
-  <strong>user:1234</strong>
-  <br />
+  <div>
+    <strong>
+      Query Search
+    </strong>
+    <div>
+      Search for a query and get top answers for python directly using PyStackBot. <br/>
+      Not satisfied with PyStackBot answers, use direct Stack Overflow search. <br/>
+      <em>Stack Overflow search works for any type of query, not only python queries.</em><br/>
+      <strong>Key Binding: alt + cmd/ctrl + s</strong> 
+    </div>
+  </div>
+  <br/>
 
-  <i>Score:</i>
-  <strong>score:3 (3+)</strong>
-  <br />
+  <div>
+    <strong>
+      Tag Search
+    </strong>
+    <div>
+      Search for a specific word or technology you want to know about. <br/>
+      Get to know the brief explanation/details about that tag/technology. <br/>
+      <em>Tag search works when you search for a tag enclosed between [], eg: [django].</em><br/>
+      <strong>Key Binding: alt + cmd/ctrl + s</strong> 
+    </div>
+  </div>
+  <br/>
 
-  <i>Answers:</i>
-  <strong>answers:3 (3+)</strong>
-  <br />
+  <div>
+    <strong>
+      Error Search
+    </strong>
+    <div>
+      Search for error from terminal after executing the file. <br/>
+      Get to the brief definition of error and questions related to that error. <br/>
+      <em>Error search works afer executing [only python files] files, and you get an error.</em>><br/>
+      <strong>Key Binding: alt + cmd/ctrl + e</strong> 
+    </div>
+  </div>
+  <br/>
 
-  <i>Views:</i>
-  <strong>views:250</strong>
-  <br />
+  <div>
+    <strong>
+      Auto Query Search [Beta]
+    </strong>
+    <div>
+      Search for query about currently working python file without you needing to explain the query.<br/>
+      Auto Query generates and searches for query automatically.<br/>
+      <em>Auto Query works on only python files, and accuracy might be low.</em><br/>
+      <strong>Key Binding: alt + cmd/ctrl + a</strong> 
+    </div>
+  </div>
+  <br/>
 
-  <i>Sections:</i>
-  <strong>title:apples</strong>
-  <br />
+  <div>
+    <strong>
+      Summarised Answers for Technical Questions [Beta]
+    </strong>
+    <div>
+      Search for technical question and get a summarised answer without needing to scavenge for answers.<br/>
+      Technical Answer Summariser works for only python related question, and accuracy might be low.<br/>
+      <em>To search type your question enclosed in [], eg: [what are metaclasses in python].</em><br/>
+      <strong>Key Binding: alt + cmd/ctrl + s</strong> 
+    </div>
+  </div>
 
-  <i>URL:</i>
-  <strong>url:"*.example.com"</strong>
-  <br />
-
-  <i>Favorites:</i>
-  <strong>infavorites:1234</strong>
-  <br />
-
-  <i>Status:</i>
-  <strong>closed:yes</strong>
-  <br />
-
-  <i>Types:</i>
-  <strong>is:question</strong>
-  <br />
-
-  <i>Exclude:</i>
-  <strong>-[tag]</strong>
-  <br />
 </div>

@@ -51,6 +51,6 @@
       {/if}
     </div>
   {:else}
-    <strong>EasySO</strong>
+    <strong>Easy StackOverflow</strong>
   {/if}
 </h3>

@@ -29,7 +29,6 @@
       searchQuery.set(event.data.query);
       selectedSearchFilter.set("Relevance");
       searchPyStackBot();
-      searchSO();
       section.set("search");
     }
 
