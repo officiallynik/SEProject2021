@@ -1,9 +1,7 @@
 <script>
   import { section, searchQuery } from "./stores/common.js";
   import { vscodeProgress } from "./stores/vscode-api.js";
-  import {
-    selectedSearchFilter
-  } from "./stores/results-filter.js";
+  import { selectedSearchFilter } from "./stores/results-filter.js";
   import axios from "axios";
   import Header from "./common/Header.svelte";
   import Question from "./question/Question.svelte";
@@ -20,9 +18,10 @@
   let initialInstruction = true;
   let errorObj;
   let PyStackBotAnswers;
+  let PyStackBotSummary;
   let PyStackBotRelatedQuestions;
 
-  window.addEventListener("message", event => {
+  window.addEventListener("message", (event) => {
     extensionAction = event.data.action;
 
     if (event.data.action === "search") {
@@ -51,16 +50,44 @@
     section.set("search");
   }
 
-  function handlePageSearch() {
+  function handlePageSearch() {}
 
-  }
-
-  function handleFilterChangeSearch() {
-
-  }
+  function handleFilterChangeSearch() {}
 
   function handleTagFromQuestionSearch(event) {
     handleTagSelected(event);
+  }
+
+  function handleTechnicalQuery(query) {
+  
+    vscodeProgress("start", "Searching PyStackBot", false);
+    isLoading = true;
+    tagData = null;
+    selectedTag = null;
+    errorObj = null;
+    searchData = null;
+    PyStackBotAnswers = null;
+
+    const uri = `http://localhost:5000/search/summary?query=${query}`;
+    console.log("pystackbot search....");
+    axios
+      .get(uri)
+      .then((response) => {
+        isLoading = false;
+
+        if (response.status === 200) {
+          console.log("got response...");
+          PyStackBotRelatedQuestions = response.data.questions;
+          PyStackBotSummary = response.data.answers;
+          vscodeProgress("stop", null, false);
+        } else {
+          vscodeProgress("stop", null, true);
+        }
+      })
+      .catch(() => {
+        isLoading = false;
+        vscodeProgress("stop", null, true);
+      });
   }
 
   // Search by selected tag - Only gets the wiki info
@@ -75,30 +102,29 @@
     console.log("TagSearch req...");
     axios
       .get(uri)
-      .then(response => {
+      .then((response) => {
         if (response.status === 200) {
-          tagData = response.data.items[0]
+          tagData = response.data.items[0];
           // section.set("tag");
         }
-        if(tagData === undefined) {
-          tagData = { tag_name: selectedTag, error_msg: "No wiki found for given tag :("}
+        if (tagData === undefined) {
+          tagData = {
+            tag_name: selectedTag,
+            error_msg: "No wiki found for given tag :(",
+          };
         }
       })
-      .catch(() => {
-
-      })
+      .catch(() => {})
       .finally(() => {
         isLoading = false;
         vscodeProgress("stop", null, true);
         addCopyOption();
-      })
+      });
   }
-
 
   // stackoverflow direct search functionality
   function searchSO() {
-
-    if($searchQuery.length !== 0){
+    if ($searchQuery.length !== 0) {
       initialInstruction = false;
     }
 
@@ -106,11 +132,18 @@
       $searchQuery[0] === "[" &&
       $searchQuery[$searchQuery.length - 1] === "]"
     ) {
-      console.log("tag search...")
-      const tag = $searchQuery.substring(1, $searchQuery.length - 1);
-      handleTagSelected({ detail: { tag: tag } });
-      errorObj = null;
-      return;
+      let split = $searchQuery.substring(1, $searchQuery.length - 1).split(" ");
+      if (split.length === 1) {
+        const tag = $searchQuery.substring(1, $searchQuery.length - 1);
+        handleTagSelected({ detail: { tag: tag } });
+        errorObj = null;
+        return;
+      } else {
+        const techQuery = $searchQuery.substring(1, $searchQuery.length - 1);
+        handleTechnicalQuery(techQuery);
+        errorObj = null;
+        return;
+      }
     }
 
     tagData = null;
@@ -118,18 +151,19 @@
     errorObj = null;
     PyStackBotRelatedQuestions = null;
     PyStackBotAnswers = null;
-    
-    if($searchQuery.length > 0){
+    PyStackBotSummary = null;
+
+    if ($searchQuery.length > 0) {
       vscodeProgress("start", "Loading Search Results", false);
       isLoading = true;
 
       const uri = `https://api.stackexchange.com/2.2/search/advanced?order=desc&sort=relevance&q=${$searchQuery}&site=stackoverflow&filter=withbody`;
-      console.log("query search...")
+      console.log("query search...");
       axios
         .get(uri)
-        .then(response => {
+        .then((response) => {
           isLoading = false;
-          console.log(response.data)
+          console.log(response.data);
           if (response.status === 200) {
             searchData = response.data.items;
             totalResults = searchData.length;
@@ -143,14 +177,13 @@
           vscodeProgress("stop", null, true);
         });
     }
-
   }
 
   // stackoverflow direct search functionality
   function searchPyStackBot() {
     console.log("query", $searchQuery);
-    
-    if($searchQuery.length !== 0){
+
+    if ($searchQuery.length !== 0) {
       initialInstruction = false;
     }
 
@@ -158,18 +191,27 @@
       $searchQuery[0] === "[" &&
       $searchQuery[$searchQuery.length - 1] === "]"
     ) {
-      const tag = $searchQuery.substring(1, $searchQuery.length - 1);
-      handleTagSelected({ detail: { tag: tag } });
-      errorObj = null;
-      return;
+      let split = $searchQuery.substring(1, $searchQuery.length - 1).split(" ");
+      if (split.length === 1) {
+        const tag = $searchQuery.substring(1, $searchQuery.length - 1);
+        handleTagSelected({ detail: { tag: tag } });
+        errorObj = null;
+        return;
+      } else {
+        const techQuery = $searchQuery.substring(1, $searchQuery.length - 1);
+        handleTechnicalQuery(techQuery);
+        errorObj = null;
+        return;
+      }
     }
 
     tagData = null;
     selectedTag = null;
     errorObj = null;
     searchData = null;
-    
-    if($searchQuery.length > 0){
+    PyStackBotSummary = null;
+
+    if ($searchQuery.length > 0) {
       vscodeProgress("start", "Searching PyStackBot", false);
       isLoading = true;
 
@@ -177,7 +219,7 @@
       console.log("pystackbot search....");
       axios
         .get(uri)
-        .then(response => {
+        .then((response) => {
           isLoading = false;
 
           if (response.status === 200) {
@@ -188,7 +230,6 @@
           } else {
             vscodeProgress("stop", null, true);
           }
-
         })
         .catch(() => {
           isLoading = false;
@@ -217,6 +258,7 @@
     {errorObj}
     {PyStackBotAnswers}
     {PyStackBotRelatedQuestions}
+    {PyStackBotSummary}
   />
 {:else if $section === "question"}
   <Question

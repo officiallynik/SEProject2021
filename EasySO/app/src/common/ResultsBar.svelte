@@ -4,6 +4,7 @@
   export let results;
   export let isLoading;
   export let PyStackBotRelatedQuestions;
+  export let PyStackBotSummary;
   let showRelatedQuestions = false;
   let relatedQuestions = null;
 
@@ -54,7 +55,9 @@
 
   <div>
     <h2 class="results-header">
-      {#if PyStackBotRelatedQuestions}
+      {#if PyStackBotSummary}
+        PyStackBot Summary
+      {:else if PyStackBotRelatedQuestions}
         PyStackBot Results
       {:else if isLoading}
         Loading...

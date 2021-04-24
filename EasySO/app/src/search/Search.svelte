@@ -6,6 +6,7 @@
   import Loader from "../common/Loader.svelte";
   import Tag from "../tag/tag.svelte";
   import QuestionAnswers from "../question/QuestionAnswers.svelte";
+import { each } from "svelte/internal";
 
   export let searchData;
   export let totalResults;
@@ -14,6 +15,7 @@
   export let initialInstruction;
   export let errorObj;
   export let PyStackBotAnswers;
+  export let PyStackBotSummary;
   export let PyStackBotRelatedQuestions;
 
 </script>
@@ -28,7 +30,7 @@
 
 {#if !initialInstruction}
   {#if tagData === null}
-    <ResultsBar {isLoading} {PyStackBotRelatedQuestions} on:gotoQuestion />
+    <ResultsBar {isLoading} {PyStackBotRelatedQuestions} {PyStackBotSummary} on:gotoQuestion />
     {#if isLoading }
     <Loader />
     {/if}
@@ -52,4 +54,10 @@
   <QuestionAnswers 
     {PyStackBotAnswers}
   />
+{/if}
+
+{#if PyStackBotSummary}
+  {#each PyStackBotSummary as answer}
+    {@html answer}
+  {/each}
 {/if}
