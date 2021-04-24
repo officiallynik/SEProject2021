@@ -168,6 +168,7 @@
     tagData = null;
     selectedTag = null;
     errorObj = null;
+    searchData = null;
     
     if($searchQuery.length > 0){
       vscodeProgress("start", "Searching PyStackBot", false);
