@@ -17,7 +17,7 @@ export function AppPageHtml(contextPath: string, panel: WebviewPanel) {
         <meta name='viewport' content='width=device-width'>
         <meta http-equiv="Content-Security-Policy" content="default-src 'self';frame-src https://giphy.com/; connect-src https://api.stackexchange.com/2.2/ http://localhost:5000/; img-src vscode-resource: https:; script-src vscode-resource:; style-src vscode-resource: 'unsafe-inline';" />
 
-        <title>PyStackBot</title>
+        <title>EasySO</title>
 
         <link rel='stylesheet' href='${cssGlobal}'>
         <link rel='stylesheet' href='${cssBundle}'>

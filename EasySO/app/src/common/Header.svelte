@@ -51,6 +51,6 @@
       {/if}
     </div>
   {:else}
-    <strong>PyStackBot</strong>
+    <strong>EasySO</strong>
   {/if}
 </h3>
