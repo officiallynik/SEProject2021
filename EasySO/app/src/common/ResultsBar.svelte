@@ -47,10 +47,6 @@
       {:else}
         Stack Overflow Results
       {/if}
-    
-      <!-- {#if results > 0}
-        {total} {title}
-      {:else if results === 0}{titleForNoResults}{:else if isLoading}&nbsp;{/if} -->
     </h2>
 
   </div>
