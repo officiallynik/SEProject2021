@@ -10,6 +10,14 @@
   export let initialInstruction;
   export let errorObj;
   let searchQueryPreviousValue;
+  let searchType = "PyStackBot";
+
+  function selectSearchType() {
+    let w = document.getElementById("searchType").selectedIndex;
+    let type = document.getElementById("searchType").options[w].value;
+    console.log("type", type);
+    searchType = type;
+  }
 
   function toggleSearchTips() {
     showTips = !showTips;
@@ -28,11 +36,11 @@
   }
 
   function handleSearch() {
+    console.log("gjdkf", isLoading);
     if (
-      !isLoading &&
-      $searchQuery !== searchQueryPreviousValue &&
-      $searchQuery !== ""
+      !isLoading
     ) {
+      console.log("fvjsdflgkjdklgj")
       search();
     }
   }
@@ -40,7 +48,14 @@
   const dispatch = createEventDispatcher();
   function search() {
     searchQueryPreviousValue = $searchQuery;
-    dispatch("searchInput");
+    if(searchType === "PyStackBot"){
+      console.log("pystackbot search...");
+      dispatch("searchPyStackBot");
+    }
+    else {
+      console.log("stackoverflow search...");
+      dispatch("searchSO");
+    }
   }
 
 </script>
@@ -72,13 +87,17 @@
     {/if}
   </div>
 
+  <div class="search-type">
+    <label for="searchType">Search Type:</label>
+    <select name="searchType" id="searchType" on:change={selectSearchType}>
+      <option value="PyStackBot">PyStackBot</option>
+      <option value="SO">Stack Overflow</option>
+    </select>
+  </div>
+
   <input type="text" bind:value={$searchQuery} />
 
   <button on:click={handleSearch} class="text-capitalize"> Search </button>
-
-  <div on:click={handleSearch} class="link link-search">
-    Stack Overflow Direct Search
-  </div>
 </section>
 
 {#if initialInstruction || showTips}
@@ -152,6 +171,15 @@
 
   .errorTip {
     margin-top: 10px;
+  }
+
+  .search-type {
+    margin-top: 5px;
+  }
+
+  .search-type select {
+    background-color: var(--vscode-input-background);
+    color: var(--vscode-input-foreground);
   }
 
 </style>

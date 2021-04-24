@@ -13,13 +13,14 @@
   let questionId;
   let questionTitle;
   let totalResults;
-  let isLoading = true;
+  let isLoading = false;
   let extensionAction;
   let selectedTag;
   let tagData;
   let initialInstruction = true;
   let errorObj;
-  let PyStackBotResults;
+  let PyStackBotAnswers;
+  let relatedQuestions;
 
   window.addEventListener("message", event => {
     extensionAction = event.data.action;
@@ -27,7 +28,8 @@
     if (event.data.action === "search") {
       searchQuery.set(event.data.query);
       selectedSearchFilter.set("Relevance");
-      searchPySO();
+      searchPyStackBot();
+      searchSO();
       section.set("search");
     }
 
@@ -71,6 +73,7 @@
 
     const uri = `https://api.stackexchange.com/2.2/tags/${selectedTag}/wikis?site=stackoverflow&filter=!9_bDDrGXY`;
 
+    console.log("TagSearch req...");
     axios
       .get(uri)
       .then(response => {
@@ -111,37 +114,43 @@
       return;
     }
 
-    console.log("query search...")
-    vscodeProgress("start", "Loading Search Results", false);
-    isLoading = true;
     tagData = null;
     selectedTag = null;
     errorObj = null;
+    relatedQuestions = null;
+    PyStackBotAnswers = null;
+    
+    if($searchQuery.length > 0){
+      vscodeProgress("start", "Loading Search Results", false);
+      isLoading = true;
 
-    const uri = `https://api.stackexchange.com/2.2/search/advanced?order=desc&sort=relevance&q=${$searchQuery}&site=stackoverflow&filter=withbody`;
-
-    axios
-      .get(uri)
-      .then(response => {
-        isLoading = false;
-        console.log(response.data)
-        if (response.status === 200) {
-          searchData = response.data.items;
-          totalResults = searchData.length;
-          vscodeProgress("stop", null, false);
-        } else {
+      const uri = `https://api.stackexchange.com/2.2/search/advanced?order=desc&sort=relevance&q=${$searchQuery}&site=stackoverflow&filter=withbody`;
+      console.log("query search...")
+      axios
+        .get(uri)
+        .then(response => {
+          isLoading = false;
+          console.log(response.data)
+          if (response.status === 200) {
+            searchData = response.data.items;
+            totalResults = searchData.length;
+            vscodeProgress("stop", null, false);
+          } else {
+            vscodeProgress("stop", null, true);
+          }
+        })
+        .catch(() => {
+          isLoading = false;
           vscodeProgress("stop", null, true);
-        }
-      })
-      .catch(() => {
-        isLoading = false;
-        vscodeProgress("stop", null, true);
-      });
+        });
+    }
+
   }
 
   // stackoverflow direct search functionality
   function searchPyStackBot() {
-    console.log("pystackbot search....");
+    console.log("query", $searchQuery);
+    
     if($searchQuery.length !== 0){
       initialInstruction = false;
     }
@@ -156,31 +165,36 @@
       return;
     }
 
-    vscodeProgress("start", "Searching PyStackBot", false);
-    isLoading = true;
     tagData = null;
     selectedTag = null;
     errorObj = null;
+    
+    if($searchQuery.length > 0){
+      vscodeProgress("start", "Searching PyStackBot", false);
+      isLoading = true;
 
-    const uri = `http://localhost:5000/search?query=${$searchQuery}`;
+      const uri = `http://localhost:5000/search?query=${$searchQuery}`;
+      console.log("pystackbot search....");
+      axios
+        .get(uri)
+        .then(response => {
+          isLoading = false;
 
-    axios
-      .get(uri)
-      .then(response => {
-        isLoading = false;
+          if (response.status === 200) {
+            console.log("got response...");
+            relatedQuestions = response.data.questions;
+            PyStackBotAnswers = response.data.answers;
+            vscodeProgress("stop", null, false);
+          } else {
+            vscodeProgress("stop", null, true);
+          }
 
-        if (response.status === 200) {
-          PyStackBotResults = response.data.items;
-          vscodeProgress("stop", null, false);
-        } else {
+        })
+        .catch(() => {
+          isLoading = false;
           vscodeProgress("stop", null, true);
-        }
-
-      })
-      .catch(() => {
-        isLoading = false;
-        vscodeProgress("stop", null, true);
-      });
+        });
+    }
   }
 </script>
 
@@ -191,7 +205,7 @@
     on:gotoQuestion={handleGotoQuestion}
     on:gotoTagLearnMore={() => section.set("tag")}
     on:searchByTag={handleTagSelected}
-    on:searchInput={searchSO}
+    on:searchSO={searchSO}
     on:searchPyStackBot={searchPyStackBot}
     on:searchByPage={handlePageSearch}
     on:filterChange={handleFilterChangeSearch}
@@ -201,7 +215,8 @@
     {totalResults}
     {initialInstruction}
     {errorObj}
-    {PyStackBotResults}
+    {PyStackBotAnswers}
+    {relatedQuestions}
   />
 {:else if $section === "question"}
   <Question

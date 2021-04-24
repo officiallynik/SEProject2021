@@ -4,6 +4,8 @@
 
   export let relatedQuestions;
 
+  console.log("RQS", relatedQuestions[0].question.title, relatedQuestions[1].question.title);
+
   const dispatch = createEventDispatcher();
   function gotoRelatedQuestion(questionId, questionTitle) {
     dispatch("relatedQuestionSearch", {
@@ -60,11 +62,16 @@
         {@html question.title}
       </p>
     {/if}
-    {#if question.id && question.title}
+    {#if question.question}
+      <header
+        class:is-answered={true}
+        class:has-answer={true}>
+        {question.score.toFixed(2)}
+      </header>
       <p
         class="link"
-        on:click={() => gotoRelatedQuestion(question.id, question.title)}>
-        {@html question.title}
+        on:click={() => gotoRelatedQuestion(question.question.id, question.question.title)}>
+        {@html question.question.title}
       </p>
     {/if}
   {/each}

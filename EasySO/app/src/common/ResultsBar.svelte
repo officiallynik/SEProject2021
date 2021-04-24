@@ -3,7 +3,7 @@
   export let results;
   export let isLoading;
   export let relatedQuestions;
-  let showRelatedQuestions;
+  let showRelatedQuestions = false;
 
   function toggleRelatedQuestions() {
     showRelatedQuestions = !showRelatedQuestions;
@@ -31,13 +31,21 @@
   .link-questions:hover {
     opacity: 1;
   }
+  .results-header {
+    float: left;
+  }
 </style>
 
 <section>
 
   <div>
-    <h2>
-      Top Results
+    <h2 class="results-header">
+      {#if relatedQuestions}
+        PyStackBot Results
+      {:else}
+        Stack Overflow Results
+      {/if}
+    
       <!-- {#if results > 0}
         {total} {title}
       {:else if results === 0}{titleForNoResults}{:else if isLoading}&nbsp;{/if} -->
@@ -45,7 +53,7 @@
 
   </div>
   {#if relatedQuestions}
-    <div class="link link-questions">
+    <div class="link link-questions" on:click={toggleRelatedQuestions}>
       {#if !showRelatedQuestions}
         view related questions
       {:else}hide related questions{/if}
@@ -54,7 +62,7 @@
 
 </section>
 
-{#if relatedQuestions}
+{#if relatedQuestions && showRelatedQuestions}
   <QuestionsRelated
       {relatedQuestions}
       on:closeRelatedQuestions={toggleRelatedQuestions}

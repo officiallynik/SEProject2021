@@ -38,6 +38,7 @@
     const site = `stackoverflow`;
     const uri = `https://api.stackexchange.com/2.2/questions/${questionId}/related?order=desc&sort=activity&site=${site}`;
 
+    console.log("fetchRelatedQuestions req...");
     axios.get(uri).then((response) => {
       isLoading = false;
       if (response.status === 200) {
@@ -54,6 +55,7 @@
     const site = `stackoverflow`;
     const uri = `https://api.stackexchange.com/2.2/questions/${questionId}?site=${site}&filter=!3zl2.5epWZZhmbtbF`;
 
+    console.log("fetchQuestions req...");
     axios.get(uri).then((response) => {
       isLoading = false;
       
@@ -70,6 +72,7 @@
   function fetchAnswers() {
     const uri = `https://api.stackexchange.com/2.2/questions/${questionId}/answers?order=desc&sort=votes&site=stackoverflow&filter=!3zl2.GhG14q1O7U25`;
 
+    console.log("fetchAnswers req...");
     axios.get(uri).then(response => {
       isLoading = false;
       if (response.status === 200) {

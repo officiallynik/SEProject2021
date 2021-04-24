@@ -5,6 +5,7 @@
   import SearchNoResults from "./SearchNoResults.svelte";
   import Loader from "../common/Loader.svelte";
   import Tag from "../tag/tag.svelte";
+  import QuestionAnswers from "../question/QuestionAnswers.svelte";
 
   export let searchData;
   export let totalResults;
@@ -12,8 +13,8 @@
   export let isLoading;
   export let initialInstruction;
   export let errorObj;
-  export let PyStackBotResults;
-  let relatedQuestions = null;
+  export let PyStackBotAnswers;
+  export let relatedQuestions;
 
 </script>
 
@@ -23,7 +24,7 @@
   }
 </style>
 
-<SearchInput {tagData} {isLoading} {initialInstruction} {errorObj} on:searchInput on:searchByTag />
+<SearchInput {tagData} {isLoading} {initialInstruction} {errorObj} on:searchSO on:searchPyStackBot on:searchByTag />
 
 {#if !initialInstruction}
   {#if tagData === null}
@@ -45,4 +46,10 @@
     {/if}
     <Tag {tagData} />
   {/if}
+{/if}
+
+{#if PyStackBotAnswers}
+  <QuestionAnswers 
+    {PyStackBotAnswers}
+  />
 {/if}
