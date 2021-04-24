@@ -42,6 +42,8 @@
     <h2 class="results-header">
       {#if relatedQuestions}
         PyStackBot Results
+      {:else if isLoading}
+        Loading...
       {:else}
         Stack Overflow Results
       {/if}
