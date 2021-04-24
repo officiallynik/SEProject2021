@@ -9,6 +9,7 @@
   export let viewCount;
   export let extensionAction;
   export let relatedQuestions;
+  let PyStackBotRelatedQuestions = null;
   let showRelatedQuestions;
 
   $: totalViews = formatNumber(viewCount);
@@ -47,6 +48,7 @@
     {#if showRelatedQuestions}
       <QuestionsRelated
         {relatedQuestions}
+        {PyStackBotRelatedQuestions}
         on:closeRelatedQuestions={toggleRelatedQuestions}
         on:relatedQuestionSearch
       />

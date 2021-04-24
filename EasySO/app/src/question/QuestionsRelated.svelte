@@ -3,8 +3,7 @@
   import { fade } from "svelte/transition";
 
   export let relatedQuestions;
-
-  console.log("RQS", relatedQuestions[0].question.title, relatedQuestions[1].question.title);
+  export let PyStackBotRelatedQuestions;
 
   const dispatch = createEventDispatcher();
   function gotoRelatedQuestion(questionId, questionTitle) {
@@ -46,23 +45,28 @@
   }
 </style>
 
-<section in:fade>
-  {#each relatedQuestions as question}
-    {#if question.score && question.is_answered && question.answer_count}
-      <header
-        class:is-answered={question.is_answered}
-        class:has-answer={question.answer_count}>
-        {question.score}
-      </header>
-    {/if}
-    {#if question.question_id && question.title}
+{#if relatedQuestions}
+  <section in:fade>
+    {#each relatedQuestions as question}
+      {#if question.score && question.is_answered && question.answer_count}
+        <header
+          class:is-answered={question.is_answered}
+          class:has-answer={question.answer_count}>
+          {question.score}
+        </header>
+      {/if}
       <p
         class="link"
         on:click={() => gotoRelatedQuestion(question.question_id, question.title)}>
         {@html question.title}
       </p>
-    {/if}
-    {#if question.question}
+    {/each}
+  </section>
+{/if}
+
+{#if PyStackBotRelatedQuestions}
+  <section in:fade>
+    {#each PyStackBotRelatedQuestions as question}
       <header
         class:is-answered={true}
         class:has-answer={true}>
@@ -73,6 +77,6 @@
         on:click={() => gotoRelatedQuestion(question.question.id, question.question.title)}>
         {@html question.question.title}
       </p>
-    {/if}
-  {/each}
-</section>
+    {/each}
+  </section>
+{/if}

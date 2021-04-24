@@ -1,13 +1,27 @@
 <script>
+  import { createEventDispatcher } from "svelte";
   import QuestionsRelated from "../question/QuestionsRelated.svelte";
   export let results;
   export let isLoading;
-  export let relatedQuestions;
+  export let PyStackBotRelatedQuestions;
   let showRelatedQuestions = false;
+  let relatedQuestions = null;
 
   function toggleRelatedQuestions() {
     showRelatedQuestions = !showRelatedQuestions;
   }
+
+  const dispatch = createEventDispatcher();
+  function handleGotoQuestion(event) {
+    console.log("rq", event.detail.questionId, event.detail.questionTitle);
+    if (!isLoading) {
+      dispatch("gotoQuestion", {
+        questionId: event.detail.questionId,
+        questionTitle: event.detail.questionTitle
+      });
+    }
+  }
+
 </script>
 
 <style>
@@ -40,7 +54,7 @@
 
   <div>
     <h2 class="results-header">
-      {#if relatedQuestions}
+      {#if PyStackBotRelatedQuestions}
         PyStackBot Results
       {:else if isLoading}
         Loading...
@@ -50,7 +64,7 @@
     </h2>
 
   </div>
-  {#if relatedQuestions}
+  {#if PyStackBotRelatedQuestions}
     <div class="link link-questions" on:click={toggleRelatedQuestions}>
       {#if !showRelatedQuestions}
         view related questions
@@ -60,10 +74,11 @@
 
 </section>
 
-{#if relatedQuestions && showRelatedQuestions}
+{#if PyStackBotRelatedQuestions && showRelatedQuestions}
   <QuestionsRelated
+      {PyStackBotRelatedQuestions}
       {relatedQuestions}
       on:closeRelatedQuestions={toggleRelatedQuestions}
-      on:relatedQuestionSearch
+      on:relatedQuestionSearch={handleGotoQuestion}
   />
 {/if}

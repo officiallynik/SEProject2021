@@ -20,7 +20,7 @@
   let initialInstruction = true;
   let errorObj;
   let PyStackBotAnswers;
-  let relatedQuestions;
+  let PyStackBotRelatedQuestions;
 
   window.addEventListener("message", event => {
     extensionAction = event.data.action;
@@ -117,7 +117,7 @@
     tagData = null;
     selectedTag = null;
     errorObj = null;
-    relatedQuestions = null;
+    PyStackBotRelatedQuestions = null;
     PyStackBotAnswers = null;
     
     if($searchQuery.length > 0){
@@ -183,7 +183,7 @@
 
           if (response.status === 200) {
             console.log("got response...");
-            relatedQuestions = response.data.questions;
+            PyStackBotRelatedQuestions = response.data.questions;
             PyStackBotAnswers = response.data.answers;
             vscodeProgress("stop", null, false);
           } else {
@@ -217,7 +217,7 @@
     {initialInstruction}
     {errorObj}
     {PyStackBotAnswers}
-    {relatedQuestions}
+    {PyStackBotRelatedQuestions}
   />
 {:else if $section === "question"}
   <Question
