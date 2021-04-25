@@ -36,11 +36,9 @@
   }
 
   function handleSearch() {
-    console.log("gjdkf", isLoading);
     if (
       !isLoading
     ) {
-      console.log("fvjsdflgkjdklgj")
       search();
     }
   }
@@ -49,11 +47,9 @@
   function search() {
     searchQueryPreviousValue = $searchQuery;
     if(searchType === "PyStackBot"){
-      console.log("pystackbot search...");
       dispatch("searchPyStackBot");
     }
     else {
-      console.log("stackoverflow search...");
       dispatch("searchSO");
     }
   }

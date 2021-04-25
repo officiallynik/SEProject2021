@@ -97,6 +97,13 @@
     window.scroll({ top: 0, behavior: "smooth" });
     selectedTag = event.detail.tag;
 
+
+    errorObj = null;
+    PyStackBotRelatedQuestions = null;
+    PyStackBotAnswers = null;
+    PyStackBotSummary = null;
+    searchData = null;
+
     const uri = `https://api.stackexchange.com/2.2/tags/${selectedTag}/wikis?site=stackoverflow&filter=!9_bDDrGXY`;
 
     console.log("TagSearch req...");
@@ -105,7 +112,6 @@
       .then((response) => {
         if (response.status === 200) {
           tagData = response.data.items[0];
-          // section.set("tag");
         }
         if (tagData === undefined) {
           tagData = {
@@ -113,12 +119,13 @@
             error_msg: "No wiki found for given tag :(",
           };
         }
+        vscodeProgress("stop", null, false);
       })
-      .catch(() => {})
+      .catch(() => {
+        vscodeProgress("stop", null, true);
+      })
       .finally(() => {
         isLoading = false;
-        vscodeProgress("stop", null, true);
-        addCopyOption();
       });
   }
 
@@ -137,13 +144,12 @@
         const tag = $searchQuery.substring(1, $searchQuery.length - 1);
         handleTagSelected({ detail: { tag: tag } });
         errorObj = null;
-        return;
       } else {
         const techQuery = $searchQuery.substring(1, $searchQuery.length - 1);
         handleTechnicalQuery(techQuery);
         errorObj = null;
-        return;
       }
+      return;
     }
 
     tagData = null;
@@ -158,7 +164,7 @@
       isLoading = true;
 
       const uri = `https://api.stackexchange.com/2.2/search/advanced?order=desc&sort=relevance&q=${$searchQuery}&site=stackoverflow&filter=withbody`;
-      console.log("query search...");
+      console.log("SO query search...");
       axios
         .get(uri)
         .then((response) => {
@@ -181,28 +187,23 @@
 
   // stackoverflow direct search functionality
   function searchPyStackBot() {
-    console.log("query", $searchQuery);
 
     if ($searchQuery.length !== 0) {
       initialInstruction = false;
     }
 
-    if (
-      $searchQuery[0] === "[" &&
-      $searchQuery[$searchQuery.length - 1] === "]"
-    ) {
+    if ($searchQuery[0] === "[" && $searchQuery[$searchQuery.length - 1] === "]") {
       let split = $searchQuery.substring(1, $searchQuery.length - 1).split(" ");
       if (split.length === 1) {
         const tag = $searchQuery.substring(1, $searchQuery.length - 1);
         handleTagSelected({ detail: { tag: tag } });
         errorObj = null;
-        return;
       } else {
         const techQuery = $searchQuery.substring(1, $searchQuery.length - 1);
         handleTechnicalQuery(techQuery);
         errorObj = null;
-        return;
       }
+      return;
     }
 
     tagData = null;
@@ -216,7 +217,7 @@
       isLoading = true;
 
       const uri = `http://localhost:5000/search?query=${$searchQuery}`;
-      console.log("pystackbot search....");
+      console.log("pystackbot search....", $searchQuery);
       axios
         .get(uri)
         .then((response) => {

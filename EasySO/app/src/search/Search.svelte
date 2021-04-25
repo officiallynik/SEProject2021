@@ -6,7 +6,6 @@
   import Loader from "../common/Loader.svelte";
   import Tag from "../tag/tag.svelte";
   import QuestionAnswers from "../question/QuestionAnswers.svelte";
-import { each } from "svelte/internal";
 
   export let searchData;
   export let totalResults;
