@@ -7,4 +7,4 @@ AnswerSearch/Word2Vec/word2vec.model*
 AnswerSearch/Word2Vec/corpus.txt
 AnswerSearch/*/__pycache__
 node_modules
-AnswerSearch/*env
+AnswerSearch/wenv
