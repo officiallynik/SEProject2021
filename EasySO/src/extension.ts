@@ -171,7 +171,7 @@ export function activate(context: vscode.ExtensionContext) {
             return;
           }
 
-          vscode.commands.executeCommand('extension.searchPyStackBot', errorObj);
+          vscode.commands.executeCommand('extension.searchWithTextBox', errorObj);
           
         });
       });
@@ -179,7 +179,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   });
 
-  let searchWithAutoQuery = vscode.commands.registerCommand('extension.searchWithAutoQuery', (errorObj) => {
+  let searchWithAutoQuery = vscode.commands.registerCommand('extension.searchWithAutoQuery', () => {
 
     const editor = vscode.window.activeTextEditor;
     let searchQuery = "";

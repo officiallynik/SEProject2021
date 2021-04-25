@@ -7,7 +7,7 @@ Provides an API for using our PyStackBot Tool
 import sys
 sys.path.append("./AnswerSearch")
 from flask import Flask, request
-from main import getAnswers
+from main import getAnswers, getSummarizedAnswer
 from flask_cors import CORS
 
 app = Flask(__name__)
