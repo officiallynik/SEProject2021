@@ -36,9 +36,9 @@ import { each } from "svelte/internal";
     {/if}
 
     {#if searchData && totalResults !== 0}
-    <SearchItem {isLoading} {searchData} on:gotoQuestion on:searchByTag />
-    {:else if !isLoading}
-    <SearchNoResults />
+      <SearchItem {isLoading} {searchData} on:gotoQuestion on:searchByTag />
+    {:else if !isLoading && PyStackBotSummary && PyStackBotAnswers}
+      <SearchNoResults />
     {/if}
   {:else}
     {#if isLoading }
