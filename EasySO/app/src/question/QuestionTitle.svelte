@@ -1,3 +1,6 @@
+<!--
+  display question title, used in question svelte file
+-->
 <script>
   import { fade } from "svelte/transition";
   import { formatNumber } from "../stores/common.js";
