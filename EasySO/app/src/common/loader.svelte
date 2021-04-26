@@ -1,3 +1,6 @@
+<!--
+  loader display
+-->
 <style>
   section {
     height: 2px;

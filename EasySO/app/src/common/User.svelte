@@ -1,3 +1,6 @@
+<!--
+  display user info on questions and answers for SO questions and answers
+-->
 <script>
   import { formatNumber } from "../stores/common.js";
 

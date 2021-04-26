@@ -1,3 +1,6 @@
+<!--
+  display message on no result
+-->
 <script>
   import { onMount } from "svelte";
   import { searchQuery } from "../stores/common.js";

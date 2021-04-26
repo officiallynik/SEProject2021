@@ -1,3 +1,7 @@
+<!--
+  display tag search result svelte file
+-->
+
 <script>
   import { fade } from "svelte/transition";
 

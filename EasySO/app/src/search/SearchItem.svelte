@@ -1,3 +1,6 @@
+<!--
+  individual search item results display, title body, tags and score
+-->
 <script>
   import { createEventDispatcher } from "svelte";
   import { fade } from "svelte/transition";

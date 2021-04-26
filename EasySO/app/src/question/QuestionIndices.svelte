@@ -1,3 +1,6 @@
+<!--
+  display score, favourite count for SO question and answers
+-->
 <script>
   export let score;
   export let favorite;

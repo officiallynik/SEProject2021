@@ -1,12 +1,20 @@
+/** 
+ * main extension file, listen for inputs and creates webviews by implementing other files
+*/
+
 import * as vscode from 'vscode';
 import { posix } from 'path';
 import { AppPageHtml } from './app-page';
 import GeneratorQuery from './generate-query';
+import { pythonErrors } from './utils';
 
+/* function to activate extension */
 export function activate(context: vscode.ExtensionContext) {
 
+  // store existing panel created, to reuse instead of creating new one
   let existingPanel: vscode.WebviewPanel|null = null;
 
+  // normal search, error search using keybindings and text input
   let searchWithTextBox = vscode.commands.registerCommand('extension.searchWithTextBox', (errorObj) => {
 
     const editor = vscode.window.activeTextEditor;
@@ -68,44 +76,12 @@ export function activate(context: vscode.ExtensionContext) {
     changeWindowTitle(stackoverflowPanel);
   });
 
+  // invoke error search on python files using keybindings
   let searchTerminalErrors = vscode.commands.registerCommand('extension.searchTerminalErrors', () => {
 
     if(!vscode.window.activeTerminal) {
       vscode.window.showErrorMessage("No Terminal Found");
       return;
-    } 
-
-    const pythonErrors: { [key: string]: string } = {
-      "AssertionError": "Raised when an <code>assert</code> statement fails.",
-      "AttributeError": "Raised when attribute assignment or reference fails.",
-      "EOFError": "Raised when the <code>input()</code> function hits end-of-file condition.",
-      "FloatingPointError": "Raised when a floating point operation fails.",
-      "GeneratorExit": "Raise when a generator's <code>close()</code> method is called.",
-      "ImportError": "Raised when the imported module is not found.",
-      "IndexError": "Raised when the index of a sequence is out of range.",
-      "KeyError": "Raised when a key is not found in a dictionary.",
-      "KeyboardInterrupt": "Raised when the user hits the interrupt key (<code>Ctrl+C</code> or <code>Delete</code>).",
-      "MemoryError": "Raised when an operation runs out of memory.",
-      "NameError": "Raised when a variable is not found in local or global scope.",
-      "NotImplementedError": "Raised by abstract methods.",
-      "OSError": "Raised when system operation causes system related error.",
-      "OverflowError": "Raised when the result of an arithmetic operation is too large to be represented.",
-      "ReferenceError": "Raised when a weak reference proxy is used to access a garbage collected referent.",
-      "RuntimeError": "Raised when an error does not fall under any other category.",
-      "StopIteration": "Raised by <code>next()</code> function to indicate that there is no further item to be returned by iterator.",
-      "SyntaxError": "Raised by parser when syntax error is encountered.",
-      "IndentationError": "Raised when there is incorrect indentation.",
-      "TabError": "Raised when indentation consists of inconsistent tabs and spaces.",
-      "SystemError": "Raised when interpreter detects internal error.",
-      "SystemExit": "Raised by <code>sys.exit()</code> function.",
-      "TypeError": "Raised when a function or operation is applied to an object of incorrect type.",
-      "UnboundLocalError": "Raised when a reference is made to a local variable in a function or method, but no value has been bound to that variable.",
-      "UnicodeError": "Raised when a Unicode-related encoding or decoding error occurs.",
-      "UnicodeEncodeError": "Raised when a Unicode-related error occurs during encoding.",
-      "UnicodeDecodeError": "Raised when a Unicode-related error occurs during decoding.",
-      "UnicodeTranslateError": "Raised when a Unicode-related error occurs during translating.",
-      "ValueError": "Raised when a function gets an argument of correct type but improper value.",
-      "ZeroDivisionError": "Raised when the second operand of division or modulo operation is zero."
     }
 
     const createError = (text:Array<string>) => {
@@ -179,6 +155,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   });
 
+  // invoke extension using keybindings and generate query automatically
   let searchWithAutoQuery = vscode.commands.registerCommand('extension.searchWithAutoQuery', () => {
 
     const editor = vscode.window.activeTextEditor;
@@ -236,7 +213,7 @@ export function activate(context: vscode.ExtensionContext) {
     // Listen for changes to window title
     changeWindowTitle(stackoverflowPanel);
   });
-
+ 
   context.subscriptions.push(searchWithTextBox);
   context.subscriptions.push(searchTerminalErrors);
   context.subscriptions.push(searchWithAutoQuery);
@@ -255,6 +232,10 @@ function createWebViewPanel(panelTitle: string, path: string): vscode.WebviewPan
   });
 }
 
+/**
+ * windowProgress - show progress in notification bar on message
+ * @param panel webpanel
+ */
 function windowProgress(panel: vscode.WebviewPanel) {
   panel.webview.onDidReceiveMessage(message => {
     if (message.command === 'progress' && message.action === 'start') {
@@ -263,6 +244,11 @@ function windowProgress(panel: vscode.WebviewPanel) {
   });
 }
 
+/**
+ * showWindowProgress - show progress in notification bar
+ * @param panel webpanel
+ * @param title string
+ */
 function showWindowProgress(panel: vscode.WebviewPanel, title: string) {
   vscode.window.withProgress({
     location: vscode.ProgressLocation.Window,
@@ -299,4 +285,5 @@ function changeWindowTitle(panel: vscode.WebviewPanel) {
   });
 }
 
+// run on extension deactivate
 export function deactivate() { }

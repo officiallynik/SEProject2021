@@ -1,3 +1,6 @@
+<!--
+  display SO questions and answers tags clickable
+-->
 <script>
   import { createEventDispatcher } from "svelte";
   export let tags;

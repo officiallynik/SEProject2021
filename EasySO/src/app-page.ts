@@ -1,13 +1,19 @@
+/*
+  web view page, imports svelte app and creates main view of extension
+*/
+
 import { WebviewPanel } from 'vscode';
 import { Uri } from 'vscode';
 import { posix } from 'path';
 
 export function AppPageHtml(contextPath: string, panel: WebviewPanel) {
 
+  // imports svelte build files
   const cssGlobal: Uri = Uri.file(posix.join(contextPath, 'app', 'public', 'global.css')).with({ scheme: 'vscode-resource' });
   const cssBundle: Uri = Uri.file(posix.join(contextPath, 'app', 'public', 'bundle.css')).with({ scheme: 'vscode-resource' });
   const jsFile: Uri = Uri.file(posix.join(contextPath, 'app', 'public', 'bundle.js')).with({ scheme: 'vscode-resource' });
   
+  // return web view html
   return `
     <!doctype html>
     <html>
@@ -29,5 +35,6 @@ export function AppPageHtml(contextPath: string, panel: WebviewPanel) {
       <body>
       </body>
 
-    </html>`;
+    </html>
+    `;
 }

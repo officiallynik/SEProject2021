@@ -1,3 +1,6 @@
+<!--
+  header display brand, go back btn
+-->
 <script>
   import { section } from "../stores/common.js";
   import { createEventDispatcher } from "svelte";

@@ -1,3 +1,6 @@
+<!--
+  display related questions
+-->
 <script>
   import { createEventDispatcher } from "svelte";
   import { fade } from "svelte/transition";

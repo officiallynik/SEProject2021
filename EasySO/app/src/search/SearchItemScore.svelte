@@ -1,3 +1,6 @@
+<!--
+  score, accepted answers, number of answers display
+-->
 <script>
   export let searchItem;
 </script>

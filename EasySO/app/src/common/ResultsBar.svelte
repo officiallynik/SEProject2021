@@ -1,3 +1,6 @@
+<!--
+  results bar conditionally display what results
+-->
 <script>
   import { createEventDispatcher } from "svelte";
   import QuestionsRelated from "../question/QuestionsRelated.svelte";

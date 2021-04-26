@@ -1,3 +1,6 @@
+<!--
+  search input box, tips trigger svelte file
+-->
 <script>
   import { createEventDispatcher, onMount } from "svelte";
   import { searchQuery } from "../stores/common.js";

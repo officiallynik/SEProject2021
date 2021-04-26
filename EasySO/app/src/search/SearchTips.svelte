@@ -1,3 +1,6 @@
+<!--
+  show search tips
+-->
 <style>
   div {
     margin-top: 10px;

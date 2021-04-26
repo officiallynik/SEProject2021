@@ -1,3 +1,6 @@
+<!--
+  individual question display given id and title
+-->
 <script>
   import { onMount } from "svelte";
   import { vscodeProgress } from "../stores/vscode-api.js";
@@ -21,10 +24,12 @@
   let isLoading = true;
   let relatedQuestions;
 
+  // call fetchquestions with id and title on mount
   onMount(() => {
     fetchQuestion();
   });
 
+  // refresh question page on related question click
   function handleOnRelatedSearch(event) {
     isLoading = true;
     questionId = event.detail.questionId;
@@ -32,6 +37,7 @@
     fetchQuestion();
   }
 
+  // fetch related questions related to current question
   function fetchRelatedQuestions() {
     isLoading = true;
 
@@ -50,6 +56,7 @@
     });
   }
 
+  // fetch full question info with given id
   function fetchQuestion() {
     vscodeProgress("start", "Loading Search Results", false);
     const site = `stackoverflow`;
@@ -69,6 +76,7 @@
     });
   }
 
+  // fetch all answers of the current question
   function fetchAnswers() {
     const uri = `https://api.stackexchange.com/2.2/questions/${questionId}/answers?order=desc&sort=votes&site=stackoverflow&filter=!3zl2.GhG14q1O7U25`;
 

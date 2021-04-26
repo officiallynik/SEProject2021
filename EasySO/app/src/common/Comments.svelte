@@ -1,3 +1,6 @@
+<!--
+  display comments in questions and answers
+-->
 <script>
   export let comments;
   let commentsShowAmount = 5;

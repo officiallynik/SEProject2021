@@ -1,5 +1,15 @@
-import { idf_data } from './idf';
+/**
+ * auto query generator on selected code [Beta]
+ */
 
+import { idf_data } from './utils';
+
+/**
+ * GeneratorQuery - use idf metrics to generate query on selected code
+ * @param text selected code string
+ * @param querySize num of words integer
+ * @returns query string
+ */
 const GeneratorQuery = (text: string, querySize:number = 4): string => {
 
     const res:Array<{word: string, score: number}> = [];

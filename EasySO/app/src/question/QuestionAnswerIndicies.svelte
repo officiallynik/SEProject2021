@@ -1,3 +1,6 @@
+<!--
+  display vote up, vote down and accepted answer info
+-->
 <script>
   export let score;
   export let isAccepted;

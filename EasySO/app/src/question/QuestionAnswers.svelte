@@ -1,3 +1,6 @@
+<!--
+  answer display svelte file, for given question
+-->
 <script>
   import Comments from "../common/Comments.svelte";
   import RowLayout from "../common/RowLayout.svelte";
@@ -28,16 +31,19 @@
   }
 </style>
 
+<!-- result bar display -->
 {#if !PyStackBotAnswers}
   <ResultsBar
     {isAnswersLoading}
   />
 {/if}
 
+<!-- loader -->
 {#if isAnswersLoading}
   <Loader />
 {/if}
 
+<!-- SO answers -->
 {#if answers}
   {#each answers as answer, i}
     <section>
@@ -71,6 +77,7 @@
   {/each}
 {/if}
 
+<!-- pystackbot answers -->
 {#if PyStackBotAnswers}
   {#each PyStackBotAnswers as answer, i}
     <section>

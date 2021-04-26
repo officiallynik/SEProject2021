@@ -1,3 +1,6 @@
+<!--
+  basic layout used in questions svelte file
+-->
 <style>
   .container {
     display: table;

@@ -1,4 +1,9 @@
+<!--
+  main app file, import other files and renders condtionally
+-->
+
 <script>
+  // necessary imports
   import { section, searchQuery } from "./stores/common.js";
   import { vscodeProgress } from "./stores/vscode-api.js";
   import { selectedSearchFilter } from "./stores/results-filter.js";
@@ -7,6 +12,7 @@
   import Question from "./question/Question.svelte";
   import Search from "./search/Search.svelte";
 
+  // necessary variables
   let searchData;
   let questionId;
   let questionTitle;
@@ -21,6 +27,7 @@
   let PyStackBotSummary;
   let PyStackBotRelatedQuestions;
 
+  // listen for message from extension and trigger actions conditionally
   window.addEventListener("message", (event) => {
     extensionAction = event.data.action;
 
@@ -40,12 +47,20 @@
     }
   });
 
+  /**
+   * handleGotoQuestion - goto question section on clicking search result item 
+   * @param event
+   */
   function handleGotoQuestion(event) {
     section.set("question");
     questionId = event.detail.questionId;
     questionTitle = event.detail.questionTitle;
   }
 
+  /**
+   * handleGotoSearch - back to search section
+   * @param event
+   */
   function handleGotoSearch(event) {
     section.set("search");
   }
@@ -54,10 +69,18 @@
 
   function handleFilterChangeSearch() {}
 
+  /**
+   * handleTagFromQuestionSearch - trigger tag search
+   * @param event
+   */
   function handleTagFromQuestionSearch(event) {
     handleTagSelected(event);
   }
 
+  /**
+   * handleTechnicalQuery - pystackbot summary search
+   * @param query
+   */
   function handleTechnicalQuery(query) {
   
     vscodeProgress("start", "Searching PyStackBot", false);
@@ -185,7 +208,7 @@
     }
   }
 
-  // stackoverflow direct search functionality
+  // pystackbot answer search
   function searchPyStackBot() {
 
     if ($searchQuery.length !== 0) {
@@ -240,8 +263,10 @@
   }
 </script>
 
+<!-- header section (always displays) -->
 <Header on:goBack={handleGotoSearch} {extensionAction} />
 
+<!-- conditionally display section -->
 {#if $section === "search"}
   <Search
     on:gotoQuestion={handleGotoQuestion}

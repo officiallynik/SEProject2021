@@ -1,3 +1,7 @@
+/*
+  default webpack config from code generator
+*/
+
 //@ts-check
 
 'use strict';

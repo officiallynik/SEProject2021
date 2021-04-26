@@ -1,3 +1,7 @@
+<!--
+  search section svelte file
+-->
+
 <script>
   import SearchInput from "./SearchInput.svelte";
   import ResultsBar from "../Common/ResultsBar.svelte";
@@ -25,8 +29,10 @@
   }
 </style>
 
+<!-- search input box -->
 <SearchInput {tagData} {isLoading} {initialInstruction} {errorObj} on:searchSO on:searchPyStackBot on:searchByTag />
 
+<!-- instruction box, search items -->
 {#if !initialInstruction}
   {#if tagData === null}
     <ResultsBar {isLoading} {PyStackBotRelatedQuestions} {PyStackBotSummary} on:gotoQuestion />
@@ -49,12 +55,14 @@
   {/if}
 {/if}
 
+<!-- pystackbot answers display -->
 {#if PyStackBotAnswers}
   <QuestionAnswers 
     {PyStackBotAnswers}
   />
 {/if}
 
+<!-- pystackbot summarised answer display -->
 {#if PyStackBotSummary}
   {#each PyStackBotSummary as answer}
     {@html answer}
