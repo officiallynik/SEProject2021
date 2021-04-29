@@ -82,7 +82,8 @@ Follow below given rules for searching your query in the given CLI.
    ![image](https://user-images.githubusercontent.com/17109060/32149062-4f0547ca-bd25-11e7-98b6-587467379704.png)
 
 # API
-
+### Architecture
+   ![image](Design.png)
 ### Folder Structure
 ```
 PyStackBot
