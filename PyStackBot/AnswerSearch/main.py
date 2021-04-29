@@ -94,11 +94,22 @@ if __name__=="__main__":
             break
         inp = inp.split("--")
         query = inp[0]
+
+        questions = []
         
-        questions = retrieve_top_matched_questions(query, 5, len(inp)>1)
-        
-        sorted_paragraphs=retrieve_top_matched_answer_paragraphs(questions, query)
-        final_paragraphs=mmr.rank_mmr(sorted_paragraphs)
-        for cnt, para_obj in enumerate(final_paragraphs, 1):
-            answer_display(para_obj["paragraph"].raw_text)
-            print("--------------------------------------------------------------------------------------------")
+        if 'q' in inp:
+            questions = retrieve_top_matched_questions(query, 5, True)
+        else:
+            questions = retrieve_top_matched_questions(query, 5, False)
+
+        if 's' in inp:
+            sorted_paragraphs=retrieve_top_matched_answer_paragraphs(questions, query)
+            final_paragraphs=mmr.rank_mmr(sorted_paragraphs)
+            for cnt, para_obj in enumerate(final_paragraphs, 1):
+                answer_display(para_obj["paragraph"].raw_text)
+                print("--------------------------------------------------------------------------------------------")
+        else:
+            answers_list=retrieve_top_matched_answers(questions,query)
+            for cnt, answer in enumerate(answers_list, 1):
+                print("no.: ", cnt, "\nanswer: ", answer['answer'])
+                print("--------------------------------------------------------------------------------------------")

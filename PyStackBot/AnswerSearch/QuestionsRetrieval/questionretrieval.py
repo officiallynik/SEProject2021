@@ -77,7 +77,8 @@ def retrieve_top_matched_questions(query, number_of_questions, display):
     relevance_questions.sort(reverse=True, key=custom_key)
     # sort the questions in descending order with respect to their scores
 
-    questions_display(relevance_questions[:number_of_questions], display)
+    if(display):
+        questions_display(relevance_questions[:number_of_questions], display)
 
     return relevance_questions[:number_of_questions]
 

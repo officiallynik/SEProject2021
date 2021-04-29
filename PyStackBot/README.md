@@ -76,10 +76,12 @@ Go to AnswerSearch Directory. Then run the below command
 A command line interface for using our tool is shown.
 Follow below given rules for searching your query in the given CLI.
 
-- To view the answer summary of the your query, just enter your query on the CLI.
-   ![image](https://user-images.githubusercontent.com/17109060/32149062-4f0547ca-bd25-11e7-98b6-587467379704.png)
+- To view the answer summary of the your query, just enter your query on the CLI and pass --s flag to summarize.
+   ![image](images/summary.png)
+- To view only answers without summarizing omit --s flag
+   ![image](images/answers.png)
 - Use --q flag to also view the relevant questions that were chosen.
-   ![image](https://user-images.githubusercontent.com/17109060/32149062-4f0547ca-bd25-11e7-98b6-587467379704.png)
+   ![image](images/answers_questions.png)
 
 # API
 
