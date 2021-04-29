@@ -92,6 +92,9 @@
     });
   }
 
+  /** 
+   * add copy to clipboard buttons to code section after getting answers
+  */
   afterUpdate(() => {
     if(answers){
       // remove existing copy btns

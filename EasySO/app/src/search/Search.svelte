@@ -11,6 +11,7 @@
   import Loader from "../common/Loader.svelte";
   import Tag from "../tag/tag.svelte";
   import QuestionAnswers from "../question/QuestionAnswers.svelte";
+  import createCopyBtn from '../stores/copy-btn';
 
   export let searchData;
   export let totalResults;
@@ -22,9 +23,28 @@
   export let PyStackBotSummary;
   export let PyStackBotRelatedQuestions;
 
+  /** 
+   * add copy to clipboard buttons to code section after getting answers
+  */
   afterUpdate(() => {
     if(PyStackBotSummary || PyStackBotAnswers){
-      console.log("updated answers [pystackbot]");
+      // remove existing copy btns
+      let copy_btns = document.getElementsByClassName('copy-btn');
+      for(let i=0; i<copy_btns.length; i++){
+        copy_btns[i].remove();
+      }
+
+      // add copy btns to codes
+      let codeElements = document.getElementsByTagName('pre'); 
+      for(let i=0; i<codeElements.length; i++){
+        codeElements[i].firstElementChild.id = `code-ele-${i}`;
+        const copyBtn = createCopyBtn(`copy-btn-${i}`);
+        copyBtn.onclick = () => {
+          let copyText = document.getElementById(`code-ele-${i}`).innerText;
+          navigator.clipboard.writeText(copyText);
+        }
+        codeElements[i].prepend(copyBtn);
+      }
     }
   });
 
