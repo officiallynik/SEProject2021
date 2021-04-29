@@ -110,11 +110,11 @@ Your contributions are always welcome! Recommended steps to contriburte
 # Contributors
 
 [(Back to top)](#table-of-contents)
-<br/>
+
 [Nikhil M](https://github.com/officiallynik)
-<br/>
+
 [Sameed Ali](https://github.com/mir-sam-ali)
-</br>
+
 Mentor: Eashaan Rao
-</br>
+
 Guide: Sridhar Chimalakonda
