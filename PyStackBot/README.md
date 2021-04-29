@@ -84,6 +84,7 @@ Follow below given rules for searching your query in the given CLI.
    ![image](images/answers_questions.png)
 
 # API
+[(Back to top)](#table-of-contents)
 ### Architecture
    ![image](Design.png)
 ### Folder Structure
