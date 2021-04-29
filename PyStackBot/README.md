@@ -86,7 +86,7 @@ Follow below given rules for searching your query in the given CLI.
 # API
 [(Back to top)](#table-of-contents)
 ### Architecture
-   ![image](Design.png)
+   ![image](images/architecture.png)
 ### Folder Structure
 ```
 PyStackBot

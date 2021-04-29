@@ -4,8 +4,10 @@
   "description": "",
   "version": "0.0.1",
   "license": "MIT",
+  "publisher": "officiallynik",
   "repository": {
-    "type": "git"
+    "type": "git",
+    "url": "https://github.com/officiallynik/SEProject2021/tree/main/EasySO"
   },
   "engines": {
     "vscode": "^1.37.0"
