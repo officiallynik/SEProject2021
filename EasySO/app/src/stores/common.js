@@ -4,6 +4,9 @@ const page = writable(1);
 const section = writable();
 const searchQuery = writable();
 
+/**
+ * function to format numbers correctly
+ */
 function formatNumber(num) {
   if (Math.abs(num) > 999999) {
     return Math.sign(num) * (Math.abs(num) / 1000000).toFixed(1) + "m"

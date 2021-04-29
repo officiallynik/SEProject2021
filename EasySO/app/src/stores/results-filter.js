@@ -3,8 +3,8 @@ import { writable } from 'svelte/store';
 /**
  * label: Refers to the reference from the extension.
  * languageReference: matches object key in i18n.js
- * apiSort: used in the api call ?sort=
- * apiOrder: used in the api call ?order=
+ * apiSort: used in the api call
+ * apiOrder: used in the api call
  */
 export const resultFilters = [
   { label: 'Relevance', languageReference: 'relevance', apiSort: 'relevance', apiOrder: 'desc' },
