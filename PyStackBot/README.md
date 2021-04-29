@@ -84,7 +84,8 @@ Follow below given rules for searching your query in the given CLI.
    ![image](images/answers_questions.png)
 
 # API
-
+### Architecture
+   ![image](Design.png)
 ### Folder Structure
 ```
 PyStackBot
