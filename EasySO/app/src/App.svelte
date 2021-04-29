@@ -93,14 +93,14 @@
     PyStackBotAnswers = null;
 
     const uri = `http://localhost:5000/search/summary?query=${query}`;
-    console.log("pystackbot search....");
+
     axios
       .get(uri)
       .then((response) => {
         isLoading = false;
 
         if (response.status === 200) {
-          console.log("got response...");
+
           PyStackBotRelatedQuestions = response.data.questions;
           PyStackBotSummary = response.data.answers;
           vscodeProgress("stop", null, false);
@@ -130,7 +130,7 @@
 
     const uri = `https://api.stackexchange.com/2.2/tags/${selectedTag}/wikis?site=stackoverflow&filter=!9_bDDrGXY`;
 
-    console.log("TagSearch req...");
+
     axios
       .get(uri)
       .then((response) => {
@@ -188,12 +188,12 @@
       isLoading = true;
 
       const uri = `https://api.stackexchange.com/2.2/search/advanced?order=desc&sort=relevance&q=${$searchQuery}&site=stackoverflow&filter=withbody`;
-      console.log("SO query search...");
+
       axios
         .get(uri)
         .then((response) => {
           isLoading = false;
-          console.log(response.data);
+
           if (response.status === 200) {
             searchData = response.data.items;
             totalResults = searchData.length;
@@ -241,14 +241,14 @@
       isLoading = true;
 
       const uri = `http://localhost:5000/search?query=${$searchQuery}`;
-      console.log("pystackbot search....", $searchQuery);
+
       axios
         .get(uri)
         .then((response) => {
           isLoading = false;
 
           if (response.status === 200) {
-            console.log("got response...");
+
             PyStackBotRelatedQuestions = response.data.questions;
             PyStackBotAnswers = response.data.answers;
             vscodeProgress("stop", null, false);

@@ -168,7 +168,6 @@ export function activate(context: vscode.ExtensionContext) {
         return;
       }
 
-      console.log(editor.document.getText(editor.selection))
       searchQuery = "python" + GeneratorQuery(editor.document.getText(editor.selection));
     }
     else {

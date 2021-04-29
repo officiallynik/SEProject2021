@@ -17,7 +17,7 @@
 
   const dispatch = createEventDispatcher();
   function handleGotoQuestion(event) {
-    console.log("rq", event.detail.questionId, event.detail.questionTitle);
+
     if (!isLoading) {
       dispatch("gotoQuestion", {
         questionId: event.detail.questionId,

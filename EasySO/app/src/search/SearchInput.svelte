@@ -18,7 +18,7 @@
   function selectSearchType() {
     let w = document.getElementById("searchType").selectedIndex;
     let type = document.getElementById("searchType").options[w].value;
-    console.log("type", type);
+
     searchType = type;
   }
 

@@ -15,7 +15,7 @@ Easy StackOverflow is a vscode extension to search and get query searched on sta
 # Installation
 
 For Normal Users
-> 1. Download 'easyso-1.0.0.vsix' and open this file in vscode using cmd: ```code easyso-1.0.0.vsix``` or use extension tab in vscode and click 'install from VSIX' and select this file.
+> 1. Download 'easyso-1.0.0.vsix' in releases and open this file in vscode using cmd: ```code easyso-1.0.0.vsix``` or use extension tab in vscode and click 'install from VSIX' and select this file.
 <br/>OR
 > 2. Install from vscode marketplace [EasySO](https://marketplace.visualstudio.com/items?itemName=officiallynik.easyso)
 
