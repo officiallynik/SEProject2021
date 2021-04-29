@@ -4,6 +4,7 @@
 
 <script>
   // necessary imports
+  import { afterUpdate } from 'svelte';
   import { section, searchQuery } from "./stores/common.js";
   import { vscodeProgress } from "./stores/vscode-api.js";
   import { selectedSearchFilter } from "./stores/results-filter.js";

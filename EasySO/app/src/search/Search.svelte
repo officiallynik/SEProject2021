@@ -3,6 +3,7 @@
 -->
 
 <script>
+  import { afterUpdate } from "svelte";
   import SearchInput from "./SearchInput.svelte";
   import ResultsBar from "../Common/ResultsBar.svelte";
   import SearchItem from "./SearchItem.svelte";
@@ -20,6 +21,12 @@
   export let PyStackBotAnswers;
   export let PyStackBotSummary;
   export let PyStackBotRelatedQuestions;
+
+  afterUpdate(() => {
+    if(PyStackBotSummary || PyStackBotAnswers){
+      console.log("updated answers [pystackbot]");
+    }
+  });
 
 </script>
 

@@ -2,7 +2,7 @@
   individual question display given id and title
 -->
 <script>
-  import { onMount } from "svelte";
+  import { onMount, afterUpdate } from "svelte";
   import { vscodeProgress } from "../stores/vscode-api.js";
   import axios from "axios";
   import Comments from "../Common/Comments.svelte";
@@ -13,6 +13,7 @@
   import QuestionTitle from "./QuestionTitle.svelte";
   import QuestionAnswers from "./QuestionAnswers.svelte";
   import QuestionIndices from "./QuestionIndices.svelte";
+  import createCopyBtn from '../stores/copy-btn';
 
   export let questionId;
   export let questionTitle;
@@ -90,6 +91,28 @@
       }
     });
   }
+
+  afterUpdate(() => {
+    if(answers){
+      // remove existing copy btns
+      let copy_btns = document.getElementsByClassName('copy-btn');
+      for(let i=0; i<copy_btns.length; i++){
+        copy_btns[i].remove();
+      }
+
+      // add copy btns to codes
+      let codeElements = document.getElementsByTagName('pre'); 
+      for(let i=0; i<codeElements.length; i++){
+        codeElements[i].firstElementChild.id = `code-ele-${i}`;
+        const copyBtn = createCopyBtn(`copy-btn-${i}`);
+        copyBtn.onclick = () => {
+          let copyText = document.getElementById(`code-ele-${i}`).innerText;
+          navigator.clipboard.writeText(copyText);
+        }
+        codeElements[i].prepend(copyBtn);
+      }
+    }
+  });
 </script>
 
 <QuestionTitle
